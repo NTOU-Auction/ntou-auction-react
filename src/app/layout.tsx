@@ -12,31 +12,29 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import HomeIcon from '@mui/icons-material/Home';
-import StarIcon from '@mui/icons-material/Star';
-import ChecklistIcon from '@mui/icons-material/Checklist';
+import RedeemIcon from '@mui/icons-material/Redeem';
+import CreateIcon from '@mui/icons-material/Create';
+import ComputerIcon from '@mui/icons-material/Computer';
 import SettingsIcon from '@mui/icons-material/Settings';
-import SupportIcon from '@mui/icons-material/Support';
-import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
 import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry';
 
 export const metadata = {
-  title: 'Next.js App Router + Material UI v5',
-  description: 'Next.js App Router + Material UI v5',
+  title: 'NTOU Auction',
+  description: 'NTOU Auction',
 };
 
 const DRAWER_WIDTH = 240;
 
 const LINKS = [
-  { text: 'Home', href: '/', icon: HomeIcon },
-  { text: 'Starred', href: '/starred', icon: StarIcon },
-  { text: 'Tasks', href: '/tasks', icon: ChecklistIcon },
+  { text: '文具類', href: '/', icon: CreateIcon },
+  { text: '日用品', href: '/starred', icon: RedeemIcon },
+  { text: '3C產品', href: '/tasks', icon: ComputerIcon },
+  { text: '登入' , href: '/sign-in' ,icon: LoginIcon },
 ];
 
 const PLACEHOLDER_LINKS = [
-  { text: 'Settings', icon: SettingsIcon },
-  { text: 'Support', icon: SupportIcon },
-  { text: 'Logout', icon: LogoutIcon },
+  { text: '設定' ,icon: SettingsIcon },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -48,7 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Toolbar sx={{ backgroundColor: 'background.paper' }}>
               <DashboardIcon sx={{ color: '#444', mr: 2, transform: 'translateY(-2px)' }} />
               <Typography variant="h6" noWrap component="div" color="black">
-                Next.js App Router
+                NTOU Auction
               </Typography>
             </Toolbar>
           </AppBar>
