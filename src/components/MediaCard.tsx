@@ -10,8 +10,8 @@ export default function MediaCard({ heading, text }: { heading: string; text: st
   return (
     <Card>
       <Image
-        alt="Random image"
-        src="https://source.unsplash.com/random"
+        alt="Item"
+        src="https://pic.pimg.tw/archerplus/1657717817-1259189726-g.png"
         width={640}
         height={480}
         style={{
@@ -29,8 +29,8 @@ export default function MediaCard({ heading, text }: { heading: string; text: st
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
+        <Button size="small">加入購物車</Button>
+        <Button size="small">更多資訊</Button>
       </CardActions>
     </Card>
   );
