@@ -33,20 +33,22 @@ function Copyright(props) {
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [token, setToken] = useState(null);
-
+  // const [token, setToken] = useState(null);
+  console.log(username);
   const handleSubmit = async () => {
+    
     try {
       const response = await axios.post('/api/login', {
-        username,
-        password,
+        "username": username,
+        "password": password
       });
-
+      // console.log(error)
+      // console.log(username,password)
       if (response.status === 200) {
         //登入成功，將從後端拿到的token存在 Cookie 中
         const { token } = response.data;
         Cookies.set('token', token);
-        setToken(token);
+        // setToken(token);
       } else {
         console.error('登入失敗');
       }
@@ -85,9 +87,9 @@ export default function Login() {
               fullWidth
               id="username"
               label="使用者姓名" /*提示字*/
-              name="username" 
+              // name="username" 
               autoComplete="name" /*自動填入*/ 
-              autoFocus
+              autoFocus   
               onChange={(e) => setUsername(e.target.value)}
             />
             <TextField
@@ -95,7 +97,7 @@ export default function Login() {
               required  
               fullWidth
               id="password"
-              name="password"
+              // name="password"
               label="使用者密碼"
               type="password"            
               autoComplete="current-password"
