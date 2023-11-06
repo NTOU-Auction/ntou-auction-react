@@ -1,3 +1,4 @@
+"use client"
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -9,7 +10,23 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import MediaCard from '@/components/MediaCard';
 
+import Button from '@mui/material/Button';
+
+interface NotifyState {
+  isOpen: boolean;
+  message: string;
+  type: string;
+}
+
+
 export default function HomePage() {
+
+  // const [notify, setNotify] = React.useState<NotifyState>({
+  //   isOpen: false,
+  //   message: "",
+  //   type: "",
+  // });
+
   return (
     <Box sx={{ display: 'flex' }}>
       <div>
@@ -17,6 +34,9 @@ export default function HomePage() {
           <AlertTitle>歡迎來到海大拍賣系統 👋</AlertTitle>
           您可以在本系統購買商品，也可以上架想賣出的商品。
         </Alert>
+
+        {/* <Alert notify={notify} setNotify={setNotify}>This is a success alert — check it out! </Alert> */}
+
         <Grid container rowSpacing={3} columnSpacing={3}>
           <Grid xs={6}>
             <MediaCard
