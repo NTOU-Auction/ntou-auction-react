@@ -1,0 +1,19 @@
+{
+    "commodity":{
+        "stationery":{
+            "heading":"PILOT 百樂七彩自動鉛筆H-185L",
+            "text":"不二價",
+            "img":"pen.jpg"
+        },
+        "daily":{
+            "heading":"新一代多效型牙刷－中性毛",
+            "text":"不二價",
+            "img":"toothbrush.jpg"
+        },
+        "Electron":{
+            "heading":"samsung galaxy s23 ultra 256GB (紫)",
+            "text":"競標",
+            "img":"phone.jpg"
+        }
+    }
+}
