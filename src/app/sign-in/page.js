@@ -16,6 +16,8 @@ import Container from '@mui/material/Container';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+// alert
+import { Alert } from '@mui/material';
 
 function Copyright(props) {
   return (
@@ -35,6 +37,7 @@ function setupAxiosInterceptors() {
     (config) => {
       const token = Cookies.get('token');
       if (token) {
+        //console.log(config)
         config.headers['Authorization'] = `Bearer ${token}`;
       }
       return config;
@@ -73,13 +76,19 @@ export default function Login() {
         //登入成功，將從後端拿到的token存在 Cookie 中
         const { token } = response.data;
         Cookies.set('token', token);
-        window.location.href = '/layout'; // 登入成功 導向主頁面
+        window.location.href = '/'; // 登入成功 導向主頁面
         // setToken(token);
+        
       } else {
+        window.alert("登入失敗");
         console.error('登入失敗');
       }
     } catch (error) {
-      console.error('發生錯誤:', error);
+      // window.alert("登入失敗");
+      <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          This is an error alert — <strong>check it out!</strong>
+      </Alert>
     }
   };
 
@@ -112,7 +121,7 @@ export default function Login() {
             required  /*必要輸入*/
             fullWidth
             id="username"
-            label="使用者姓名" /*提示字*/
+            label="使用者帳號" /*提示字*/
             // name="username" 
             autoComplete="name" /*自動填入*/
             autoFocus
@@ -128,10 +137,6 @@ export default function Login() {
             type="password"
             autoComplete="current-password"
             onChange={(e) => setPassword(e.target.value)}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="記住密碼"
           />
           <Button
             type="submit"
