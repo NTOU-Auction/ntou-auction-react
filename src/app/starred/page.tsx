@@ -15,7 +15,7 @@ export default function StarredPage() {
         }}
       >
         <Typography variant="body1" gutterBottom>
-          Starred Page
+          日用品
         </Typography>
       </Box>
     </Container>
