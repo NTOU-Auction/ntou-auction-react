@@ -6,12 +6,12 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-export default function MediaCard({ heading, text }: { heading: string; text: string }) {
+export default function MediaCard({ heading, text, img }: { heading: string; text: string; img: string }) {
   return (
     <Card>
       <Image
         alt="Item"
-        src="https://pic.pimg.tw/archerplus/1657717817-1259189726-g.png"
+        src={'img/' + img}
         width={640}
         height={480}
         style={{
