@@ -27,9 +27,9 @@ export const metadata = {
 const DRAWER_WIDTH = 240;
 
 const LINKS = [
-  { text: '文具類', href: '/', icon: CreateIcon },
-  { text: '日用品', href: '/starred', icon: RedeemIcon },
-  { text: '3C產品', href: '/tasks', icon: ComputerIcon },
+  { text: '文具類', href: '/stationery', icon: CreateIcon },
+  { text: '日用品', href: '/daily', icon: RedeemIcon },
+  { text: '3C產品', href: '/3c', icon: ComputerIcon },
   { text: '登入' , href: '/sign-in' ,icon: LoginIcon },
 ];
 
@@ -44,9 +44,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeRegistry>
           <AppBar position="fixed" sx={{ zIndex: 2000 }}>
             <Toolbar sx={{ backgroundColor: 'background.paper' }}>
-              <DashboardIcon sx={{ color: '#444', mr: 2, transform: 'translateY(-2px)' }} />
               <Typography variant="h6" noWrap component="div" color="black">
-                NTOU Auction
+                <div style={{display: "flex",textAlign: "center",alignItems: "center"}}>
+                  <button style={{border:"none", background:"white"}}>
+                    <img src='img/option.png' width={'30px'} />
+                  </button>
+                  <button style={{border:"none", background:"white"}}>
+                    <a href='/'><img src='img/logo.png' width={'50px'} /></a>
+                  </button>
+                  NTOU Auction
+                </div>
               </Typography>
             </Toolbar>
           </AppBar>

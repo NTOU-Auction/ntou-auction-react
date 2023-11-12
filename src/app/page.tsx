@@ -19,6 +19,10 @@ interface NotifyState {
 }
 
 
+import commodity from './commodity.json' assert { type: 'JSON' };
+let len = Object.keys(commodity.commodity).length;
+console.log(len);
+
 export default function HomePage() {
 
   // const [notify, setNotify] = React.useState<NotifyState>({
@@ -40,8 +44,19 @@ export default function HomePage() {
         <Grid container rowSpacing={3} columnSpacing={3}>
           <Grid xs={6}>
             <MediaCard
-              heading="原子筆"
-              text="不二價"
+              heading={commodity.commodity.stationery.heading}
+              text={commodity.commodity.stationery.text}
+              img={commodity.commodity.stationery.img}
+            />
+            <MediaCard
+              heading={commodity.commodity.Electron.heading}
+              text={commodity.commodity.Electron.text}
+              img={commodity.commodity.Electron.img}
+            />
+            <MediaCard
+              heading={commodity.commodity.daily.heading}
+              text={commodity.commodity.daily.text}
+              img={commodity.commodity.daily.img}
             />
           </Grid>
         </Grid>
