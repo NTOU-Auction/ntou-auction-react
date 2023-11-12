@@ -16,14 +16,16 @@ import Container from '@mui/material/Container';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-// alert
+// sign in error display
+import Snackbar from '@mui/material/Snackbar';
 import { Alert } from '@mui/material';
+import MuiAlert from '@mui/material/Alert';
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="https://github.com/NTOU-Auction/ntou-auction-react">
         NTOU AUCTION
       </Link>{' '}
       {new Date().getFullYear()}
@@ -32,6 +34,7 @@ function Copyright(props) {
   );
 }
 
+/*透過cookie進行認證*/ 
 function setupAxiosInterceptors() {
   axios.interceptors.request.use(
     (config) => {
@@ -51,6 +54,9 @@ function setupAxiosInterceptors() {
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('null');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
   const data = JSON.stringify({
     "username": username,
     "password": password
@@ -65,7 +71,8 @@ export default function Login() {
 
   // const [token, setToken] = useState(null);
   // console.log(username);
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const response = await axios.post('http://localhost:8080/api/v1/auth/log-in', data, {
         headers: headers
@@ -78,20 +85,21 @@ export default function Login() {
         Cookies.set('token', token);
         window.location.href = '/'; // 登入成功 導向主頁面
         // setToken(token);
-        
       } else {
-        window.alert("登入失敗");
+        setError('登入失敗');
+        setOpenSnackbar(true); // 顯示 Snackbar
         console.error('登入失敗');
       }
     } catch (error) {
-      // window.alert("登入失敗");
-      <Alert severity="error">
-          <AlertTitle>Error</AlertTitle>
-          This is an error alert — <strong>check it out!</strong>
-      </Alert>
+      setError('登入失敗，請檢查帳號密碼');
+      setOpenSnackbar(true); // 顯示 Snackbar
+      console.error('發生錯誤:', error);
     }
   };
 
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
   // const handleLogout = () => {
   // 清除 Cookie 中的token
   //   Cookies.remove('token');
@@ -153,7 +161,7 @@ export default function Login() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="sign-up" variant="body2">
                 {/* // TODO */}
                 {"尚未註冊帳號? 按此註冊"}
               </Link>
@@ -161,6 +169,20 @@ export default function Login() {
           </Grid>
         </Box>
       </Box>
+       {/* 顯示錯誤訊息 */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <MuiAlert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: '100%' }}
+        >
+          {error}
+        </MuiAlert>
+      </Snackbar>
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
