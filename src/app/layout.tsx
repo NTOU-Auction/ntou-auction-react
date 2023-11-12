@@ -17,6 +17,7 @@ import CreateIcon from '@mui/icons-material/Create';
 import ComputerIcon from '@mui/icons-material/Computer';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LoginIcon from '@mui/icons-material/Login';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry';
 
 export const metadata = {
@@ -30,7 +31,8 @@ const LINKS = [
   { text: '文具類', href: '/', icon: CreateIcon },
   { text: '日用品', href: '/starred', icon: RedeemIcon },
   { text: '3C產品', href: '/tasks', icon: ComputerIcon },
-  { text: '登入' , href: '/sign-in' ,icon: LoginIcon },
+  { text: '登入' , href: '/sign-in' , icon: LoginIcon },
+  { text: '註冊' , href: '/sign-up' , icon: AssignmentIndIcon },
 ];
 
 const PLACEHOLDER_LINKS = [
