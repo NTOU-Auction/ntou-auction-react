@@ -13,12 +13,6 @@ import Button from '@mui/material/Button';
 
 export default function HomePage() {
 
-  // const [notify, setNotify] = React.useState<NotifyState>({
-  //   isOpen: false,
-  //   message: "",
-  //   type: "",
-  // });
-
   return (
     <Box sx={{ display: 'flex' }}>
       <div>

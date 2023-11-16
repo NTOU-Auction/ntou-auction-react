@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react';
 import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
@@ -13,47 +14,44 @@ import Container from '@mui/material/Container';
 import { Alert } from '@mui/material';
 
 function SignUp() {
+  const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  const data = JSON.stringify({
+    "username": username,
+    "name": name,
+    "password": password,
+    "avatarImage": "",
+    "email": email
+  });
+
+  const headers = {
+    "Content-Type": "application/json;charset=UTF-8"
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // 基本的資料檢查
-    if (!username || !email || !password) {
-      setErrorMessage('所有欄位都是必填的');
-      return;
-    }
-
-    // 檢查密碼長度
-    if (password.length < 8) {
-      setErrorMessage('密碼長度至少要 8 個字元');
-      return;
-    }
-
-    // 檢查 email 格式
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setErrorMessage('請輸入有效的電子信箱');
-      return;
-    }
-
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/auth/register', {
-        username: username,
-        email: email,
-        password: password,
+      const response = await axios.post('http://localhost:8080/api/v1/auth/sign-up', data, {
+        headers: headers
       });
-
-      if (response.status === 201) {
-        console.log('註冊成功！');
-        // 在這裡可以進行一些轉導或其他操作
-      } else {
-        console.error('註冊失敗');
-      }
+      console.log(name.length)
+      if (response.status === 200) {
+        // console.log('註冊成功！');
+        // console.log(response.data.message)
+        setSuccessMessage(response.data.message);
+        // 清除錯誤訊息
+        setErrorMessage('');
+      } //else {
+      //   console.log(error.response.data.message)
+      //   console.error('註冊失敗');
+      // }
     } catch (error) {
+      setErrorMessage(error.response.data.message);
       console.error('發生錯誤:', error);
     }
   };
@@ -75,9 +73,21 @@ function SignUp() {
         <Typography component="h1" variant="h5">
           註冊
         </Typography>
-        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+        {successMessage && <Alert severity="success" sx={{ whiteSpace: 'pre-line' }}>{successMessage}</Alert>}
+        {errorMessage && <Alert severity="error" sx={{ whiteSpace: 'pre-line' }}>{errorMessage}</Alert>}
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
+            <Grid item xs={12} >
+              <TextField
+                // autoComplete="given-name"
+                required
+                fullWidth
+                id="name"
+                label="使用者暱稱"
+                autoFocus
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Grid>
             <Grid item xs={12} >
               <TextField
                 autoComplete="given-name"
