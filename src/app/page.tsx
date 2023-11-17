@@ -20,6 +20,7 @@ interface NotifyState {
 
 const commodityAPI = "http://localhost:8080/api/v1/product/products";
 
+
 export default function HomePage() {
 
   const [commodity, setcommodity] = React.useState([]);
@@ -47,8 +48,8 @@ export default function HomePage() {
 
         <Grid container rowSpacing={len} columnSpacing={len}>
           <Grid xs={6}> 
-            <div style={{ display:'inline'}}>
-            {commodity ? function() {
+            <div style={{ display:'flex'}}>
+            {commodity ? function() { 
               let show = []
               for (let i = 0; i<len; i++){
                 show.push(<MediaCard

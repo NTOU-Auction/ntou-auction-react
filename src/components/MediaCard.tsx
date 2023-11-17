@@ -8,10 +8,10 @@ import Typography from '@mui/material/Typography';
 
 export default function MediaCard({ productName, isFixedPrice, productImage, productDescription, price, currentPrice }: { productName: string; isFixedPrice: boolean; productImage: string; productDescription:string; price:number; currentPrice:number }) {
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" sx={{ width:'400px', height:'400px' }}>
       <Image
         alt="Image"
-        src={productImage}
+        src={"data:image/jpeg;base64," + productImage}
         width={640}
         height={480}
         style={{
@@ -20,7 +20,7 @@ export default function MediaCard({ productName, isFixedPrice, productImage, pro
           objectFit: 'cover',
         }}
       />
-      <CardContent>
+      <CardContent >
         <Typography gutterBottom variant="h6" component="div">
           {productName}
         </Typography>
