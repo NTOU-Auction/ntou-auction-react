@@ -49,7 +49,7 @@ export default function HomePage() {
         <Grid container rowSpacing={len} columnSpacing={len}>
           <Grid xs={6}> 
             <div style={{ display:'flex'}}>
-            {commodity ? function() {
+            {commodity ? function() { 
               let show = []
               for (let i = 0; i<len; i++){
                 show.push(<MediaCard
