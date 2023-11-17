@@ -28,10 +28,10 @@ export const metadata = {
 const DRAWER_WIDTH = 240;
 
 const LINKS = [
-  { text: "文具類", href: "/", icon: CreateIcon },
-  { text: "日用品", href: "/starred", icon: RedeemIcon },
-  { text: "3C產品", href: "/tasks", icon: ComputerIcon },
-  { text: "登入", href: "/sign-in", icon: LoginIcon },
+  { text: '文具類', href: '/stationery', icon: CreateIcon },
+  { text: '日用品', href: '/daily', icon: RedeemIcon },
+  { text: '3C產品', href: '/3c', icon: ComputerIcon },
+  { text: '登入' , href: '/sign-in' ,icon: LoginIcon },
   { text: "註冊", href: "/sign-up", icon: AssignmentIndIcon },
 ];
 
@@ -48,12 +48,22 @@ export default function RootLayout({
       <body>
         <ThemeRegistry>
           <AppBar position="fixed" sx={{ zIndex: 2000 }}>
-            <Toolbar sx={{ backgroundColor: "background.paper" }}>
-              <DashboardIcon
-                sx={{ color: "#444", mr: 2, transform: "translateY(-2px)" }}
-              />
+            <Toolbar sx={{ backgroundColor: 'background.paper' }}>
               <Typography variant="h6" noWrap component="div" color="black">
-                NTOU Auction
+                <div style={{float:"left", display: "flex",textAlign: "center",alignItems: "center"}}>
+                  <button style={{border:"none", background:"white"}}>
+                    <img src='img/option.png' width={'30px'} />
+                  </button>
+                  <button style={{border:"none", background:"white"}}>
+                    <a href='/'><img src='img/logo.png' width={'50px'} /></a>
+                  </button>
+                  NTOU Auction
+                </div>
+                <div style={{float:"right", display: "flex",textAlign: "center",alignItems: "start"}}>
+                  <button style={{border:"none", background:"white"}}>
+                    <u style={{display: "flex", color:"orange"}}>login</u>
+                  </button>
+                </div>
               </Typography>
             </Toolbar>
           </AppBar>
