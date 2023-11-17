@@ -45,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AppBar position="fixed" sx={{ zIndex: 2000 }}>
             <Toolbar sx={{ backgroundColor: 'background.paper' }}>
               <Typography variant="h6" noWrap component="div" color="black">
-                <div style={{display: "flex",textAlign: "center",alignItems: "center"}}>
+                <div style={{float:"left", display: "flex",textAlign: "center",alignItems: "center"}}>
                   <button style={{border:"none", background:"white"}}>
                     <img src='img/option.png' width={'30px'} />
                   </button>
@@ -53,6 +53,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <a href='/'><img src='img/logo.png' width={'50px'} /></a>
                   </button>
                   NTOU Auction
+                </div>
+                <div style={{float:"right", display: "flex",textAlign: "center",alignItems: "start"}}>
+                  <button style={{border:"none", background:"white"}}>
+                    <u style={{display: "flex", color:"orange"}}>login</u>
+                  </button>
                 </div>
               </Typography>
             </Toolbar>

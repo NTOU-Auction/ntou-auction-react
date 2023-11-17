@@ -6,12 +6,12 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-export default function MediaCard({ heading, text, img }: { heading: string; text: string; img: string }) {
+export default function MediaCard({ productName, isFixedPrice, productImage, productDescription, price, currentPrice }: { productName: string; isFixedPrice: boolean; productImage: string; productDescription:string; price:number; currentPrice:number }) {
   return (
-    <Card>
+    <Card variant="outlined">
       <Image
-        alt="Item"
-        src={'img/' + img}
+        alt="Image"
+        src={productImage}
         width={640}
         height={480}
         style={{
@@ -21,11 +21,14 @@ export default function MediaCard({ heading, text, img }: { heading: string; tex
         }}
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {heading}
+        <Typography gutterBottom variant="h6" component="div">
+          {productName}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {text}
+          {isFixedPrice ? "不二價："+price : "競標價："+currentPrice}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {productDescription}
         </Typography>
       </CardContent>
       <CardActions>

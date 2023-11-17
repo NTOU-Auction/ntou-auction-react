@@ -13,11 +13,22 @@ export default function Electron() {
       <div>
         <Grid container rowSpacing={3} columnSpacing={3}>
           <Grid xs={6}>
-            <MediaCard
-              heading={commodity.commodity.Electron.heading}
-              text={commodity.commodity.Electron.text}
-              img={commodity.commodity.Electron.img}
-            />
+            <div>
+            {function() {
+              let show = []
+              for (let i = 0; i<len; i++){
+                show.push(<MediaCard
+                              productName={commodity[i].productName}
+                              isFixedPrice={commodity[i].isFixedPrice}
+                              productImage={commodity[i].productImage}
+                              productDescription={commodity[i].productDescription}
+                              price={commodity[i].price}
+                              currentPrice={commodity[i].currentPrice}
+                              />)
+              }
+            return show
+            }()}
+            </div>
           </Grid>
         </Grid>
       </div>

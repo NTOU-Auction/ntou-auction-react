@@ -9,8 +9,8 @@ import ListItem from '@mui/material/ListItem';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import MediaCard from '@/components/MediaCard';
-
-import Button from '@mui/material/Button';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 interface NotifyState {
   isOpen: boolean;
@@ -18,18 +18,24 @@ interface NotifyState {
   type: string;
 }
 
-
-import commodity from './commodity.json' assert { type: 'JSON' };
-let len = Object.keys(commodity.commodity).length;
-console.log(len);
+const commodityAPI = "http://localhost:8080/api/v1/product/products";
 
 export default function HomePage() {
 
-  // const [notify, setNotify] = React.useState<NotifyState>({
-  //   isOpen: false,
-  //   message: "",
-  //   type: "",
-  // });
+  const [commodity, setcommodity] = React.useState([]);
+  React.useEffect(() => {
+      fetch(commodityAPI)
+         .then((response) => response.json())
+         .then((data) => {
+            console.log(data);
+            setcommodity(data);
+         })
+         .catch((err) => {
+            console.log(err.message);
+         });
+   }, []);
+
+  var len = commodity ? Object.keys(commodity).length : 0;
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -37,27 +43,26 @@ export default function HomePage() {
         <Alert severity="info" sx={{ mt: 2, mb: 5 }}>
           <AlertTitle>歡迎來到海大拍賣系統 👋</AlertTitle>
           您可以在本系統購買商品，也可以上架想賣出的商品。
-        </Alert>
+        </Alert>  
 
-        {/* <Alert notify={notify} setNotify={setNotify}>This is a success alert — check it out! </Alert> */}
-
-        <Grid container rowSpacing={3} columnSpacing={3}>
-          <Grid xs={6}>
-            <MediaCard
-              heading={commodity.commodity.stationery.heading}
-              text={commodity.commodity.stationery.text}
-              img={commodity.commodity.stationery.img}
-            />
-            <MediaCard
-              heading={commodity.commodity.Electron.heading}
-              text={commodity.commodity.Electron.text}
-              img={commodity.commodity.Electron.img}
-            />
-            <MediaCard
-              heading={commodity.commodity.daily.heading}
-              text={commodity.commodity.daily.text}
-              img={commodity.commodity.daily.img}
-            />
+        <Grid container rowSpacing={len} columnSpacing={len}>
+          <Grid xs={6}> 
+            <div style={{ display:'inline'}}>
+            {commodity ? function() {
+              let show = []
+              for (let i = 0; i<len; i++){
+                show.push(<MediaCard
+                              productName={commodity[i].productName}
+                              isFixedPrice={commodity[i].isFixedPrice}
+                              productImage={commodity[i].productImage}
+                              productDescription={commodity[i].productDescription}
+                              price={commodity[i].price}
+                              currentPrice={commodity[i].currentPrice}
+                              />)
+              }
+            return show
+            }() : <p>404</p>}
+            </div>
           </Grid>
         </Grid>
       </div>
