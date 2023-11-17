@@ -1,19 +1,41 @@
-{
-    "commodity":{
-        "stationery":{
-            "heading":"PILOT 百樂七彩自動鉛筆H-185L",
-            "text":"不二價",
-            "img":"pen.jpg"
-        },
-        "daily":{
-            "heading":"新一代多效型牙刷－中性毛",
-            "text":"不二價",
-            "img":"toothbrush.jpg"
-        },
-        "Electron":{
-            "heading":"samsung galaxy s23 ultra 256GB (紫)",
-            "text":"競標",
-            "img":"phone.jpg"
-        }
+[
+    {
+        "id": 1,
+        "version": 1,
+        "productName":"PILOT 百樂七彩自動鉛筆H-185L",
+        "price": 100,
+        "isFixedPrice": true,
+        "productDescription": "非常好用",
+        "seller": "weichun",
+        "productImage":"pen.jpg",
+        "upsetPrice": 100,
+        "currentPrice": 100,
+        "productType": "stationery"
+    },
+    {
+        "id": 2,
+        "version": 1,
+        "productName":"新一代多效型牙刷－中性毛",
+        "price": 100,
+        "isFixedPrice": true,
+        "productDescription": "非常好用",
+        "seller": "weichun",
+        "productImage":"toothbrush.jpg",
+        "upsetPrice": 100,
+        "currentPrice": 100,
+        "productType": "daily"
+    },
+    {
+        "id": 3,
+        "version": 1,
+        "productName":"samsung galaxy s23 ultra 256GB (紫)",
+        "price": 0,
+        "isFixedPrice": false,
+        "productDescription": "非常好用",
+        "seller": "chiachi",
+        "productImage":"phone.jpg",
+        "upsetPrice": 35000,
+        "currentPrice": 39999,
+        "productType": "3c"
     }
-}
+]
