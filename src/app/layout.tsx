@@ -1,3 +1,4 @@
+"use client"
 import * as React from "react";
 import Link from "next/link";
 import AppBar from "@mui/material/AppBar";
@@ -17,10 +18,25 @@ import CreateIcon from "@mui/icons-material/Create";
 import ComputerIcon from "@mui/icons-material/Computer";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LoginIcon from "@mui/icons-material/Login";
+import SearchIcon from '@mui/icons-material/Search';
+import ChatIcon from '@mui/icons-material/Chat';
+import ListIcon from '@mui/icons-material/List';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
 
-export const metadata = {
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+import HomePage from '@/app/page';
+import SignIn from '@/app/sign-in/page';
+import SignUp from '@/app/sign-up/page';
+import Details from '@/app/details/page';
+import Electron from '@/app/electronic/page';
+import Daily from '@/app/daily/page';
+import Stationery from '@/app/Stationary/page';
+
+ const metadata = {
   title: "NTOU Auction",
   description: "NTOU Auction",
 };
@@ -28,41 +44,49 @@ export const metadata = {
 const DRAWER_WIDTH = 240;
 
 const LINKS = [
-  { text: '文具類', href: '/stationery', icon: CreateIcon },
+  { text: '文具類', href: '/Stationary', icon: CreateIcon },
   { text: '日用品', href: '/daily', icon: RedeemIcon },
-  { text: '3C產品', href: '/3c', icon: ComputerIcon },
-  { text: '登入' , href: '/sign-in' ,icon: LoginIcon },
-  { text: "註冊", href: "/sign-up", icon: AssignmentIndIcon },
+  { text: '3C產品', href: '/electronic', icon: ComputerIcon }
 ];
 
-const PLACEHOLDER_LINKS = [{ text: "設定", icon: SettingsIcon }];
+const PLACEHOLDER_LINKS = [
+  { text: "購物車",href: "/sign-in", icon: ShoppingCartIcon },
+  { text: "聊天室",href: "/sign-in", icon: ChatIcon },
+  { text: "設定",href: "/", icon: SettingsIcon }];
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // const isAuthorized = AuthorizationChecker();
   return (
     <html lang="en">
       <body>
         <ThemeRegistry>
           <AppBar position="fixed" sx={{ zIndex: 2000 }}>
-            <Toolbar sx={{ backgroundColor: 'background.paper' }}>
-              <Typography variant="h6" noWrap component="div" color="black">
+            <Toolbar sx={{backgroundColor: 'background.paper' }}>
+              <Typography height='100%' width='100%' variant="h6" noWrap component="div" color="black">
                 <div style={{float:"left", display: "flex",textAlign: "center",alignItems: "center"}}>
-                  <button style={{border:"none", background:"white"}}>
-                    <img src='img/option.png' width={'30px'} />
-                  </button>
+                  <ListItemButton>
+                    <ListIcon/>
+                  </ListItemButton>
                   <button style={{border:"none", background:"white"}}>
                     <a href='/'><img src='img/logo.png' width={'50px'} /></a>
                   </button>
                   NTOU Auction
                 </div>
-                <div style={{float:"right", display: "flex",textAlign: "center",alignItems: "start"}}>
-                  <button style={{border:"none", background:"white"}}>
-                    <u style={{display: "flex", color:"orange"}}>login</u>
-                  </button>
+                <div style={{ float:"left", width: "50%", justifyContent: "center", display: "flex",textAlign: "center",alignItems: "center"}}>
+                  <input style={{width: "50%", height: "40px", borderRadius:"18px", border: "1px solid #ccc", paddingLeft: "3%"}} type="search" placeholder="搜尋商品"/>
+                  <SearchIcon/>
+                </div>
+                <div style={{ float:"right", display: "flex",textAlign: "center",alignItems: "center"}}>
+                  <ListItemButton component={Link} href={'/sign-in'}>
+                    <u style={{fontSize:"15px", color:"orange"}}><LoginIcon/>登入</u>
+                  </ListItemButton>
+                  /
+                  <ListItemButton component={Link} href={'/sign-up'}>
+                    <u style={{fontSize:"15px", color:"orange"}}><AssignmentIndIcon/>註冊</u>
+                  </ListItemButton>
                 </div>
               </Typography>
             </Toolbar>
@@ -97,10 +121,10 @@ export default function RootLayout({
             </List>
             <Divider sx={{ mt: "auto" }} />
             <List>
-              {PLACEHOLDER_LINKS.map(({ text, icon: Icon }) => (
+              {PLACEHOLDER_LINKS.map(({ text, href, icon: Icon }) => (
                 <ListItem key={text} disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon>
+                  <ListItemButton component={Link} href={href}>
+                    <ListItemIcon>                     
                       <Icon />
                     </ListItemIcon>
                     <ListItemText primary={text} />

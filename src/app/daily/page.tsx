@@ -6,7 +6,7 @@ import MediaCard from "@/components/MediaCard";
 
 const commodityAPI = "http://localhost:8080/api/v1/product/products";
 
-export default function Electron() {
+export default function Daily() {
   const [commodity, setcommodity] = React.useState([]);
   React.useEffect(() => {
     fetch(commodityAPI)
@@ -34,14 +34,7 @@ export default function Electron() {
                   for (let i = 0; i < len; i++) {
                     if (commodity[i].productType == "Daily need")
                       show.push(
-                        <MediaCard
-                          productName={commodity[i].productName}
-                          isFixedPrice={commodity[i].isFixedPrice}
-                          productImage={commodity[i].productImage}
-                          productDescription={commodity[i].productDescription}
-                          price={commodity[i].price}
-                          currentPrice={commodity[i].currentPrice}
-                        />
+                        (<MediaCard commodity={commodity[i]} />)
                       );
                   }
                   return show;

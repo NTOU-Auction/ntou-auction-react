@@ -34,14 +34,7 @@ export default function Electron() {
                   for (let i = 0; i < len; i++) {
                     if (commodity[i].productType == "electronic")
                       show.push(
-                        <MediaCard
-                          productName={commodity[i].productName}
-                          isFixedPrice={commodity[i].isFixedPrice}
-                          productImage={commodity[i].productImage}
-                          productDescription={commodity[i].productDescription}
-                          price={commodity[i].price}
-                          currentPrice={commodity[i].currentPrice}
-                        />
+                        (<MediaCard commodity={commodity[i]} />)
                       );
                   }
                   return show;
