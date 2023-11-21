@@ -6,7 +6,7 @@ import MediaCard from '@/components/MediaCard';
 
 const commodityAPI = "http://localhost:8080/api/v1/product/products";
 
-export default function Electron(){
+export default function Stationery(){
 
   const [commodity, setcommodity] = React.useState([]);
   React.useEffect(() => {
@@ -32,14 +32,7 @@ export default function Electron(){
             {commodity ? function() {
               let show = []
               for (let i = 0; i<len; i++){
-                if(commodity[i].productType == "Stationary") show.push(<MediaCard
-                                                                      productName={commodity[i].productName}
-                                                                      isFixedPrice={commodity[i].isFixedPrice}
-                                                                      productImage={commodity[i].productImage}
-                                                                      productDescription={commodity[i].productDescription}
-                                                                      price={commodity[i].price}
-                                                                      currentPrice={commodity[i].currentPrice}
-                                                                      />);
+                if(commodity[i].productType == "Stationary") show.push((<MediaCard commodity={commodity[i]} />));
               }
             return show
             }() : <p>404</p>}
