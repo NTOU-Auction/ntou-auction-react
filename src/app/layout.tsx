@@ -33,6 +33,7 @@ const LINKS = [
   { text: '3C產品', href: '/3c', icon: ComputerIcon },
   { text: '登入' , href: '/sign-in' ,icon: LoginIcon },
   { text: "註冊", href: "/sign-up", icon: AssignmentIndIcon },
+  { text: "新增商品", href: "/add-product", icon: AssignmentIndIcon },
 ];
 
 const PLACEHOLDER_LINKS = [{ text: "設定", icon: SettingsIcon }];
