@@ -24,18 +24,22 @@ const editorConfiguration = {
     ]
 };
 
-function CustomEditor( props ) {
-        return (
-            <CKEditor
-                editor={ Editor }
-                config={ editorConfiguration }
-                data={ props.initialData }
-                onChange={ (event, editor ) => {
-                    const data = editor.getData();
-                    console.log( { event, editor, data } );
-                } }
-            />
-        )
-}
-
-export default CustomEditor;
+function CustomEditor(props, ref) {
+    return (
+      <CKEditor
+        editor={Editor}
+        config={editorConfiguration}
+        data={props.initialData}
+        onChange={(event, editor) => {
+          const data = editor.getData();
+        //   console.log({ data });
+          if (props.onChange) {
+            props.onChange(data); // 將獲取的資料傳給父元件的onChange方法 
+          }
+        }}
+        ref={ref} // 傳遞 ref 給 CKEditor
+      />
+    );
+  }
+  
+  export default React.forwardRef(CustomEditor);

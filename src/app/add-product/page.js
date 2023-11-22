@@ -1,16 +1,28 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import axios from "axios";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import FormHelperText from "@mui/material/FormHelperText";
+import FormControl from "@mui/material/FormControl";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormLabel from "@mui/material/FormLabel";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import Paper from "@mui/material/Paper";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import dayjs from "dayjs";
 import { Grid } from "@mui/material";
-const htmlString = "";
-const theObj = { __html: htmlString };
-
+// const theObj = { __html: productDescription };
 const CustomEditor = dynamic(
   () => {
     return import("../../components/custom-editor");
@@ -24,34 +36,67 @@ const UploadProductForm = () => {
   const [productCategory, setProductCategory] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productDeadline, setProductDeadline] = useState("");
+  const [auctionType, setAuctionType] = useState("0"); // default為競標
+  const [productIncPrice, setProductIncPrice] = useState("");
+  const [productAmount, setProductAmount] = useState("1");
 
-  const handleDateTimeChange = (date) => {
-    date = new Date(date.toISOString());
-    const formattedDateTime = date.toLocaleString("en-US", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
-    // console.log(typeof formattedDateTime);
+  // 上傳商品縮圖
+  const [file, setFile] = useState(null);
+  const [base64, setBase64] = useState(null);
+  const onFileChange = (e) => {
+    if (!e.target.files) {
+      return;
+    }
+    setFile(e.target.files[0]);
+  };
+  const onClick = (e) => {
+    e.currentTarget.value = "";
+  };
+
+  // 設定時間格式
+  const handleDateTimeChange = (dateObject) => {
+    const year = dateObject.$y;
+    const month = `0${dateObject.$M + 1}`.slice(-2);
+    const day = `0${dateObject.$D}`.slice(-2);
+    const hours = `0${dateObject.$H}`.slice(-2);
+    const minutes = `0${dateObject.$m}`.slice(-2);
+    const seconds = `0${dateObject.$s}`.slice(-2);
+    const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    console.log(formattedDateTime);
     setProductDeadline(formattedDateTime);
+  };
+
+  // 設定CustomEditor訊息傳遞
+  const editorRef = useRef();
+  const handleEditorChange = (data) => {
+    setProductDescription(data);
+  };
+
+  useEffect(() => {
+    // 調用 ref.current.editor.getData() 來獲取editor的data
+    if (editorRef.current && editorRef.current.editor) {
+      const editorData = editorRef.current.editor.getData();
+      console.log("Editor Data:", editorData);
+    }
+  }, []);
+
+  const headers = {
+    "Content-Type": "application/json;charset=UTF-8",
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const base64 = await toBase64(file);
+    setBase64(base64);
+
     const productData = JSON.stringify({
       name: productName,
+      image: base64,
       description: productDescription,
       category: productCategory,
       price: productPrice,
     });
-
-    const headers = {
-      "Content-Type": "application/json;charset=UTF-8",
-    };
 
     try {
       // 發送POST請求到後端API端點
@@ -61,199 +106,223 @@ const UploadProductForm = () => {
         { headers: headers }
       );
       console.log("商品上傳成功:", response.data);
-      // 在這裡可以處理上傳成功後的其他邏輯或重新導向
     } catch (error) {
+      console.log(productData);
       console.error("商品上傳失敗:", error);
-      // 在這裡可以處理上傳失敗後的錯誤狀況
     }
   };
 
+  const toBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <TextField
-        label="商品名稱"
-        value={productName}
-        onChange={(e) => setProductName(e.target.value)}
-        fullWidth
-        required
-        margin="normal"
-      />
-      <Grid>
-        <div dangerouslySetInnerHTML={theObj} />
+    <Container style={{ marginTop: "20px" }}>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Paper elevation={6} style={{ padding: "20px" }}>
+            <Typography variant="h5" style={{ color: "#0476D9" }}>
+              請填寫商品上架資訊
+            </Typography>
+            <br></br>
+            <form onSubmit={handleSubmit}>
+              <Grid item xs={6}>
+                <FormControl>
+                  <FormLabel id="demo-radio-buttons-group-label">
+                    請選擇拍賣種類
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    defaultValue="female"
+                    name="radio-buttons-group"
+                    value={auctionType}
+                    // onChange={(e) => setAuctionType(e.target.value)}
+                    onChange={(e) => {
+                      setAuctionType(e.target.value);
+                      if (e.target.value === "1") {
+                        setProductDeadline(""); // 在選擇不二價時將 productDeadline 設為空字串
+                      } else if (e.target.value === "0") {
+                        setProductAmount("1"); // 在選擇拍賣時將 ProductAmount 設為1
+                      }
+                    }}
+                  >
+                    <FormControlLabel
+                      value="0"
+                      control={<Radio />}
+                      label="競標"
+                    />
+                    <FormControlLabel
+                      value="1"
+                      control={<Radio />}
+                      label="不二價"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+              <br></br>
+              <Grid item xs={3}>
+                <InputLabel id="demo-simple-select-required-label">
+                  請出入商品名稱
+                </InputLabel>
+                <TextField
+                  label="商品名稱"
+                  value={productName}
+                  onChange={(e) => setProductName(e.target.value)}
+                  fullWidth
+                  required
+                  margin="normal"
+                />
+              </Grid>
+              <br></br>
+              <Grid item xs={6}>
+                <InputLabel id="demo-simple-select-required-label">
+                  選擇商品縮圖
+                </InputLabel>
+                <label htmlFor="contained-button-file">
+                  <input
+                    style={{ display: "none" }}
+                    id="contained-button-file"
+                    type="file"
+                    accept="image/*"
+                    onChange={onFileChange}
+                    onClick={onClick}
+                  />
+                  <Button
+                    variant="contained"
+                    component="span"
+                    startIcon={<CloudUploadIcon />}
+                  >
+                    上傳圖片
+                  </Button>
+                </label>
+              </Grid>
+              <br></br>
+              <br></br>
+              <Grid item xs={6}>
+                <InputLabel id="demo-simple-select-required-label">
+                  請選擇商品的種類
+                </InputLabel>
+                <FormControl required sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-required-label">
+                    商品種類
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-required-label"
+                    id="demo-simple-select-required"
+                    value={productCategory}
+                    label="商品種類 *"
+                    onChange={(e) => setProductCategory(e.target.value)}
+                  >
+                    <MenuItem value={"electronic"}>3C產品</MenuItem>
+                    <MenuItem value={"Daily need"}>日常用品</MenuItem>
+                    <MenuItem value={"Stationary"}>文具類</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <br></br>
+              <Grid item xs={3}>
+                <InputLabel id="demo-simple-select-required-label">
+                  請輸入商品價格
+                </InputLabel>
+                <TextField
+                  label="商品價格"
+                  value={productPrice}
+                  onChange={(e) => setProductPrice(e.target.value)}
+                  type="number"
+                  fullWidth
+                  required
+                  margin="normal"
+                />
+              </Grid>
+
+              {auctionType === "1" && (
+                <Grid item xs={3}>
+                  <InputLabel id="demo-simple-select-required-label">
+                    請輸入商品數量
+                  </InputLabel>
+                  <TextField
+                    label="商品數量"
+                    value={productAmount}
+                    onChange={(e) => setProductAmount(e.target.value)}
+                    type="number"
+                    fullWidth
+                    required
+                    margin="normal"
+                  />
+                </Grid>
+              )}
+              <br></br>
+
+              {auctionType === "0" && (
+                <Grid item xs={3}>
+                  <InputLabel id="demo-simple-select-required-label">
+                    請輸入每口叫價
+                  </InputLabel>
+                  <TextField
+                    label="每口叫價"
+                    value={productIncPrice}
+                    onChange={(e) => setProductIncPrice(e.target.value)}
+                    type="number"
+                    fullWidth
+                    required
+                    margin="normal"
+                  />
+                </Grid>
+              )}
+
+              {auctionType === "0" && (
+                <Grid item xs={6}>
+                  <InputLabel id="demo-simple-select-required-label">
+                    請選擇拍賣截止日期
+                  </InputLabel>
+                  <p></p>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DateTimePicker
+                      label="選擇拍賣截止日期"
+                      value={productDeadline}
+                      onChange={handleDateTimeChange}
+                      renderInput={(params) => <TextField {...params} />}
+                      minDateTime={dayjs(new Date())}
+                    />
+                    <br></br>
+                    <br></br>
+                  </LocalizationProvider>
+                </Grid>
+              )}
+
+              <InputLabel id="demo-simple-select-required-label">
+                商品描述
+              </InputLabel>
+              <Grid item xs={8}>
+                <CustomEditor
+                  onChange={handleEditorChange}
+                  ref={editorRef} // 將 ref 绑定到 CustomEditor 组件
+                  // value={productDescription}
+                  initialData="Some initial data"
+                />
+              </Grid>
+              <br></br>
+              <br></br>
+
+              <Button type="submit" variant="contained" color="primary">
+                上傳商品
+              </Button>
+            </form>
+          </Paper>
+        </Grid>
       </Grid>
-      <CustomEditor initialData="test..." />
-      {/* <TextField
-        label="商品類別"
-        value={productCategory}
-        onChange={(e) => setProductCategory(e.target.value)}
-        fullWidth
-        required
-        margin="normal"
-      /> */}
-      <TextField
-        label="商品價格"
-        value={productPrice}
-        onChange={(e) => setProductPrice(e.target.value)}
-        type="number"
-        fullWidth
-        required
-        margin="normal"
-      />
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DateTimePicker
-          label="選擇日期"
-          value={productDeadline}
-          onChange={handleDateTimeChange}
-          renderInput={(params) => <TextField {...params} />}
-        />
-      </LocalizationProvider>
-      <br></br>
-      <br></br>
-      <Button type="submit" variant="contained" color="primary">
-        上傳商品
-      </Button>
-    </form>
+    </Container>
   );
-  //productName, isFixedPrice(0:競標 1:不二價), productImage(base64), productDescription(CK5), price, 商品截止time(for競標)
 };
 
-// import React, { useState } from 'react';
-// import { CKEditor } from '@ckeditor/ckeditor5-react';
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-// // import { Base64UploadAdapter } from '@ckeditor/ckeditor5-upload';
-// import TextField from '@mui/material/TextField';
-// import Button from '@mui/material/Button';
-// import axios from 'axios';
-
-// const UploadProductForm = () => {
-//   const [productDescription, setProductDescription] = useState('');
-
-//   const handleProductDescriptionChange = (event, editor) => {
-//     const data = editor.getData();
-//     setProductDescription(data);
-//   };
-
-//   const handleSubmit = async (event) => {
-//     event.preventDefault();
-
-//     const productData = {
-//       description: productDescription,
-//       // other product data...
-//     };
-
-//     try {
-//       const response = await axios.post('http://localhost:8080/api/v1/product/products', productData);
-//       console.log('商品上傳成功:', response.data);
-//       // 在這裡可以處理上傳成功後的其他邏輯或重新導向
-//     } catch (error) {
-//       console.error('商品上傳失敗:', error);
-//       // 在這裡可以處理上傳失敗後的錯誤狀況
-//     }
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <CKEditor
-//         editor={ClassicEditor}
-//         config={{
-//           // plugins: [Base64UploadAdapter],
-//           image: {
-//             upload: {
-//               types: ['png', 'jpeg'] // 設置允許上傳的圖片類型
-//               // 其他圖片上傳配置
-//             }
-//           }
-//           // 其他編輯器設定
-//         }}
-//         onChange={handleProductDescriptionChange}
-//       />
-//       <TextField
-//         label="商品描述"
-//         value={productDescription}
-//         multiline
-//         rows={4}
-//         fullWidth
-//         required
-//         margin="normal"
-//       />
-//       <Button type="submit" variant="contained" color="primary">
-//         上傳商品
-//       </Button>
-//     </form>
-//   );
-// };
-
 export default UploadProductForm;
-
-// import React from 'react';
-// // import React, { useState } from 'react';
-// // import { CKEditor } from '@ckeditor/ckeditor5-react';
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-// // import Editor from 'ckeditor5-custom-build/build/ckeditor';
-// // import {Editor as ClassicEditor} from 'ckeditor5-custom-build/build/ckeditor';
-// import { CKEditor } from '@ckeditor/ckeditor5-react'
-
-// const MyCkeditor = () => {
-//     const API_URl = "https://noteyard-backend.herokuapp.com"
-//     const UPLOAD_ENDPOINT = "api/blogs/uploadImg";
-
-//     function uploadAdapter(loader) {
-//         return {
-//             upload: () => {
-//                 return new Promise((resolve, reject) => {
-//                     const body = new FormData();
-//                     loader.file.then((file) => {
-//                         body.append("uploadImg", file);
-//                         fetch(`${API_URl}/${UPLOAD_ENDPOINT}`, {
-//                             method: "post",
-//                             body: body
-//                         })
-//                             .then((res => res.json()))
-//                             .then((res) => {
-//                                 resolve({ default: `${API_URl}/${res.url}` })
-//                             })
-//                             .catch((err) => {
-//                                 reject(err);
-//                             })
-//                     })
-//                 })
-//             }
-//         }
-//     }
-
-//     function uploadPlugin(editor) {
-//         editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-//             return uploadAdapter(loader);
-//         }
-//     }
-//     return (
-//         <div>
-//             <div className="App">
-//                 {/* <h2>Using CKEditor 5 from online builder in React</h2> */}
-//                 <CKEditor
-//                     config={{
-//                         extraPlugins: [uploadPlugin]
-//                     }}
-//                     editor={ClassicEditor}
-//                     data="<p>Hello from CKEditor 5!</p>"
-//                     onReady={editor => {
-//                         // You can store the "editor" and use when it is needed.
-//                         console.log('Editor is ready to use!', editor);
-//                     }}
-//                     onChange={(event, editor) => {
-//                         const data = editor.getData();
-//                         console.log({ event, editor, data });
-//                     }}
-//                     onBlur={(event, editor) => {
-//                         console.log('Blur.', editor);
-//                     }}
-//                     onFocus={(event, editor) => {
-//                         console.log('Focus.', editor);
-//                     }}
-//                 />
-//             </div>
-//         </div>
-//     )
-// }
-
-// export default MyCkeditor;

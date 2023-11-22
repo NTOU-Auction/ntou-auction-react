@@ -34,6 +34,7 @@ const LINKS = [
   { text: '登入' , href: '/sign-in' ,icon: LoginIcon },
   { text: "註冊", href: "/sign-up", icon: AssignmentIndIcon },
   { text: "新增商品", href: "/add-product", icon: AssignmentIndIcon },
+  { text: "測試", href: "/test", icon: AssignmentIndIcon },
 ];
 
 const PLACEHOLDER_LINKS = [{ text: "設定", icon: SettingsIcon }];
