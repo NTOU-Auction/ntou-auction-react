@@ -81,24 +81,15 @@ const UploadProductForm = () => {
       <Grid>
         <div dangerouslySetInnerHTML={theObj} />
       </Grid>
-      <TextField
-        label="商品描述"
-        value={productDescription}
-        onChange={(e) => setProductDescription(e.target.value)}
-        multiline
-        rows={4}
-        fullWidth
-        required
-        margin="normal"
-      />
-      <TextField
+      <CustomEditor initialData="test..." />
+      {/* <TextField
         label="商品類別"
         value={productCategory}
         onChange={(e) => setProductCategory(e.target.value)}
         fullWidth
         required
         margin="normal"
-      />
+      /> */}
       <TextField
         label="商品價格"
         value={productPrice}
@@ -116,7 +107,6 @@ const UploadProductForm = () => {
           renderInput={(params) => <TextField {...params} />}
         />
       </LocalizationProvider>
-      <CustomEditor initialData="<h1>...!</h1>" />
       <br></br>
       <br></br>
       <Button type="submit" variant="contained" color="primary">
