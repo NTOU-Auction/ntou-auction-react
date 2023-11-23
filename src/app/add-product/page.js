@@ -22,6 +22,10 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import { Grid } from "@mui/material";
+import Cookies from "js-cookie";
+import { Alert } from "@mui/material";
+
+
 // const theObj = { __html: productDescription };
 const CustomEditor = dynamic(
   () => {
@@ -32,21 +36,26 @@ const CustomEditor = dynamic(
 
 const UploadProductForm = () => {
   const [productName, setProductName] = useState("");
-  const [productDescription, setProductDescription] = useState("");
+  const [productDescription, setProductDescription] =
+    useState("請輸入商品詳情");
   const [productCategory, setProductCategory] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productDeadline, setProductDeadline] = useState("");
   const [auctionType, setAuctionType] = useState("0"); // default為競標
   const [productIncPrice, setProductIncPrice] = useState("");
   const [productAmount, setProductAmount] = useState("1");
-
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [imageSelected, setImageSelected] = useState(false);
   // 上傳商品縮圖
   const [file, setFile] = useState(null);
   const [base64, setBase64] = useState(null);
+  const token = Cookies.get("token");
   const onFileChange = (e) => {
     if (!e.target.files) {
       return;
     }
+    setImageSelected(true);
     setFile(e.target.files[0]);
   };
   const onClick = (e) => {
@@ -81,33 +90,60 @@ const UploadProductForm = () => {
   }, []);
 
   const headers = {
-    "Content-Type": "application/json;charset=UTF-8",
+    // "Content-Type": "application/json;charset=UTF-8",
+    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    // 設定縮圖
     const base64 = await toBase64(file);
     setBase64(base64);
+    const productDataFixed = JSON.stringify({
+      productName: productName,
+      currentPrice: productPrice,
+      productType: productCategory,
+      productDescription: productDescription,
+      productImage: base64,
+      productAmount: productAmount,
+    });
 
-    const productData = JSON.stringify({
-      name: productName,
-      image: base64,
-      description: productDescription,
-      category: productCategory,
-      price: productPrice,
+    const productDataAuction = JSON.stringify({
+      productName: productName,
+      upsetPrice: productPrice,
+      bidIncrement: productIncPrice,
+      productAmount: productAmount,
+      finishTime: productDeadline,
+      productType: productCategory,
+      productDescription: productDescription,
+      productImage: base64,
     });
 
     try {
-      // 發送POST請求到後端API端點
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/product/products",
-        productData,
-        { headers: headers }
-      );
-      console.log("商品上傳成功:", response.data);
+      let requestData = {};
+      let endpoint = "";
+      if (auctionType === "0") {
+        requestData = productDataAuction;
+        endpoint = "http://localhost:8080/api/v1/product/nonfixedproduct";
+      } else if (auctionType === "1") {
+        requestData = productDataFixed;
+        endpoint = "http://localhost:8080/api/v1/product/fixedproduct";
+      } else {
+        throw new Error("Invalid auctionType value");
+      }
+      const response = await axios.post(endpoint, productDataAuction, {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        setSuccessMessage(response.data.message);
+        console.log("商品上傳成功:", response.data);
+        setErrorMessage("");
+      }
     } catch (error) {
-      console.log(productData);
+      setErrorMessage(error.message);
       console.error("商品上傳失敗:", error);
     }
   };
@@ -127,6 +163,16 @@ const UploadProductForm = () => {
 
   return (
     <Container style={{ marginTop: "20px" }}>
+      {successMessage && (
+        <Alert severity="success" sx={{ whiteSpace: "pre-line" }}>
+          {successMessage}
+        </Alert>
+      )}
+      {errorMessage && (
+        <Alert severity="error" sx={{ whiteSpace: "pre-line" }}>
+          {errorMessage}
+        </Alert>
+      )}
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Paper elevation={6} style={{ padding: "20px" }}>
@@ -188,23 +234,27 @@ const UploadProductForm = () => {
                 <InputLabel id="demo-simple-select-required-label">
                   選擇商品縮圖
                 </InputLabel>
+                {!imageSelected ? (
+                  <p style={{ color: "red" }}>請上傳圖片</p>
+                ): <p style={{ color: "green" }}>圖片以上傳</p>}
                 <label htmlFor="contained-button-file">
-                  <input
-                    style={{ display: "none" }}
-                    id="contained-button-file"
-                    type="file"
-                    accept="image/*"
-                    onChange={onFileChange}
-                    onClick={onClick}
-                  />
                   <Button
                     variant="contained"
                     component="span"
                     startIcon={<CloudUploadIcon />}
                   >
                     上傳圖片
+                    <input
+                      style={{ display: "none" }}
+                      required
+                      id="contained-button-file"
+                      type="file"
+                      accept="image/*"
+                      onChange={onFileChange}
+                      onClick={onClick}
+                    />
                   </Button>
-                </label>
+                </label>  
               </Grid>
               <br></br>
               <br></br>
@@ -301,14 +351,14 @@ const UploadProductForm = () => {
               )}
 
               <InputLabel id="demo-simple-select-required-label">
-                商品描述
+                請輸入商品描述
               </InputLabel>
               <Grid item xs={8}>
                 <CustomEditor
                   onChange={handleEditorChange}
                   ref={editorRef} // 將 ref 绑定到 CustomEditor 组件
                   // value={productDescription}
-                  initialData="Some initial data"
+                  initialData="請輸入商品描述"
                 />
               </Grid>
               <br></br>
