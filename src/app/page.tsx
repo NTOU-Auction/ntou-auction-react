@@ -21,7 +21,6 @@ interface NotifyState {
 
 const commodityAPI = "http://localhost:8080/api/v1/product/products";
 
-
 export default function HomePage() {
 
   const [commodity, setcommodity] = React.useState([]);
@@ -40,28 +39,26 @@ export default function HomePage() {
   var len = commodity ? Object.keys(commodity).length : 0;
 
   return (
-    <Box sx={{ display: 'flex'}}>
+    <Box style={{ display: 'block' }}>
       <div>
-        <Alert severity="info" sx={{ mt: 2, mb: 5 }}>
+        <Alert variant="outlined" severity="info" sx={{ mt: 2, mb: 5 }}>
           <AlertTitle>歡迎來到海大拍賣系統 👋</AlertTitle>
           您可以在本系統購買商品，也可以上架想賣出的商品。
-        </Alert>  
+        </Alert> 
         <Grid container rowSpacing={len} columnSpacing={len}>
-          <Grid xs={6}> 
-            <div style={{ display:'flex'}}>
+          <Grid xs={6} > 
+            <div style={{ display:'flex', float:"left"}}>
             {commodity ? function() { 
               let show = []
               for (let i = 0; i<len; i++){
-                show.push(<MediaCard
-                  commodity={commodity[i]}
-                              />)
+                show.push(<MediaCard commodity={commodity[i]} />)
               }
             return show
             }() : <p>404</p>}
             </div>
           </Grid>
         </Grid>
-      </div>
+      </div>  
     </Box>
   );
 }

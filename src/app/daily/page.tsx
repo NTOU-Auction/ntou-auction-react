@@ -23,7 +23,7 @@ export default function Daily() {
   var len = commodity ? Object.keys(commodity).length : 0;
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "block" }}>
       <div>
         <Grid container rowSpacing={len} columnSpacing={len}>
           <Grid xs={6}>
@@ -33,8 +33,7 @@ export default function Daily() {
                   let show = [];
                   for (let i = 0; i < len; i++) {
                     if (commodity[i].productType == "Daily need")
-                      show.push(
-                        (<MediaCard commodity={commodity[i]} />)
+                      show.push((<MediaCard commodity={commodity[i]} />)
                       );
                   }
                   return show;

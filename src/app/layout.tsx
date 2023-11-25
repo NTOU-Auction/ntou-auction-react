@@ -24,17 +24,8 @@ import ListIcon from '@mui/icons-material/List';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
-
-import ReactDOM from "react-dom/client";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-
-import HomePage from '@/app/page';
-import SignIn from '@/app/sign-in/page';
-import SignUp from '@/app/sign-up/page';
-import Details from '@/app/details/page';
-import Electron from '@/app/electronic/page';
-import Daily from '@/app/daily/page';
-import Stationery from '@/app/Stationary/page';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
  const metadata = {
   title: "NTOU Auction",
@@ -54,11 +45,33 @@ const PLACEHOLDER_LINKS = [
   { text: "聊天室",href: "/sign-in", icon: ChatIcon },
   { text: "設定",href: "/", icon: SettingsIcon }];
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+
+const token = Cookies.get('token');
+async function fetchUserInfo() {
+  const response = axios.get('http://localhost:8080/api/v1/account/users', {
+    headers: {
+      Authorization: `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+    }
+  })
+  return response;
+}
+
+export default function RootLayout({children,}: {children: React.ReactNode;}) {
+  
+  const [user, setUser] = React.useState(null);
+  
+  React.useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await fetchUserInfo();
+        setUser(data.data);
+      } catch (error) {
+        console.error('獲取帳號資料錯誤:', error);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <html lang="en">
       <body>
@@ -80,13 +93,15 @@ export default function RootLayout({
                   <SearchIcon/>
                 </div>
                 <div style={{ float:"right", display: "flex",textAlign: "center",alignItems: "center"}}>
-                  <ListItemButton component={Link} href={'/sign-in'}>
-                    <u style={{fontSize:"15px", color:"orange"}}><LoginIcon/>登入</u>
-                  </ListItemButton>
-                  /
-                  <ListItemButton component={Link} href={'/sign-up'}>
-                    <u style={{fontSize:"15px", color:"orange"}}><AssignmentIndIcon/>註冊</u>
-                  </ListItemButton>
+                  {user ? (
+                    <ListItemButton component={Link} href={'/tasks'}>
+                      <u style={{fontSize:"15px", color:"orange"}}>{user.name}</u>
+                    </ListItemButton>
+                  ) : (
+                    <ListItemButton component={Link} href={'/sign-in'}>
+                      <u style={{fontSize:"15px", color:"orange"}}><LoginIcon/>登入</u>
+                    </ListItemButton>
+                  )}
                 </div>
               </Typography>
             </Toolbar>

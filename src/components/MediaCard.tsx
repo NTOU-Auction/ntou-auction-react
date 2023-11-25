@@ -29,10 +29,10 @@ export default function MediaCard({ commodity }: { commodity:object }) {
   }
   
   return (
-    <Card variant="outlined" sx={{ width:'400px', height:'400px' }}>
+    <Card variant="outlined" sx={{ width:'200px', height:'400px'}}>
       <Image
         alt="Image"
-        src={"data:image/jpeg;base64," + commodity.productImage}
+        src={"" + commodity.productImage}
         width={640}
         height={480}
         style={{
@@ -48,9 +48,6 @@ export default function MediaCard({ commodity }: { commodity:object }) {
         <Typography variant="body2" color="text.secondary">
           {commodity.isFixedPrice ? "不二價："+commodity.price : "競標價："+commodity.currentPrice}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {commodity.productDescription}
-        </Typography>
       </CardContent>
       <CardActions>
         <Button size="small">加入購物車</Button>
@@ -58,17 +55,14 @@ export default function MediaCard({ commodity }: { commodity:object }) {
           更多資訊
         </Button>
       </CardActions>
-
-      <TpModal
-        isVisible={isVisible}
-        onClose={handleToggleModalShowUp}
-      >
-
+      
+      {/*詳細資料*/}
+      <TpModal isVisible={isVisible} onClose={handleToggleModalShowUp}>
         <ModalContent>
           <div>
             <img
               alt="Image"
-              src={"data:image/jpeg;base64," + commodity.productImage}
+              src={"" + commodity.productImage}
               width="50%"
               style={{float:"left", padding: "0px 20px 20px 0px"}}
             />
@@ -89,7 +83,7 @@ export default function MediaCard({ commodity }: { commodity:object }) {
               <p style={{ color: "black"}}>賣家：<a>{commodity.seller}</a></p>
               <p style={{ color: "black"}}>分類：<a href={"/"+commodity.productType}>{commodity.productType}</a></p>
               <ModalFooter>
-                <button style={{}} onClick={handleToggleModalShowUp}>{commodity.isFixedPrice ? "加入購物車" : "加注"}</button>
+                <Button style={{color:"red"}} onClick={handleToggleModalShowUp}>{commodity.isFixedPrice ? "加入購物車" : "加注"}</Button>
               </ModalFooter>
             </div>
           </div>
