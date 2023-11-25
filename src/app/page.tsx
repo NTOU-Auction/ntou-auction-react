@@ -45,9 +45,9 @@ export default function HomePage() {
           <AlertTitle>歡迎來到海大拍賣系統 👋</AlertTitle>
           您可以在本系統購買商品，也可以上架想賣出的商品。
         </Alert> 
-        <Grid container rowSpacing={len} columnSpacing={len}>
-          <Grid xs={6} > 
-            <div style={{ display:'flex', float:"left"}}>
+        <Grid container spacing={3} style={{ width:"100%"}}>
+          <Grid xs={6} style={{ width:"100%"}}> 
+            <div style={{ display:'flex', flexWrap: "wrap"}}>
             {commodity ? function() { 
               let show = []
               for (let i = 0; i<len; i++){

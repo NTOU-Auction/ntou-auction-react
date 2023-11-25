@@ -37,7 +37,8 @@ const DRAWER_WIDTH = 240;
 const LINKS = [
   { text: '文具類', href: '/Stationary', icon: CreateIcon },
   { text: '日用品', href: '/daily', icon: RedeemIcon },
-  { text: '3C產品', href: '/electronic', icon: ComputerIcon }
+  { text: '3C產品', href: '/electronic', icon: ComputerIcon },
+  { text: "新增商品", href: "/add-product", icon: AssignmentIndIcon },
 ];
 
 const PLACEHOLDER_LINKS = [
@@ -88,7 +89,7 @@ export default function RootLayout({children,}: {children: React.ReactNode;}) {
                   </button>
                   NTOU Auction
                 </div>
-                <div style={{ float:"left", width: "50%", justifyContent: "center", display: "flex",textAlign: "center",alignItems: "center"}}>
+                <div style={{ float:"left", width: "60%", justifyContent: "center", display: "flex",textAlign: "center",alignItems: "center"}}>
                   <input style={{width: "50%", height: "40px", borderRadius:"18px", border: "1px solid #ccc", paddingLeft: "3%"}} type="search" placeholder="搜尋商品"/>
                   <SearchIcon/>
                 </div>

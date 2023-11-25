@@ -79,6 +79,7 @@ export default function MediaCard({ commodity }: { commodity:object }) {
                   </div>
                 )
               }
+              <div dangerouslySetInnerHTML={{__html: commodity.productDescription}}></div>
               <p style={{ color: "black"}}>{commodity.productDescription} </p>
               <p style={{ color: "black"}}>賣家：<a>{commodity.seller}</a></p>
               <p style={{ color: "black"}}>分類：<a href={"/"+commodity.productType}>{commodity.productType}</a></p>

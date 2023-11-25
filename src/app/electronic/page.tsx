@@ -25,9 +25,9 @@ export default function Electron() {
   return (
     <Box sx={{ display: "block" }}>
       <div>
-        <Grid container rowSpacing={len} columnSpacing={len}>
-          <Grid xs={6}>
-            <div style={{ display: "flex" }}>
+        <Grid container spacing={3} style={{ width:"100%"}}>
+          <Grid xs={6} style={{ width:"100%"}}> 
+            <div style={{ display:'flex', flexWrap: "wrap"}}>
               {commodity ? (
                 (function () {
                   let show = [];
