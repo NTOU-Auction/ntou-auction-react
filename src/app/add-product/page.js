@@ -47,6 +47,8 @@ const UploadProductForm = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [imageSelected, setImageSelected] = useState(false);
+
+  
   // 上傳商品縮圖
   const [file, setFile] = useState(null);
   const [base64, setBase64] = useState(null);
@@ -364,7 +366,7 @@ const UploadProductForm = () => {
               <br></br>
               <br></br>
 
-              <Button type="submit" variant="contained" color="primary">
+              <Button type="submit" variant="contained" color="primary" >
                 上傳商品
               </Button>
             </form>

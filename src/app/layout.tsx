@@ -24,6 +24,8 @@ import ListIcon from '@mui/icons-material/List';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -34,17 +36,6 @@ import Cookies from 'js-cookie';
 
 const DRAWER_WIDTH = 240;
 
-const LINKS = [
-  { text: '文具類', href: '/Stationary', icon: CreateIcon },
-  { text: '日用品', href: '/daily', icon: RedeemIcon },
-  { text: '3C產品', href: '/electronic', icon: ComputerIcon },
-  { text: "新增商品", href: "/add-product", icon: AssignmentIndIcon },
-];
-
-const PLACEHOLDER_LINKS = [
-  { text: "購物車",href: "/sign-in", icon: ShoppingCartIcon },
-  { text: "聊天室",href: "/sign-in", icon: ChatIcon },
-  { text: "設定",href: "/", icon: SettingsIcon }];
 
 
 const token = Cookies.get('token');
@@ -60,7 +51,7 @@ async function fetchUserInfo() {
 export default function RootLayout({children,}: {children: React.ReactNode;}) {
   
   const [user, setUser] = React.useState(null);
-  
+
   React.useEffect(() => {
     async function fetchData() {
       try {
@@ -73,6 +64,19 @@ export default function RootLayout({children,}: {children: React.ReactNode;}) {
     fetchData();
   }, []);
 
+  const LINKS = [
+    { text: '文具類', href: '/Stationary', icon: CreateIcon },
+    { text: '日用品', href: '/daily', icon: RedeemIcon },
+    { text: '3C產品', href: '/electronic', icon: ComputerIcon },
+    { text: "新增商品", href: (user ? ("/add-product"):("/sign-in")), icon: AssignmentIndIcon },
+  ];
+  
+  const PLACEHOLDER_LINKS = [
+    { text: "購物車",href: (user ? ("/shopping-cart"):("/sign-in")), icon: ShoppingCartIcon },
+    { text: "聊天室",href: (user ? ("/chat"):("/sign-in")), icon: ChatIcon },
+    { text: "設定",href: "/", icon: SettingsIcon }
+  ];
+
   return (
     <html lang="en">
       <body>
@@ -81,17 +85,16 @@ export default function RootLayout({children,}: {children: React.ReactNode;}) {
             <Toolbar sx={{backgroundColor: 'background.paper' }}>
               <Typography height='100%' width='100%' variant="h6" noWrap component="div" color="black">
                 <div style={{float:"left", display: "flex",textAlign: "center",alignItems: "center"}}>
-                  <ListItemButton>
-                    <ListIcon/>
-                  </ListItemButton>
                   <button style={{border:"none", background:"white"}}>
                     <a href='/'><img src='img/logo.png' width={'50px'} /></a>
                   </button>
                   NTOU Auction
                 </div>
-                <div style={{ float:"left", width: "60%", justifyContent: "center", display: "flex",textAlign: "center",alignItems: "center"}}>
+                <div style={{ padding:6, float:"left", width: "50%", justifyContent: "center", display: "flex",textAlign: "center",alignItems: "center"}}>
                   <input style={{width: "50%", height: "40px", borderRadius:"18px", border: "1px solid #ccc", paddingLeft: "3%"}} type="search" placeholder="搜尋商品"/>
-                  <SearchIcon/>
+                  <IconButton>
+                    <SearchIcon/>
+                  </IconButton>
                 </div>
                 <div style={{ float:"right", display: "flex",textAlign: "center",alignItems: "center"}}>
                   {user ? (
