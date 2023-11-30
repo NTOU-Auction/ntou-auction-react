@@ -164,7 +164,7 @@ const UploadProductForm = () => {
   };
 
   return (
-    <Container style={{ marginTop: "20px" }}>
+    <Container style={{ marginTop: "40px" }}>
       {successMessage && (
         <Alert severity="success" sx={{ whiteSpace: "pre-line" }}>
           {successMessage}
@@ -177,7 +177,7 @@ const UploadProductForm = () => {
       )}
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Paper elevation={6} style={{ padding: "20px" }}>
+          <Paper elevation={6} style={{ marginTop: "40px" , padding: "20px" }}>
             <Typography variant="h5" style={{ color: "#0476D9" }}>
               請填寫商品上架資訊
             </Typography>
