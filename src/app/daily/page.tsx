@@ -6,7 +6,7 @@ import MediaCard from "@/components/MediaCard";
 
 const commodityAPI = "http://localhost:8080/api/v1/product/products";
 
-export default function Electron() {
+export default function Daily() {
   const [commodity, setcommodity] = React.useState([]);
   React.useEffect(() => {
     fetch(commodityAPI)
@@ -23,25 +23,17 @@ export default function Electron() {
   var len = commodity ? Object.keys(commodity).length : 0;
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "block" }}>
       <div>
-        <Grid container rowSpacing={len} columnSpacing={len}>
-          <Grid xs={6}>
-            <div style={{ display: "flex" }}>
+      <Grid container spacing={3} style={{ width:"100%"}}>
+          <Grid xs={6} style={{ width:"100%"}}> 
+            <div style={{ display:'flex', flexWrap: "wrap"}}>
               {commodity ? (
                 (function () {
                   let show = [];
                   for (let i = 0; i < len; i++) {
                     if (commodity[i].productType == "Daily need")
-                      show.push(
-                        <MediaCard
-                          productName={commodity[i].productName}
-                          isFixedPrice={commodity[i].isFixedPrice}
-                          productImage={commodity[i].productImage}
-                          productDescription={commodity[i].productDescription}
-                          price={commodity[i].price}
-                          currentPrice={commodity[i].currentPrice}
-                        />
+                      show.push((<MediaCard commodity={commodity[i]} />)
                       );
                   }
                   return show;

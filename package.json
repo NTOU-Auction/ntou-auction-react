@@ -10,16 +10,23 @@
     "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-react": "^6.2.0",
     "@emotion/cache": "latest",
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
+    "@mui/x-date-pickers": "^6.18.2",
     "axios": "^1.6.2",
+    "ckeditor5-custom-build": "file:./ckeditor5",
+    "dayjs": "^1.11.10",
     "js-cookie": "^3.0.5",
     "next": "latest",
+    "qs": "^6.11.2",
     "react": "latest",
-    "react-dom": "latest"
+    "react-bootstrap": "^2.9.1",
+    "react-dom": "latest",
+    "react-router-dom": "^6.19.0"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.5",
