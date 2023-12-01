@@ -26,7 +26,9 @@
     "react": "latest",
     "react-bootstrap": "^2.9.1",
     "react-dom": "latest",
-    "react-router-dom": "^6.19.0"
+    "react-router-dom": "^6.19.0",
+    "recharts": "^2.10.2",
+    "styled-components": "^6.1.1"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.5",
