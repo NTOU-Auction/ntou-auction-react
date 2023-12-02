@@ -55,8 +55,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [user, setUser] = React.useState(null);
 
+  interface User {
+    name: string;
+  }
+  const [user, setUser] = React.useState<User | null>(null);
+
+  
   React.useEffect(() => {
     async function fetchData() {
       try {

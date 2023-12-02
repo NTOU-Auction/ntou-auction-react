@@ -220,7 +220,7 @@ const UploadProductForm = () => {
             <br></br>
             <form onSubmit={handleSubmit}>
               <Grid item xs={6}>
-                <FormControl>
+                {/* <FormControl>
                   <FormLabel id="demo-radio-buttons-group-label">
                     請選擇拍賣種類
                   </FormLabel>
@@ -251,7 +251,7 @@ const UploadProductForm = () => {
                       label="不二價"
                     />
                   </RadioGroup>
-                </FormControl>
+                </FormControl> */}
               </Grid>
               <br></br>
               <Grid item xs={3}>
