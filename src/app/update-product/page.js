@@ -1,4 +1,6 @@
 "use client";
+import { useRouter } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import React, { useState, useRef, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -27,7 +29,6 @@ import Cookies from "js-cookie";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
-// const theObj = { __html: productDescription };
 const CustomEditor = dynamic(
   () => {
     return import("../../components/custom-editor");
@@ -93,10 +94,42 @@ const UploadProductForm = () => {
     }
   }, []);
 
-  const headers = {
-    // "Content-Type": "application/json;charset=UTF-8",
-    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-  };
+  //
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const search = searchParams.get("id");
+
+  useEffect(() => {
+    let storedObject = localStorage.getItem("product");
+    if (storedObject) {
+      let parsedObject = JSON.parse(storedObject);
+      // console.log(parsedObject);
+      if (parsedObject.isFixedPrice) {
+        // 不二價
+        setAuctionType("1");
+        setProductName(parsedObject.productName);
+        setProductPrice(parsedObject.currentPrice);
+        setProductCategory(parsedObject.productType);
+        setProductDescription(parsedObject.productDescription);
+        setProductAmount(parsedObject.productAmount);
+        // setBase64(parsedObject.productImage); // 未實作
+      } else {
+        // 拍賣
+        setAuctionType("0");
+        setProductName(parsedObject.productName);
+        setProductPrice(parsedObject.upsetPrice);
+        setProductIncPrice(parsedObject.bidIncrement);
+        setProductAmount(parsedObject.productAmount);
+        setProductCategory(parsedObject.productType);
+        setProductDescription(parsedObject.productDescription);
+        // setProductDeadline(parsedObject.finishTime); // 未實作
+        // setBase64(parsedObject.productImage); // 未實作
+      }
+    } else {
+      console.log("未找到存儲的物件");
+      setErrorMessage("未找到存儲的商品");
+    }
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -135,7 +168,7 @@ const UploadProductForm = () => {
       } else {
         throw new Error("Invalid auctionType value");
       }
-      const response = await axios.post(endpoint, requestData, {
+      const response = await axios.post(endpoint, productDataAuction, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
           Authorization: `Bearer ${token}`,
@@ -143,13 +176,15 @@ const UploadProductForm = () => {
       });
       if (response.status === 200) {
         // setSuccessMessage(response.data.message);
-        console.log("商品上傳成功:", response.data);
+        // console.log("商品上傳成功:", response.data);
         // setErrorMessage("");
         setOpenSnackbar(true);
+        localStorage.removeItem("product"); // 更新商品成功 將資料從localStorage移除
         window.location.href = "/seller-product";
       }
     } catch (error) {
-      // setErrorMessage("商品上傳失敗:" + " " + error.request.response);
+      // setErrorMessage(error.request.response);
+      // console.log(productDataFixed);
       setError("商品上傳失敗:" + " " + error.request.response);
       setOpenSnackbarErrror(true);
       console.error("商品上傳失敗:", error);
@@ -178,9 +213,9 @@ const UploadProductForm = () => {
     <Container style={{ marginTop: "40px" }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Paper elevation={6} style={{ marginTop: "40px", padding: "20px" }}>
+          <Paper elevation={6} style={{ padding: "20px" }}>
             <Typography variant="h5" style={{ color: "#0476D9" }}>
-              請填寫商品上架資訊
+              請更新商品上架資訊
             </Typography>
             <br></br>
             <form onSubmit={handleSubmit}>
@@ -399,7 +434,7 @@ const UploadProductForm = () => {
           severity="success"
           sx={{ width: "100%" }}
         >
-          商品上架成功
+          商品資訊更新成功
         </MuiAlert>
       </Snackbar>
     </Container>

@@ -6,7 +6,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Title from "./Title";
+import Title from "@/components/Title";
 
 // Generate Order Data
 function createData(id, date, name, shipTo, paymentMethod, amount) {
@@ -53,9 +53,9 @@ export default function Orders() {
           ))}
         </TableBody>
       </Table>
-      <Link color="primary" href="../order"  sx={{ mt: 3 }}>
+      {/* <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
         查看更多訂單
-      </Link>
+      </Link> */}
     </React.Fragment>
   );
 }
