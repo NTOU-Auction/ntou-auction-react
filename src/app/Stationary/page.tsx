@@ -8,7 +8,10 @@ const commodityAPI = "http://localhost:8080/api/v1/product/products";
 
 export default function Stationery(){
 
-  const [commodity, setcommodity] = React.useState([]);
+  interface CommodityItem {
+    productType: string;
+  }
+  const [commodity, setcommodity] = React.useState<CommodityItem[]>([]);
   React.useEffect(() => {
       fetch(commodityAPI)
          .then((response) => response.json())
