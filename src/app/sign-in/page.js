@@ -64,6 +64,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openSnackbarErrror, setOpenSnackbarErrror] = useState(false); // 設定提示訊息開關
   // const [isLoggedIn, setIsLoggedIn] = useState(false); 
 
   const data = JSON.stringify({
@@ -93,22 +94,23 @@ export default function Login() {
         //登入成功，將從後端拿到的token存在 Cookie 中
         const { token } = response.data;
         Cookies.set("token", token);
-        // setIsLoggedIn(true);
+        setOpenSnackbar(true);
         window.location.href = "/"; // 登入成功 導向主頁面
       } else {
         setError("登入失敗");
-        setOpenSnackbar(true); // 顯示 Snackbar
+        setOpenSnackbarErrror(true); // 顯示 Snackbar
         console.error("登入失敗");
       }
     } catch (error) {
       setError("登入失敗，請檢查帳號密碼");
-      setOpenSnackbar(true); // 顯示 Snackbar
+      setOpenSnackbarErrror(true); // 顯示 Snackbar
       console.error("發生錯誤:", error);
     }
   };
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
+    setOpenSnackbarErrror(false);
   };
 
   return (
@@ -161,9 +163,9 @@ export default function Login() {
             </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              {/* <Link href="#" variant="body2">
                 忘記密碼?
-              </Link>
+              </Link> */}
             </Grid>
             <Grid item>
               <Link href="sign-up" variant="body2">
@@ -176,7 +178,7 @@ export default function Login() {
       </Box>
       {/* 顯示錯誤訊息 */}
       <Snackbar
-        open={openSnackbar}
+        open={openSnackbarErrror}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
       >
@@ -186,6 +188,19 @@ export default function Login() {
           sx={{ width: "100%" }}
         >
           {error}
+        </MuiAlert>
+      </Snackbar>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <MuiAlert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          登入成功
         </MuiAlert>
       </Snackbar>
       <Copyright sx={{ mt: 8, mb: 4 }} />

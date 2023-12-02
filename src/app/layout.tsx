@@ -32,6 +32,7 @@ import StorefrontIcon from "@mui/icons-material/Storefront";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import AddIcon from "@mui/icons-material/Add";
 import SellIcon from "@mui/icons-material/Sell";
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 //  const metadata = {
 //   title: "NTOU Auction",
 //   description: "NTOU Auction",
@@ -75,8 +76,9 @@ export default function RootLayout({
   ];
 
   const SELLER_CENTER_LINKS = [
-    { text: "賣家中心", href: "/dashbord", icon: StorefrontIcon },
-    { text: "賣家商品", href: "/seller-product", icon: SellIcon },
+    { text: "賣家中心", href: user ? "/dashbord" : "/sign-in", icon: StorefrontIcon },
+    { text: "賣家商品", href: user ? "/seller-product" : "/sign-in", icon: SellIcon },
+    { text: "訂單", href: user ?  "/order" : "/sign-in", icon: ContentPasteIcon },
     {
       text: "新增商品",
       href: user ? "/add-product" : "/sign-in",
@@ -241,7 +243,7 @@ export default function RootLayout({
             <Divider sx={{ mt: "auto" }} />
             <List>
               {SELLER_CENTER_LINKS.map(({ text, href, icon: Icon }) => (
-                <ListItem key={href} disablePadding>
+                <ListItem key={text} disablePadding>
                   <ListItemButton component={Link} href={href}>
                     <ListItemIcon>
                       <Icon />

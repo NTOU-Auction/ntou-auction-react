@@ -20,6 +20,9 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 // import { Link } from "react-router-dom";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+// import { usePathname, useSearchParams } from 'next/navigation'
+
 // function Copyright() {
 //   return (
 //     <Typography variant="body2" color="text.secondary" align="center">
@@ -33,12 +36,72 @@ import Link from "next/link";
 //   );
 // }
 
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import Image from "next/image"
+const token = Cookies.get("token");
+async function fetchProductInfo() {
+  const response = axios.get(
+    "http://localhost:8080/api/v1/product/sellercenter",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`, // Bearer 跟 token 中間有一個空格
+      },
+    }
+  );
+  return response;
+}
+
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function Album() {
+// export default function Album() => {
+function Album() {
+  const router = useRouter();
+  // console.log(url)
+  const handleEditClick = (product) => {
+
+    // const productInfo = {
+    //   id: product.id,
+    //   name: "Product Name",
+    //   description: "Product Description",
+    // };
+
+    localStorage.setItem('product', JSON.stringify(product));
+    const pathname = "/update-product";
+    // const searchParams = { productInfo: JSON.stringify(productInfo) };
+    const url = `${pathname}?id=${product.id}`;
+    router.push(url);
+
+    // 嘗試傳遞物件
+    // router.push({
+    //     pathname: '/update-product',
+    //     query: { data: JSON.stringify(productInfo)}
+    // })
+
+    // router.push((url){
+    //   // pathname: '/update-product',
+    //   query: { productInfo: JSON.stringify(productInfo) },
+    // });
+  };
+
+  const [products, setProduct] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await fetchProductInfo();
+        setProduct(data.data);
+        console.log(data.data);
+      } catch (error) {
+        console.error("獲取帳號資料錯誤:", error);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -75,9 +138,7 @@ export default function Album() {
               color="text.secondary"
               paragraph
             >
-              Something short and leading about the collection below—its
-              contents, the creator, etc. Make it short and sweet, but not too
-              short so folks don&apos;t simply skip over it entirely.
+              歡迎來到賣家商品中心<br></br>您可以在此更新商品資訊以及下架商品!
             </Typography>
             <Stack
               sx={{ pt: 4 }}
@@ -93,8 +154,8 @@ export default function Album() {
         <Container sx={{ py: 8 }} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
+            {products.map((product) => (
+              <Grid item key={product.id} xs={12} sm={6} md={4}>
                 <Card
                   sx={{
                     height: "100%",
@@ -102,17 +163,39 @@ export default function Album() {
                     flexDirection: "column",
                   }}
                 >
-                  <CardMedia
+                  {/* <CardMedia
                     component="div"
                     sx={{
                       // 16:9
                       pt: "56.25%",
                     }}
                     image="https://source.unsplash.com/random?wallpapers"
+                  /> */}
+                  {/* <CardMedia
+                    component="div"
+                    sx={{
+                      // 16:9
+                      pt: "56.25%",
+                      backgroundImage: product.productImage,
+                      backgroundSize: "cover",
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center",
+                    }}
+                  /> */}
+                  <Image
+                    alt="Image"
+                    src={"" + product.productImage}
+                    width={640}
+                    height={480}
+                    style={{
+                      maxWidth: "100%",
+                      height: "200px",
+                      objectFit: "cover",
+                    }}
                   />
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Heading
+                      {product.productName}
                     </Typography>
                     <Typography>
                       This is a media card. You can use this section to describe
@@ -120,10 +203,16 @@ export default function Album() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Link href={`test/${card}`} passHref>
-                      <Button size="small">View</Button>
-                    </Link>
-                    <Button size="small">Edit</Button>
+                    {/* <Link href={`test/${card}`} passHref> */}
+                    <Button size="small">下架</Button>
+                    {/* </Link> */}
+                    <Button
+                      size="small"
+                      onClick={() => handleEditClick(product)}
+                    >
+                      編輯
+                    </Button>
+                    {/* <Button size="small">Edit</Button> */}
                   </CardActions>
                 </Card>
               </Grid>
@@ -150,3 +239,5 @@ export default function Album() {
     </ThemeProvider>
   );
 }
+
+export default Album;
