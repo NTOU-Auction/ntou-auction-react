@@ -9,5 +9,7 @@ jobs:
         with:
           node-version: 18
       - run: yarn install && yarn global add @lhci/cli@0.12.x
+      - run: yarn add styled-components
       - run: yarn build
       - run: lhci autorun
+
