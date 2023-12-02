@@ -77,9 +77,13 @@ export default function RootLayout({
 
   const SELLER_CENTER_LINKS = [
     { text: "賣家中心", href: user ? "/dashbord" : "/sign-in", icon: StorefrontIcon },
-    { text: "賣家商品", href: user ? "/seller-product" : "/sign-in",  icon: SellIcon },
-    { text: "訂單", href: user ? "/order" : "/sign-in", icon: ContentPasteIcon },
-    { text: "新增商品", href: user ? "/add-product" : "/sign-in", icon: AddIcon },
+    { text: "賣家商品", href: user ? "/seller-product" : "/sign-in", icon: SellIcon },
+    { text: "訂單", href: user ?  "/order" : "/sign-in", icon: ContentPasteIcon },
+    {
+      text: "新增商品",
+      href: user ? "/add-product" : "/sign-in",
+      icon: AddIcon,
+    },
   ];
 
   const PLACEHOLDER_LINKS = [
@@ -239,7 +243,7 @@ export default function RootLayout({
             <Divider sx={{ mt: "auto" }} />
             <List>
               {SELLER_CENTER_LINKS.map(({ text, href, icon: Icon }) => (
-                <ListItem key={href} disablePadding>
+                <ListItem key={text} disablePadding>
                   <ListItemButton component={Link} href={href}>
                     <ListItemIcon>
                       <Icon />
