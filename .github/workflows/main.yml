@@ -1,5 +1,7 @@
 name: CI
 on: [pull_request]
+env:
+  LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 jobs:
   lighthouseci:
     runs-on: ubuntu-latest
@@ -12,5 +14,3 @@ jobs:
       - run: yarn install && yarn global add @lhci/cli@0.12.x
       - run: yarn build
       - run: lhci autorun
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
