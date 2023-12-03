@@ -133,7 +133,7 @@ const UploadProductForm = () => {
       } else {
         throw new Error("Invalid auctionType value");
       }
-      const response = await axios.post(endpoint, productDataAuction, {
+      const response = await axios.post(endpoint, requestData, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
           Authorization: `Bearer ${token}`,
@@ -365,7 +365,6 @@ const UploadProductForm = () => {
               </Grid>
               <br></br>
               <br></br>
-
               <Button type="submit" variant="contained" color="primary" >
                 上傳商品
               </Button>

@@ -99,7 +99,7 @@ export default function RootLayout({children,}: {children: React.ReactNode;}) {
                 <div style={{ float:"right", display: "flex",textAlign: "center",alignItems: "center"}}>
                   {user ? (
                     <ListItemButton component={Link} href={'/tasks'}>
-                      <u style={{fontSize:"15px", color:"orange"}}>{user.name}</u>
+                      <u style={{fontSize:"15px", color:"orange"}}>{ user.avatar_image==null ? user.name : user.avatar_image}</u>
                     </ListItemButton>
                   ) : (
                     <ListItemButton component={Link} href={'/sign-in'}>
