@@ -12,17 +12,9 @@ import MediaCard from '@/components/MediaCard';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-
-interface NotifyState {
-  isOpen: boolean;
-  message: string;
-  type: string;
-}
-
 const commodityAPI = "http://localhost:8080/api/v1/product/products";
 
 export default function HomePage() {
-
   const [commodity, setcommodity] = React.useState([]);
   React.useEffect(() => {
       fetch(commodityAPI)
@@ -39,7 +31,7 @@ export default function HomePage() {
   var len = commodity ? Object.keys(commodity).length : 0;
 
   return (
-    <Box style={{ display: 'block' }}>
+    <Box sx={{ display: "flex" , marginTop: "60px"}}>
       <div>
         <Alert variant="outlined" severity="info" sx={{ mt: 2, mb: 5 }}>
           <AlertTitle>歡迎來到海大拍賣系統 👋</AlertTitle>
