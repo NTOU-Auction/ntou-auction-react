@@ -61,7 +61,7 @@ export default function RootLayout({
   }
   const [user, setUser] = React.useState<User | null>(null);
 
-  
+
   React.useEffect(() => {
     async function fetchData() {
       try {
@@ -112,12 +112,12 @@ export default function RootLayout({
     setLoggedIn(false); // 將使用者設定為未登入狀態
     location.reload();
   };
-  
+
   return (
     <html lang="en">
       <body>
         <ThemeRegistry>
-          <AppBar
+           <AppBar
             position="fixed"
             style={{
               width: `calc(100% - ${isDrawerOpen ? DRAWER_WIDTH : 0}px)`,
@@ -147,7 +147,7 @@ export default function RootLayout({
                     aria-label="add to shopping cart"
                   >
                     <img src="img/option.png" width={"30px"} />
-                  </IconButton>
+                    </IconButton>
                   <button style={{ border: "none", background: "white" }}>
                     <a href="/">
                       <img src="img/logo.png" width={"50px"} />
@@ -190,15 +190,9 @@ export default function RootLayout({
                   }}
                 >
                   {user ? (
-<<<<<<< HEAD
-                    <ListItemButton component={Link} href={'/tasks'}>
-                      <u style={{fontSize:"15px", color:"orange"}}>{ user.avatar_image==null ? user.name : user.avatar_image}</u>
-                    </ListItemButton>
-=======
                     <><ListItemButton component={Link} href={"/tasks"}>
                       <u style={{ fontSize: "15px", color: "orange" }}>{user.name}</u>
                     </ListItemButton><Button onClick={handleLogout}>登出</Button></>
->>>>>>> origin/development
                   ) : (
                     <ListItemButton component={Link} href={"/sign-in"}>
                       <u style={{ fontSize: "15px", color: "orange" }}>

@@ -242,7 +242,7 @@ export default function ShoppingCart() {
   var count = 0;
 
   return (
-    <Box style={{ display: 'block' }}>
+    <Box style={{ display: 'block'  , marginTop: "60px"  }}>
       {shoppingcart ?
         <div>
           {Object.keys(shoppingcart).map((key, index) => {

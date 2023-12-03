@@ -1,18 +1,3 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import TpModal from '@/components/TpModal'
-import styled from 'styled-components'
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import './ScrollBar.css';
-import { AnyComponent } from 'styled-components/dist/types';
-=======
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Card from "@mui/material/Card";
@@ -22,9 +7,10 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TpModal from "@/components/TpModal";
 import styled from "styled-components";
+import Cookies from 'js-cookie';
+import axios from 'axios';
 import "./ScrollBar.css";
 import { HtmlContext } from "next/dist/server/future/route-modules/app-page/vendored/contexts/entrypoints";
->>>>>>> origin/development
 
 const ModalFooter = styled.div`
   display: flex;
@@ -34,8 +20,22 @@ const ModalContent = styled.div`
   margin-bottom: 15px;
 `;
 
-<<<<<<< HEAD
-export default function MediaCard({ commodity }: { commodity: object }) {
+interface Commodity {
+  id?: number;
+  currentPrice?: number;
+  productImage?: string;
+  productName?: string;
+  isFixedPrice?: boolean;
+  productAmount?: number;
+  upsetPrice?: number;
+  productDescription?: string;
+  finishTime?: string;
+  bidIncrement?: number;
+  productType?: string;
+  sellerid?: number;
+}
+
+export default function MediaCard({ commodity }: { commodity: Commodity }) {
 
   //詳細資料
   const [isVisible, setIsVisible] = useState(false)
@@ -80,7 +80,7 @@ export default function MediaCard({ commodity }: { commodity: object }) {
         });
         if (response.status === 200) {
           console.log("新增成功:", response.data);
-          window.location.href = "/shopping-cart"; 
+          window.location.href = "/shopping-cart";
         }
       } else {
         requestData = biddata;
@@ -99,27 +99,7 @@ export default function MediaCard({ commodity }: { commodity: object }) {
     } catch (error) {
       console.error("新增錯誤:", error);
     }
-=======
-interface Commodity {
-  currentPrice?: number;
-  productImage?: string;
-  productName?: string;
-  isFixedPrice?: boolean;
-  productAmount?: number;
-  upsetPrice?: number;
-  productDescription?: string;
-  bidIncrement?: number;
-  productType?: string;
-  sellerid?: number;
-}
-
-export default function MediaCard({ commodity }: { commodity: Commodity }) {
-  const [isVisible, setIsVisible] = useState(false);
-
-  const handleToggleModalShowUp = () => {
-    setIsVisible(!isVisible);
->>>>>>> origin/development
-  };
+  }
 
   const [commodityTMP, setCommodityTMP] = useState<number | undefined>(
     commodity.currentPrice
@@ -142,27 +122,19 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
       setCommodityTMP(newCommodityTMP);
     }
   };
+
   return (
-<<<<<<< HEAD
-    <Card variant="outlined" sx={{ width: '200px', height: '350px' }}>
-=======
-    <Card variant="outlined" sx={{ width: "200px", height: "350px" }}>
->>>>>>> origin/development
+
+    <Card variant="outlined" sx={{ width: "200px", height: "400px" }}>
       <Image
         alt="Image"
         src={"" + commodity.productImage}
         width={640}
         height={480}
         style={{
-<<<<<<< HEAD
-          maxWidth: '100%',
-          height: '150px',
-          objectFit: 'cover',
-=======
           maxWidth: "100%",
           height: "200px",
           objectFit: "cover",
->>>>>>> origin/development
         }}
       />
       <CardContent>
@@ -172,15 +144,11 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
           </p>
         </Typography>
         <Typography variant="body2" color="text.secondary">
-<<<<<<< HEAD
-          {commodity.isFixedPrice ? "不二價：" + commodity.currentPrice : "競標價：" + commodity.currentPrice}
-=======
           {commodity.isFixedPrice
             ? "不二價：" + commodity.currentPrice
             : "競標價：" + commodity.currentPrice}
->>>>>>> origin/development
-        </Typography>
-      </CardContent>
+        </Typography >
+      </CardContent >
       <CardActions>
         {commodity.isFixedPrice ?
           <form onSubmit={handleSubmit}>
@@ -195,70 +163,17 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
       </CardActions>
 
       {/*詳細資料*/}
-<<<<<<< HEAD
-      <TpModal title={commodity.productName} isVisible={isVisible} onClose={handleToggleModalShowUp}>
-
-=======
       <TpModal
         title={commodity.productName}
         isVisible={isVisible}
         onClose={handleToggleModalShowUp}
       >
->>>>>>> origin/development
         <ModalContent>
           <div>
             <img
               alt="Image"
               src={"" + commodity.productImage}
               width="50%"
-<<<<<<< HEAD
-              style={{ float: "left", padding: "0px 20px 20px 0px", top: 0, position: "sticky" }}
-            />
-            <div style={{ overflowY: "scroll", scrollbarWidth: "none" }}>
-              {commodity.isFixedPrice ?
-                (<div>
-                  <p style={{ color: "black", fontWeight: 'bold' }}>價格：${commodity.currentPrice}</p>
-                  <p style={{ color: "black", fontWeight: 'bold' }}>數量：{commodity.productAmount}個</p>
-                </div>
-                ) :
-                (<div>
-                  <p style={{ color: "black", fontWeight: 'bold' }}>起標價：${commodity.upsetPrice}</p>
-                  <p style={{ color: "black", fontWeight: 'bold' }}>競標價：${commodity.currentPrice}  </p>
-                  <p style={{ color: "black", fontWeight: 'bold' }}>截標時間：{commodity.finishTime}  </p>
-                </div>
-                )
-              }
-              <div dangerouslySetInnerHTML={{ __html: commodity.productDescription }}></div>
-              <p style={{ color: "black" }}>賣家：{commodity.sellerid}</p>
-              <p style={{ color: "black" }}>分類：<a href={"/" + commodity.productType}>{commodity.productType}</a></p>
-              <ModalFooter>
-                {commodity.isFixedPrice ?
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <form onSubmit={handleSubmit}>
-                      <Button type="submit" variant="contained" color="error">加入購物車</Button>
-                    </form>
-                    <div style={{ padding: 5 }}>
-                      <button onClick={() => productAmountTMP > 1 ? setproductAmountTMP(productAmountTMP - 1) : setproductAmountTMP(productAmountTMP)}>
-                        -
-                      </button>
-                      <span> {productAmountTMP}個 </span>
-                      <button onClick={() => productAmountTMP < commodity.productAmount ? setproductAmountTMP(productAmountTMP + 1) : setproductAmountTMP(productAmountTMP)}>
-                        +
-                      </button>
-                    </div>
-                  </div>
-                  :
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <form onSubmit={handleSubmit}>
-                      <Button type="submit" variant="contained" color="error">加注</Button>
-                    </form>
-                    <div style={{ padding: 5 }}>
-                      <button onClick={() => currentPriceTMP > commodity.currentPrice ? setcurrentPriceTMP(currentPriceTMP - commodity.bidIncrement) : setcurrentPriceTMP(currentPriceTMP)}>
-                        -
-                      </button>
-                      <span> {currentPriceTMP}$ </span>
-                      <button onClick={() => setcurrentPriceTMP(currentPriceTMP + commodity.bidIncrement)}>
-=======
               style={{
                 float: "left",
                 padding: "0px 20px 20px 0px",
@@ -281,9 +196,12 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
                   <p style={{ color: "black", fontWeight: "bold" }}>
                     起標價：${commodity.upsetPrice}
                   </p>
-                  <span style={{ color: "black", fontWeight: "bold" }}>
+                  <p style={{ color: "black", fontWeight: "bold" }}>
                     競標價：${commodity.currentPrice}{" "}
-                  </span>
+                  </p>
+                  <p style={{ color: "black", fontWeight: "bold" }}>
+                    截標時間：{commodity.finishTime}{" "}
+                  </p>
                 </div>
               )}
               <div
@@ -332,7 +250,6 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
                           })
                         }
                       >
->>>>>>> origin/development
                         +
                       </button>
                     </div>
