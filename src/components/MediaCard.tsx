@@ -47,7 +47,9 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
   //加入購物車的數量
   const [productAmountTMP, setproductAmountTMP] = useState(1)
   //加注的錢
-  const [currentPriceTMP, setcurrentPriceTMP] = useState(commodity.currentPrice)
+  const [commodityTMP, setCommodityTMP] = useState<number | undefined>(
+    commodity.currentPrice
+  );
   //token
   const token = Cookies.get('token');
   const productID = commodity.id;
@@ -63,7 +65,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
 
     const biddata = JSON.stringify({
       productID: productID,
-      bid: currentPriceTMP,
+      bid: commodityTMP,
     });
 
     try {
@@ -98,12 +100,10 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
       }
     } catch (error) {
       console.error("新增錯誤:", error);
+      window.location.href = "/shopping-cart";
     }
   }
 
-  const [commodityTMP, setCommodityTMP] = useState<number | undefined>(
-    commodity.currentPrice
-  );
   const productDescriptionHtml = commodity.productDescription
     ? commodity.productDescription
     : "";
@@ -218,25 +218,60 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
               </p>
               <ModalFooter>
                 {commodity.isFixedPrice ? (
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={handleToggleModalShowUp}
-                  >
-                    加入購物車
-                  </Button>
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={handleSubmit}
+                    >
+                      加入購物車
+                    </Button>
+                    <div style={{ padding: 5 }}>
+                      <button onClick={() =>
+                        setproductAmountTMP((prevproductAmountTMP) => {
+                          if (
+                            typeof prevproductAmountTMP === "number" &&
+                            commodity?.productAmount &&
+                            productAmountTMP > 1
+                          ) {
+                            return prevproductAmountTMP - 1;
+                          }
+                          return prevproductAmountTMP;
+                        })
+                      }>
+                        -
+                      </button>
+                      <span> {productAmountTMP}個 </span>
+                      <button
+                        onClick={() =>
+                          setproductAmountTMP((prevproductAmountTMP) => {
+                            if (
+                              typeof prevproductAmountTMP === "number" &&
+                              commodity?.productAmount &&
+                              productAmountTMP < commodity?.productAmount
+                            ) {
+                              return prevproductAmountTMP + 1;
+                            }
+                            return prevproductAmountTMP;
+                          })
+                        }
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
                 ) : (
                   <div style={{ display: "flex", justifyContent: "center" }}>
                     <Button
                       variant="contained"
                       color="error"
-                      onClick={handleToggleModalShowUp}
+                      onClick={handleSubmit}
                     >
                       加注
                     </Button>
                     <div style={{ padding: 5 }}>
                       <button onClick={handleMinusClick}>-</button>
-                      <span> {commodityTMP}$ </span>
+                      <span> {productAmountTMP}$ </span>
                       <button
                         onClick={() =>
                           setCommodityTMP((prevCommodityTMP) => {
