@@ -368,12 +368,8 @@ const UploadProductForm = () => {
               </Grid>
               <br></br>
               <br></br>
-<<<<<<< HEAD
-              <Button type="submit" variant="contained" color="primary" >
-=======
 
               <Button type="submit" variant="contained" color="primary">
->>>>>>> origin/development
                 上傳商品
               </Button>
             </form>

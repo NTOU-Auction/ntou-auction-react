@@ -35,7 +35,7 @@ export default function Daily() {
                 (function () {
                   let show = [];
                   for (let i = 0; i < len; i++) {
-                    if (commodity[i].productType == "Daily need")
+                    if (commodity[i].productType == "daily")
                       show.push((<MediaCard commodity={commodity[i]} />)
                       );
                   }
