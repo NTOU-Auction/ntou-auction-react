@@ -1,5 +1,7 @@
 name: CI
 on: [pull_request]
+env:
+  LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 jobs:
   lighthouseci:
     runs-on: ubuntu-latest
