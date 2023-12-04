@@ -69,7 +69,7 @@ export default function Login() {
 
   const data = JSON.stringify({
     username: username,
-    password: password,
+    password  : password,
   });
   const headers = {
     "Content-Type": "application/json;charset=UTF-8",
