@@ -26,16 +26,16 @@ export default function Daily() {
   var len = commodity ? Object.keys(commodity).length : 0;
 
   return (
-    <Box sx={{ display: "block" }}>
+    <Box sx={{ display: "block"  , marginTop: "60px"  }}>
       <div>
-      <Grid container spacing={3} style={{ width:"100%"}}>
-          <Grid xs={6} style={{ width:"100%"}}> 
-            <div style={{ display:'flex', flexWrap: "wrap"}}>
+        <Grid container spacing={3} style={{ width: "100%" }}>
+          <Grid xs={6} style={{ width: "100%" }}>
+            <div style={{ display: 'flex', flexWrap: "wrap" }}>
               {commodity ? (
                 (function () {
                   let show = [];
                   for (let i = 0; i < len; i++) {
-                    if (commodity[i].productType == "Daily need")
+                    if (commodity[i].productType == "daily")
                       show.push((<MediaCard commodity={commodity[i]} />)
                       );
                   }
