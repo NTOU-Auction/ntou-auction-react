@@ -83,20 +83,12 @@ export default function RootLayout({
   const SELLER_CENTER_LINKS = [
     { text: "賣家中心", href: user ? "/dashbord" : "/sign-in", icon: StorefrontIcon },
     { text: "賣家商品", href: user ? "/seller-product" : "/sign-in", icon: SellIcon },
-    { text: "訂單", href: user ?  "/order" : "/sign-in", icon: ContentPasteIcon },
-    {
-      text: "新增商品",
-      href: user ? "/add-product" : "/sign-in",
-      icon: AddIcon,
-    },
+    { text: "訂單", href: user ? "/order" : "/sign-in", icon: ContentPasteIcon },
+    { text: "新增商品", href: user ? "/add-product" : "/sign-in", icon: AddIcon },
   ];
 
   const PLACEHOLDER_LINKS = [
-    {
-      text: "購物車",
-      href: user ? "/shopping-cart" : "/sign-in",
-      icon: ShoppingCartIcon,
-    },
+    { text: "購物車", href: user ? "/shopping-cart" : "/sign-in", icon: ShoppingCartIcon },
     { text: "聊天室", href: user ? "/chat" : "/sign-in", icon: ChatIcon },
     { text: "設定", href: "/", icon: SettingsIcon },
   ];
@@ -117,7 +109,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeRegistry>
-           <AppBar
+          <AppBar
             position="fixed"
             style={{
               width: `calc(100% - ${isDrawerOpen ? DRAWER_WIDTH : 0}px)`,
@@ -147,7 +139,7 @@ export default function RootLayout({
                     aria-label="add to shopping cart"
                   >
                     <img src="img/option.png" width={"30px"} />
-                    </IconButton>
+                  </IconButton>
                   <button style={{ border: "none", background: "white" }}>
                     <a href="/">
                       <img src="img/logo.png" width={"50px"} />
@@ -159,7 +151,8 @@ export default function RootLayout({
                   style={{
                     padding: 6,
                     float: "left",
-                    width: "50%",
+                    paddingLeft:"10%",
+                    width: "40%",
                     justifyContent: "center",
                     display: "flex",
                     textAlign: "center",
@@ -168,7 +161,7 @@ export default function RootLayout({
                 >
                   <input
                     style={{
-                      width: "50%",
+                      width: "100%",
                       height: "40px",
                       borderRadius: "18px",
                       border: "1px solid #ccc",
@@ -190,9 +183,14 @@ export default function RootLayout({
                   }}
                 >
                   {user ? (
-                    <><ListItemButton component={Link} href={"/tasks"}>
-                      <u style={{ fontSize: "15px", color: "orange" }}>{user.name}</u>
-                    </ListItemButton><Button onClick={handleLogout}>登出</Button></>
+                    <div style={{ display:"flex" }}>
+                      <ListItemButton component={Link} href={"/tasks"}>
+                        <u style={{ fontSize: "15px", color: "orange" }}>{user.name}</u>
+                      </ListItemButton>
+                      <Button onClick={handleLogout} style={{ fontSize: "15px" }}>
+                        登出
+                      </Button>
+                    </div>
                   ) : (
                     <ListItemButton component={Link} href={"/sign-in"}>
                       <u style={{ fontSize: "15px", color: "orange" }}>

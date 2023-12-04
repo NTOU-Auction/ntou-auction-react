@@ -271,7 +271,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
                     </Button>
                     <div style={{ padding: 5 }}>
                       <button onClick={handleMinusClick}>-</button>
-                      <span> {productAmountTMP}$ </span>
+                      <span> {commodityTMP}$ </span>
                       <button
                         onClick={() =>
                           setCommodityTMP((prevCommodityTMP) => {
