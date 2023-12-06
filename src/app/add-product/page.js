@@ -26,7 +26,7 @@ import Cookies from "js-cookie";
 // import { Alert } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-
+import 'dayjs/locale/zh-tw';
 // const theObj = { __html: productDescription };
 const CustomEditor = dynamic(
   () => {
@@ -42,7 +42,7 @@ const UploadProductForm = () => {
   const [productCategory, setProductCategory] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productDeadline, setProductDeadline] = useState("");
-  const [auctionType, setAuctionType] = useState(""); // default為競標
+  const [auctionType, setAuctionType] = useState("1"); // default為競標
   const [productIncPrice, setProductIncPrice] = useState("");
   const [productAmount, setProductAmount] = useState("1");
   // const [successMessage, setSuccessMessage] = useState("");
@@ -240,7 +240,7 @@ const UploadProductForm = () => {
                 {!imageSelected ? (
                   <p style={{ color: "red" }}>請上傳圖片</p>
                 ) : (
-                  <p style={{ color: "green" }}>圖片以上傳</p>
+                  <p style={{ color: "green" }}>已上傳圖片</p>
                 )}
                 <label htmlFor="contained-button-file">
                   <Button
@@ -278,19 +278,26 @@ const UploadProductForm = () => {
                     label="商品種類 *"
                     onChange={(e) => setProductCategory(e.target.value)}
                   >
-                    <MenuItem value={"electronic"}>3C產品</MenuItem>
-                    <MenuItem value={"Daily need"}>日常用品</MenuItem>
-                    <MenuItem value={"Stationary"}>文具類</MenuItem>
+                    <MenuItem value={"3C產品"}>3C產品</MenuItem>
+                    <MenuItem value={"日常用品"}>日常用品</MenuItem>
+                    <MenuItem value={"文具類"}>文具類</MenuItem>
+                    <MenuItem value={"其它"}>其它</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
               <br></br>
               <Grid item xs={3}>
-                <InputLabel id="demo-simple-select-required-label">
-                  請輸入商品價格
-                </InputLabel>
+                {auctionType === "0" ? (
+                  <InputLabel id="demo-simple-select-required-label">
+                    請輸入商品底價
+                  </InputLabel>
+                ) : (
+                  <InputLabel id="demo-simple-select-required-label">
+                    請輸入商品價格
+                  </InputLabel>
+                )}
                 <TextField
-                  label="商品價格"
+                  label={auctionType === "0" ? "商品底價" : "商品價格"}
                   value={productPrice}
                   onChange={(e) => setProductPrice(e.target.value)}
                   type="number"
@@ -302,6 +309,7 @@ const UploadProductForm = () => {
 
               {auctionType === "1" && (
                 <Grid item xs={3}>
+                  <br></br>
                   <InputLabel id="demo-simple-select-required-label">
                     請輸入商品數量
                   </InputLabel>
@@ -321,10 +329,10 @@ const UploadProductForm = () => {
               {auctionType === "0" && (
                 <Grid item xs={3}>
                   <InputLabel id="demo-simple-select-required-label">
-                    請輸入每口叫價
+                    請輸入每次增加金額
                   </InputLabel>
                   <TextField
-                    label="每口叫價"
+                    label="每次增加金額"
                     value={productIncPrice}
                     onChange={(e) => setProductIncPrice(e.target.value)}
                     type="number"
@@ -337,11 +345,12 @@ const UploadProductForm = () => {
 
               {auctionType === "0" && (
                 <Grid item xs={6}>
+                  <br></br>
                   <InputLabel id="demo-simple-select-required-label">
                     請選擇拍賣截止日期
                   </InputLabel>
                   <p></p>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'zh-tw'}>
                     <DateTimePicker
                       label="選擇拍賣截止日期"
                       value={productDeadline}
