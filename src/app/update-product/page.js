@@ -28,7 +28,7 @@ import Cookies from "js-cookie";
 // import { Alert } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-
+import 'dayjs/locale/zh-tw';
 const CustomEditor = dynamic(
   () => {
     return import("../../components/custom-editor");
@@ -45,6 +45,7 @@ const UploadProductForm = () => {
   const [productDeadline, setProductDeadline] = useState("");
   const [auctionType, setAuctionType] = useState(""); // default為競標
   const [productIncPrice, setProductIncPrice] = useState("");
+  const [productPriceLabel, setProductPriceLabel] = useState("");
   const [productAmount, setProductAmount] = useState("1");
   // const [successMessage, setSuccessMessage] = useState("");
   // const [errorMessage, setErrorMessage] = useState("");
@@ -209,6 +210,10 @@ const UploadProductForm = () => {
     setOpenSnackbarErrror(false);
   };
 
+  useEffect(() => {
+    setProductPriceLabel(auctionType === "0" ? "商品底價" : "商品價格");
+  }, [auctionType]);
+
   return (
     <Container style={{ marginTop: "40px" }}>
       <Grid container spacing={3}>
@@ -220,9 +225,9 @@ const UploadProductForm = () => {
             <br></br>
             <form onSubmit={handleSubmit}>
               <Grid item xs={6}>
-                {/* <FormControl>
+                <FormControl>
                   <FormLabel id="demo-radio-buttons-group-label">
-                    請選擇拍賣種類
+                    如需更改拍賣種類，請重新上架
                   </FormLabel>
                   <RadioGroup
                     row
@@ -242,16 +247,16 @@ const UploadProductForm = () => {
                   >
                     <FormControlLabel
                       value="0"
-                      control={<Radio />}
+                      control={<Radio disabled />}
                       label="競標"
                     />
                     <FormControlLabel
                       value="1"
-                      control={<Radio />}
+                      control={<Radio disabled />}
                       label="不二價"
                     />
                   </RadioGroup>
-                </FormControl> */}
+                </FormControl>
               </Grid>
               <br></br>
               <Grid item xs={3}>
@@ -275,7 +280,7 @@ const UploadProductForm = () => {
                 {!imageSelected ? (
                   <p style={{ color: "red" }}>請上傳圖片</p>
                 ) : (
-                  <p style={{ color: "green" }}>圖片以上傳</p>
+                  <p style={{ color: "green" }}>已上傳圖片</p>
                 )}
                 <label htmlFor="contained-button-file">
                   <Button
@@ -313,19 +318,26 @@ const UploadProductForm = () => {
                     label="商品種類 *"
                     onChange={(e) => setProductCategory(e.target.value)}
                   >
-                    <MenuItem value={"electronic"}>3C產品</MenuItem>
-                    <MenuItem value={"Daily need"}>日常用品</MenuItem>
-                    <MenuItem value={"Stationary"}>文具類</MenuItem>
+                    <MenuItem value={"3C產品"}>3C產品</MenuItem>
+                    <MenuItem value={"日常用品"}>日常用品</MenuItem>
+                    <MenuItem value={"文具類"}>文具類</MenuItem>
+                    <MenuItem value={"其它"}>其它</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
               <br></br>
               <Grid item xs={3}>
-                <InputLabel id="demo-simple-select-required-label">
-                  請輸入商品價格
-                </InputLabel>
+                {auctionType === "0" ? (
+                  <InputLabel id="demo-simple-select-required-label">
+                    請輸入商品底價
+                  </InputLabel>
+                ) : (
+                  <InputLabel id="demo-simple-select-required-label">
+                    請輸入商品價格
+                  </InputLabel>
+                )}
                 <TextField
-                  label="商品價格"
+                  label={productPriceLabel}
                   value={productPrice}
                   onChange={(e) => setProductPrice(e.target.value)}
                   type="number"
@@ -337,6 +349,7 @@ const UploadProductForm = () => {
 
               {auctionType === "1" && (
                 <Grid item xs={3}>
+                  <br></br>
                   <InputLabel id="demo-simple-select-required-label">
                     請輸入商品數量
                   </InputLabel>
@@ -356,10 +369,10 @@ const UploadProductForm = () => {
               {auctionType === "0" && (
                 <Grid item xs={3}>
                   <InputLabel id="demo-simple-select-required-label">
-                    請輸入每口叫價
+                    請輸入每次增加金額
                   </InputLabel>
                   <TextField
-                    label="每口叫價"
+                    label="每次增加金額"
                     value={productIncPrice}
                     onChange={(e) => setProductIncPrice(e.target.value)}
                     type="number"
@@ -369,14 +382,15 @@ const UploadProductForm = () => {
                   />
                 </Grid>
               )}
-
+              
               {auctionType === "0" && (
                 <Grid item xs={6}>
+                  <br></br>
                   <InputLabel id="demo-simple-select-required-label">
                     請選擇拍賣截止日期
                   </InputLabel>
                   <p></p>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'zh-tw'}>
                     <DateTimePicker
                       label="選擇拍賣截止日期"
                       value={productDeadline}

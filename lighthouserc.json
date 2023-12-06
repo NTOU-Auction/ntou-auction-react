@@ -2,7 +2,7 @@
     "ci": {
       "collect": {
         "startServerCommand": "npx serve@latest out",
-        "url": ["http://localhost:3000/"],
+        "url": ["http://localhost:3000/","http://localhost:3000/dashbord"],
         "numberOfRuns": 1
       },
       "upload": {
