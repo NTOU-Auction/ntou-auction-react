@@ -9,10 +9,11 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-
-
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import './cart.css';
 import { backdropClasses } from "@mui/material";
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 export default function ShoppingCart() {
 
@@ -28,6 +29,9 @@ export default function ShoppingCart() {
   const [cost, setcost] = useState(0);
   //總數量
   const [total, settotal] = useState(0);
+  //勾選
+  const [checkedParent, setCheckedParent] = useState([]);
+  const [checked, setChecked] = useState([]);
 
   useEffect(() => {
     async function fetchShoppingcart() {
@@ -49,6 +53,7 @@ export default function ShoppingCart() {
               totalTMP += view.data.productShowBySeller[key][i].amount;
               productCountTMP.push(view.data.productShowBySeller[key][i].product.currentPrice * view.data.productShowBySeller[key][i].amount);
               costTMP += (view.data.productShowBySeller[key][i].product.currentPrice * view.data.productShowBySeller[key][i].amount);
+              checked.push(true);
             }
           })
           setcost(costTMP);
@@ -76,7 +81,7 @@ export default function ShoppingCart() {
     });
     console.log(nextAmount);
     setproductAmountTMP(nextAmount);
-    settotal(total + 1);
+    settotal(checked[index] ? total + 1 : total);
 
     const nextCount = productCountTMP.map((c, i) => {
       if (i === index) {
@@ -89,7 +94,7 @@ export default function ShoppingCart() {
     });
     console.log(nextCount);
     setproductCountTMP(nextCount);
-    setcost(cost + price);
+    setcost(checked[index] ? cost + price : cost);
 
     AddProductAmount(productID);
   }
@@ -162,7 +167,7 @@ export default function ShoppingCart() {
     });
     console.log(nextAmount);
     setproductAmountTMP(nextAmount);
-    settotal(total - 1);
+    settotal(checked[index] ? total - 1 : total);
 
     const nextCount = productCountTMP.map((c, i) => {
       if (i === index) {
@@ -175,7 +180,7 @@ export default function ShoppingCart() {
     });
     console.log(nextCount);
     setproductCountTMP(nextCount);
-    setcost(cost - price);
+    setcost(checked[index] ? cost - price : cost);
 
     DecreaseProductAmount(productID);
   }
@@ -221,7 +226,7 @@ export default function ShoppingCart() {
     });
     console.log(nextAmount);
     setproductAmountTMP(nextAmount);
-    settotal(total - productAmountTMP[index]);
+    settotal(checked[index] ? total - productAmountTMP[index] : total);
 
     const nextCount = productCountTMP.map((c, i) => {
       if (i === index) {
@@ -234,15 +239,47 @@ export default function ShoppingCart() {
     });
     console.log(nextCount);
     setproductCountTMP(nextCount);
-    setcost(cost - productCountTMP[index]);
+    setcost(checked[index] ? cost - productCountTMP[index] : cost);
 
     DeleteProductAmount(productID);
   }
 
+  //checkbox
+  function handleChangeParent (event, index) {
+    console.log(index);
+    const Next = checked.map((c, i) => {
+      if (i === index) {
+        // Increment the clicked counter
+        return event.target.checked;
+      } else {
+        // The rest haven't changed
+        return c;
+      }
+    });
+    //console.log(Next);
+    setChecked(Next);
+  };
+
+  function handleChangeChild (event, index) {
+    settotal(event.target.checked ? total + productAmountTMP[index] : total - productAmountTMP[index]);
+    setcost(event.target.checked ? cost + productCountTMP[index] : cost - productCountTMP[index]);
+
+    const Next = checked.map((c, i) => {
+      if (i === index) {
+        // Increment the clicked counter
+        return event.target.checked;
+      } else {
+        // The rest haven't changed
+        return c;
+      }
+    });
+    setChecked(Next);
+  };  
+
   var count = 0;
 
   return (
-    <Box style={{ display: 'block'  , marginTop: "60px"  }}>
+    <Box style={{ display: 'block', marginTop: "60px" }}>
       {shoppingcart ?
         <div>
           {Object.keys(shoppingcart).map((key, index) => {
@@ -251,6 +288,16 @@ export default function ShoppingCart() {
                 <hr />
                 <div className="container" >
                   <div className="item_header">
+                    <div className="check">
+                      {/* <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={checkedParent[key]}
+                            onChange={() => handleChangeParent(event, key)}
+                          />
+                        }
+                      /> */}
+                    </div>
                     <div className="item_detail">賣家：{key}</div>
                     <div className="price">單價</div>
                     <div className="count">數量</div>
@@ -259,11 +306,17 @@ export default function ShoppingCart() {
                   </div>
                   {function () {
                     let show = [];
+                    console.log("check:"+ checked);
                     for (let i = 0; i < shoppingcart[key].length; i++) {
                       let countnow = count;
                       show.push(
                         <div>
                           <div className="item_header item_body">
+                            <div className="check">
+                              <FormControlLabel
+                                control={<Checkbox color="success" checked={checked[countnow]} onChange={() => handleChangeChild(event, countnow)} />}
+                              />
+                            </div>
                             <div className="item_detail">
                               <img src={shoppingcart[key][i].product.productImage} alt="Image" />
                               <div className="name" style={{ WebkitLineClamp: 1, overflow: "hidden", textOverflow: "ellipsis", WebkitLineClamp: 3, display: "-webkit-box", WebkitBoxOrient: "vertical", boxSizing: "border-box" }}>{shoppingcart[key][i].product.productName}</div>
@@ -298,6 +351,7 @@ export default function ShoppingCart() {
           })}
           <div className="container" >
             <div className="item_header" style={{ height: "40px" }}>
+              <div className="check"></div>
               <div className="item_detail" style={{ display: "flex", alignItems: "center" }}>總計：</div>
               <div className="price"></div>
               <div className="count" >{total}</div>
@@ -311,7 +365,7 @@ export default function ShoppingCart() {
           </div>
         </div>
         :
-        <p>NO Item In Your ShoppingCart</p>
+        <p>去商店逛逛，把商品加入購物車吧！</p>
       }
     </Box >
   );

@@ -37,7 +37,13 @@
     justify-content: center;  
 }
 .item_header .item_detail{
-    width: 50%;
+    width: 45%;
+}
+.item_header .check{
+    width: 5%;
+    display: flex;
+    align-items: center; 
+    justify-content: center;  
 }
 .item_body{
     background-color: darkgray;
