@@ -31,6 +31,7 @@ interface Commodity {
   productDescription?: string;
   finishTime?: string;
   bidIncrement?: number;
+  sellerName?: string;
   productType?: string;
   sellerid?: number;
 }
@@ -242,7 +243,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
                 dangerouslySetInnerHTML={{ __html: productDescriptionHtml }}
               ></div>
               <p style={{ color: "black" }}>
-                賣家：<a>{commodity.sellerid}</a>
+                賣家：<a>{commodity.sellerName}</a>
               </p>
               <p style={{ color: "black" }}>
                 分類：
