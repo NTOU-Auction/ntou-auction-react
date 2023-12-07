@@ -45,6 +45,28 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
     setIsVisible(!isVisible)
   }
 
+  //商品描述
+  const productDescriptionHtml = commodity.productDescription
+  ? commodity.productDescription
+  : "";
+  const parsedHtml = parseOembedString(productDescriptionHtml);
+  function parseOembedString(oembedString:string) {
+    const regex = /<oembed.*?url="(.*?)"><\/oembed>/;
+    const match = oembedString.match(regex);
+    if (match && match[1]) {
+      const youtubeUrl = match[1];
+      console.log(youtubeUrl);
+      const videoId = youtubeUrl.split('.be/')[1];
+      console.log(videoId);
+      const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+      console.log(embedUrl);
+      return `<iframe width="100%" height="315" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
+    } else {
+      return ''; 
+    }
+  }
+  
+
   //加入購物車的數量
   const [productAmountTMP, setproductAmountTMP] = useState(1)
   //加注的錢
@@ -135,10 +157,6 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
       window.location.href = "/sign-in"; 
     }
   }
-
-  const productDescriptionHtml = commodity.productDescription
-    ? commodity.productDescription
-    : "";
 
   const handleMinusClick = () => {
     if (
@@ -239,24 +257,15 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
                   </p>
                 </div>
               )}
-              <div
-                dangerouslySetInnerHTML={{ __html: productDescriptionHtml }}
-              ></div>
+              <div dangerouslySetInnerHTML={{ __html: productDescriptionHtml }} />
+              <div dangerouslySetInnerHTML={{ __html: parsedHtml }}/>
               <p style={{ color: "black" }}>
                 賣家：<a>{commodity.sellerName}</a>
               </p>
               <p style={{ color: "black" }}>
                 分類：
                 <a href={"/" + commodity.productType}>
-                  {( ()=>{
-                    switch(commodity.productType){
-                      case "daily":return "日用品";
-                      case "electronic":return "3C產品";
-                      case "Stationary":return "文具類";
-                      case "other":return "其他";
-                    }
-                  }
-                  )()}
+                  {commodity.productType}
                 </a>
               </p>
               <ModalFooter>
