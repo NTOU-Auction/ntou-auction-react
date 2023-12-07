@@ -45,6 +45,27 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
     setIsVisible(!isVisible)
   }
 
+  //商品描述
+  const productDescriptionHtml = commodity.productDescription
+  ? commodity.productDescription
+  : "";
+  const parsedHtml = parseOembedString(productDescriptionHtml);
+  function parseOembedString(oembedString:string) {
+    const regex = /<oembed.*?url="(.*?)"><\/oembed>/;
+    const match = oembedString.match(regex);
+    if (match && match[1]) {
+      const youtubeUrl = match[1];
+      const tmp = /v=/;
+      const cut = youtubeUrl.match(tmp);
+      const videoId = !cut ? youtubeUrl.split('.be/')[1] : youtubeUrl.split('v=')[1];
+      const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+      return `<iframe width="100%" height="315" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
+    } else {
+      return ''; 
+    }
+  }
+  
+
   //加入購物車的數量
   const [productAmountTMP, setproductAmountTMP] = useState(1)
   //加注的錢
@@ -123,7 +144,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
           });
           if (response.status === 200) {
             console.log("新增成功:", response.data);
-            //window.location.href = "/shopping-cart"; 
+            window.location.href = "/"; 
           }
         }
       } catch (error) {
@@ -135,10 +156,6 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
       window.location.href = "/sign-in"; 
     }
   }
-
-  const productDescriptionHtml = commodity.productDescription
-    ? commodity.productDescription
-    : "";
 
   const handleMinusClick = () => {
     if (
@@ -239,24 +256,23 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
                   </p>
                 </div>
               )}
-              <div
-                dangerouslySetInnerHTML={{ __html: productDescriptionHtml }}
-              ></div>
+              <div dangerouslySetInnerHTML={{ __html: productDescriptionHtml }} />
+              <div dangerouslySetInnerHTML={{ __html: parsedHtml }}/>
               <p style={{ color: "black" }}>
                 賣家：<a>{commodity.sellerName}</a>
               </p>
               <p style={{ color: "black" }}>
                 分類：
-                <a href={"/" + commodity.productType}>
-                  {( ()=>{
+                <a href={"/" + ( ()=>{
                     switch(commodity.productType){
-                      case "daily":return "日用品";
-                      case "electronic":return "3C產品";
-                      case "Stationary":return "文具類";
-                      case "other":return "其他";
+                      case "日用品":return "daily";
+                      case "3C產品":return "electronic";
+                      case "文具類":return "Stationary";
+                      case "其它":return "other";
                     }
                   }
-                  )()}
+                  )()}>
+                  {commodity.productType}
                 </a>
               </p>
               <ModalFooter>

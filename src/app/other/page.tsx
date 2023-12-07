@@ -35,7 +35,7 @@ export default function Other() {
                 (function () {
                   let show = [];
                   for (let i = 0; i < len; i++) {
-                    if (commodity[i].productType == "other")
+                    if (commodity[i].productType == "其它")
                       show.push((<MediaCard commodity={commodity[i]} />)
                       );
                   }
