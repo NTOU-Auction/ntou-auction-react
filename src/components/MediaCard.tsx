@@ -100,7 +100,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
       }
     } catch (error) {
       console.error("新增錯誤:", error);
-      window.location.href = "/shopping-cart";
+      //window.location.href = "/shopping-cart";
     }
   }
 
