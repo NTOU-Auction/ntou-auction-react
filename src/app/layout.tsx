@@ -33,6 +33,8 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import AddIcon from "@mui/icons-material/Add";
 import SellIcon from "@mui/icons-material/Sell";
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import HomeIcon from '@mui/icons-material/Home';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 //  const metadata = {
 //   title: "NTOU Auction",
 //   description: "NTOU Auction",
@@ -75,9 +77,11 @@ export default function RootLayout({
   }, []);
 
   const LINKS = [
+    { text: "首頁", href: "/", icon: HomeIcon },
     { text: "文具類", href: "/Stationary", icon: CreateIcon },
     { text: "日用品", href: "/daily", icon: RedeemIcon },
     { text: "3C產品", href: "/electronic", icon: ComputerIcon },
+    { text: "其他", href: "/other", icon: MoreHorizIcon },
   ];
 
   const SELLER_CENTER_LINKS = [
