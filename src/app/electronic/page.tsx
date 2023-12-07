@@ -35,7 +35,7 @@ export default function Electron() {
                 (function () {
                   let show = [];
                   for (let i = 0; i < len; i++) {
-                    if (commodity[i].productType == "electronic")
+                    if (commodity[i].productType == "3C產品")
                       show.push((<MediaCard commodity={commodity[i]} />)
                       );
                   }

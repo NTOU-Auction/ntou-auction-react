@@ -264,7 +264,15 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
               </p>
               <p style={{ color: "black" }}>
                 分類：
-                <a href={"/" + commodity.productType}>
+                <a href={"/" + ( ()=>{
+                    switch(commodity.productType){
+                      case "日用品":return "daily";
+                      case "3C產品":return "electronic";
+                      case "文具類":return "Stationary";
+                      case "其它":return "other";
+                    }
+                  }
+                  )()}>
                   {commodity.productType}
                 </a>
               </p>
