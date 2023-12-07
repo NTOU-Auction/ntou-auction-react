@@ -31,6 +31,7 @@ interface Commodity {
   productDescription?: string;
   finishTime?: string;
   bidIncrement?: number;
+  sellerName?: string;
   productType?: string;
   sellerid?: number;
 }
@@ -52,6 +53,32 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
   );
   //token
   const token = Cookies.get('token');
+  async function fetchUserInfo() {
+    const response = axios.get("http://localhost:8080/api/v1/account/users", {
+      headers: {
+        Authorization: `Bearer ${token}`, // Bearer 跟 token 中間有一個空格
+      },
+    });
+    return response;
+  }
+  interface User {
+    name: string;
+  }
+  const [user, setUser] = React.useState<User | null>(null);
+
+
+  React.useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await fetchUserInfo();
+        setUser(data.data);
+      } catch (error) {
+        console.error("獲取帳號資料錯誤:", error);
+      }
+    }
+    fetchData();
+  }, []);
+
   const productID = commodity.id;
   const auctionType = commodity.isFixedPrice;
 
@@ -68,39 +95,44 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
       bid: commodityTMP,
     });
 
-    try {
-      let requestData = {};
-      let API = "";
-      if (auctionType === true) {
-        requestData = buydata;
-        API = "http://localhost:8080/api/v1/product/buy";
-        const response = await axios.post(API, requestData, {
-          headers: {
-            "Content-Type": "application/json;charset=UTF-8",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.status === 200) {
-          console.log("新增成功:", response.data);
-          window.location.href = "/shopping-cart";
+    if(user){
+      try {
+        let requestData = {};
+        let API = "";
+        if (auctionType === true) {
+          requestData = buydata;
+          API = "http://localhost:8080/api/v1/product/buy";
+          const response = await axios.post(API, requestData, {
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if (response.status === 200) {
+            console.log("新增成功:", response.data);
+            window.location.href = "/shopping-cart";
+          }
+        } else {
+          requestData = biddata;
+          API = "http://localhost:8080/api/v1/product/bid";
+          const response = await axios.patch(API, requestData, {
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if (response.status === 200) {
+            console.log("新增成功:", response.data);
+            //window.location.href = "/shopping-cart"; 
+          }
         }
-      } else {
-        requestData = biddata;
-        API = "http://localhost:8080/api/v1/product/bid";
-        const response = await axios.patch(API, requestData, {
-          headers: {
-            "Content-Type": "application/json;charset=UTF-8",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.status === 200) {
-          console.log("新增成功:", response.data);
-          //window.location.href = "/shopping-cart"; 
-        }
+      } catch (error) {
+        console.error("新增錯誤:", error);
+        //window.location.href = "/shopping-cart";
       }
-    } catch (error) {
-      console.error("新增錯誤:", error);
-      window.location.href = "/shopping-cart";
+    }
+    else{
+      window.location.href = "/sign-in"; 
     }
   }
 
@@ -155,7 +187,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
             <Button size="small" type="submit">加入購物車</Button>
           </form>
           :
-          <Button size="small" type="submit" onClick={handleToggleModalShowUp}>加注</Button>
+          <Button size="small" type="submit" onClick={handleToggleModalShowUp}>出價</Button>
         }
         <Button size="small" onClick={handleToggleModalShowUp}>
           更多資訊
@@ -194,10 +226,13 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
               ) : (
                 <div>
                   <p style={{ color: "black", fontWeight: "bold" }}>
-                    起標價：${commodity.upsetPrice}
+                    底價：${commodity.upsetPrice}
                   </p>
                   <p style={{ color: "black", fontWeight: "bold" }}>
                     競標價：${commodity.currentPrice}{" "}
+                  </p>
+                  <p style={{ color: "black", fontWeight: "bold" }}>
+                    每次增加金額：${commodity.bidIncrement}{" "}
                   </p>
                   <p style={{ color: "black", fontWeight: "bold" }}>
                     截標時間：{commodity.finishTime}{" "}
@@ -208,12 +243,20 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
                 dangerouslySetInnerHTML={{ __html: productDescriptionHtml }}
               ></div>
               <p style={{ color: "black" }}>
-                賣家：<a>{commodity.sellerid}</a>
+                賣家：<a>{commodity.sellerName}</a>
               </p>
               <p style={{ color: "black" }}>
                 分類：
                 <a href={"/" + commodity.productType}>
-                  {commodity.productType}
+                  {( ()=>{
+                    switch(commodity.productType){
+                      case "daily":return "日用品";
+                      case "electronic":return "3C產品";
+                      case "Stationary":return "文具類";
+                      case "other":return "其他";
+                    }
+                  }
+                  )()}
                 </a>
               </p>
               <ModalFooter>
@@ -267,7 +310,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
                       color="error"
                       onClick={handleSubmit}
                     >
-                      加注
+                      出價
                     </Button>
                     <div style={{ padding: 5 }}>
                       <button onClick={handleMinusClick}>-</button>
