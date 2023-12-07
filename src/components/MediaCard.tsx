@@ -55,11 +55,10 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
     const match = oembedString.match(regex);
     if (match && match[1]) {
       const youtubeUrl = match[1];
-      console.log(youtubeUrl);
-      const videoId = youtubeUrl.split('.be/')[1];
-      console.log(videoId);
+      const tmp = /v=/;
+      const cut = youtubeUrl.match(tmp);
+      const videoId = !cut ? youtubeUrl.split('.be/')[1] : youtubeUrl.split('v=')[1];
       const embedUrl = `https://www.youtube.com/embed/${videoId}`;
-      console.log(embedUrl);
       return `<iframe width="100%" height="315" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
     } else {
       return ''; 
@@ -145,7 +144,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
           });
           if (response.status === 200) {
             console.log("新增成功:", response.data);
-            //window.location.href = "/shopping-cart"; 
+            window.location.href = "/"; 
           }
         }
       } catch (error) {
