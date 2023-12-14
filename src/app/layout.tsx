@@ -66,6 +66,7 @@ export default function RootLayout({
 
 
   React.useEffect(() => {
+    localStorage.removeItem("keyword");
     async function fetchData() {
       try {
         const data = await fetchUserInfo();
@@ -193,7 +194,7 @@ export default function RootLayout({
                     type="search"
                     placeholder="搜尋商品"
                   />
-                  <IconButton onClick={() => search()}>
+                  <IconButton onClick={() => keywords ? search() : null}>
                     <SearchIcon />
                   </IconButton>
                 </div>

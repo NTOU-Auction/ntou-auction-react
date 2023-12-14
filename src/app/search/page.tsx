@@ -36,11 +36,18 @@ export default function Search(){
         <Grid container spacing={3} style={{ width:"100%"}}>
           <Grid xs={6} style={{ width:"100%"}}> 
             <div style={{ display:'flex', flexWrap: "wrap"}}>
-            {commodity && keyword ? function() {
+            {commodity ? function() {
               let show = []
-              for (let i = 0; i<len; i++){
-                if(commodity[i].productName.includes(keyword) || commodity[i].productDescription.includes(keyword) || commodity[i].productType.includes(keyword)) 
+              if(keyword){
+                for (let i = 0; i<len; i++){
+                  if(commodity[i].productName.includes(keyword) || commodity[i].productDescription.includes(keyword) || commodity[i].productType.includes(keyword))
+                    show.push((<MediaCard commodity={commodity[i]} />));
+                }
+              }
+              else{
+                for (let i = 0; i<len; i++){
                   show.push((<MediaCard commodity={commodity[i]} />));
+                }
               }
             return show
             }() : <p>404</p>}
