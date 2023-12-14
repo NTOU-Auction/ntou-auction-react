@@ -69,6 +69,7 @@ export default function RootLayout({
       try {
         const data = await fetchUserInfo();
         setUser(data.data);
+        localStorage.setItem("userID", JSON.stringify(data.data.id));
       } catch (error) {
         console.error("獲取帳號資料錯誤:", error);
       }
