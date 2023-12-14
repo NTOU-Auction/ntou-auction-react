@@ -8,8 +8,14 @@ const commodityAPI = "http://localhost:8080/api/v1/product/products";
 
 export default function Search(){
 
-  var keyword = localStorage.getItem("keyword");
+  var keyword;
 
+  try {
+    keyword = localStorage.getItem("keyword");
+  } catch (error) {
+    console.error(error); //raises the error
+  }
+  
   interface CommodityItem {
     productName: string;
     productDescription: string;
