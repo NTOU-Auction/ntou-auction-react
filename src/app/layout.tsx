@@ -158,9 +158,9 @@ export default function RootLayout({
                   <IconButton
                     onClick={toggleDrawer}
                     color="primary"
-                    aria-label="add to shopping cart"
+                    size="large"
                   >
-                    <img src="img/option.png" width={"30px"} />
+                    <ListIcon fontSize="inherit" />
                   </IconButton>
                   <button style={{ border: "none", background: "white" }}>
                     <a href="/">
