@@ -186,7 +186,7 @@ const UploadProductForm = () => {
     } catch (error) {
       // setErrorMessage(error.request.response);
       // console.log(productDataFixed);
-      setError("商品上傳失敗:" + " " + error.request.response);
+      setError("商品上傳失敗:" + " " + error.request.data.message);
       setOpenSnackbarErrror(true);
       console.error("商品上傳失敗:", error);
     }

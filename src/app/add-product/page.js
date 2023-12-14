@@ -93,11 +93,6 @@ const UploadProductForm = () => {
     }
   }, []);
 
-  const headers = {
-    // "Content-Type": "application/json;charset=UTF-8",
-    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     // 設定縮圖
@@ -150,7 +145,7 @@ const UploadProductForm = () => {
       }
     } catch (error) {
       // setErrorMessage("商品上傳失敗:" + " " + error.request.response);
-      setError("商品上傳失敗:" + " " + error.request.response);
+      setError("商品上傳失敗:" + " " + error.response.data.message);
       setOpenSnackbarErrror(true);
       console.error("商品上傳失敗:", error);
     }
