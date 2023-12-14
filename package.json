@@ -17,7 +17,6 @@
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "@mui/x-date-pickers": "^6.18.2",
-    "antd": "^5.12.2",
     "axios": "^1.6.2",
     "ckeditor5-custom-build": "file:./ckeditor5",
     "dayjs": "^1.11.10",
