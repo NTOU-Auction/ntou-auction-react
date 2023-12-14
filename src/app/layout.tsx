@@ -35,6 +35,7 @@ import SellIcon from "@mui/icons-material/Sell";
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import HomeIcon from '@mui/icons-material/Home';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+
 //  const metadata = {
 //   title: "NTOU Auction",
 //   description: "NTOU Auction",
@@ -108,6 +109,22 @@ export default function RootLayout({
     setLoggedIn(false); // 將使用者設定為未登入狀態
     location.reload();
   };
+  
+  //搜尋
+  const [keywords, setKeywords] = React.useState("");
+
+  const search = () => {
+    console.log(keywords);
+    localStorage.setItem("keyword", keywords);
+    window.location.href = "/search";
+  }
+  const handleKeyDown = (event:any) => {
+    if (event.key === 'Enter') {
+      console.log(keywords);
+      localStorage.setItem("keyword", keywords);
+      window.location.href = "/search";
+    }
+  };
 
   return (
     <html lang="en">
@@ -171,10 +188,12 @@ export default function RootLayout({
                       border: "1px solid #ccc",
                       paddingLeft: "3%",
                     }}
+                    onChange={(e) => setKeywords(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     type="search"
                     placeholder="搜尋商品"
                   />
-                  <IconButton>
+                  <IconButton onClick={() => search()}>
                     <SearchIcon />
                   </IconButton>
                 </div>

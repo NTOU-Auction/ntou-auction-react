@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Checkbox from '@mui/material/Checkbox';
+import { green } from '@mui/material/colors';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import './cart.css';
 import { backdropClasses } from "@mui/material";
@@ -314,7 +315,7 @@ export default function ShoppingCart() {
                           <div className="item_header item_body">
                             <div className="check">
                               <FormControlLabel
-                                control={<Checkbox color="success" checked={checked[countnow]} onChange={() => handleChangeChild(event, countnow)} />}
+                                control={<Checkbox color="success" checked={checked[countnow]} onChange={() => handleChangeChild(event, countnow)}/>}
                               />
                             </div>
                             <div className="item_detail">
@@ -322,15 +323,30 @@ export default function ShoppingCart() {
                               <div className="name" style={{ WebkitLineClamp: 1, overflow: "hidden", textOverflow: "ellipsis", WebkitLineClamp: 3, display: "-webkit-box", WebkitBoxOrient: "vertical", boxSizing: "border-box" }}>{shoppingcart[key][i].product.productName}</div>
                             </div>
                             <div className="price"><span>$</span>{shoppingcart[key][i].product.currentPrice}</div>
-                            <div className="count">
-                              <button onClick={() => productAmountTMP[countnow] > 1 ? handleDecrementClick(shoppingcart[key][i].product.id, countnow, shoppingcart[key][i].product.currentPrice) : setproductAmountTMP(productAmountTMP)}>
-                                -
-                              </button>
-                              <span> {productAmountTMP[countnow]} </span>
-                              <button onClick={() => productAmountTMP[countnow] < shoppingcart[key][i].product.productAmount ? handleIncrementClick(shoppingcart[key][i].product.id, countnow, shoppingcart[key][i].product.currentPrice) : setproductAmountTMP(productAmountTMP)}>
-                                +
-                              </button>
-                            </div>
+                            {function () {
+                                if(shoppingcart[key][i].product.isFixedPrice){
+                                  return <div className="count">
+                                            <button onClick={() => productAmountTMP[countnow] > 1 ? handleDecrementClick(shoppingcart[key][i].product.id, countnow, shoppingcart[key][i].product.currentPrice) : setproductAmountTMP(productAmountTMP)}>
+                                              -
+                                            </button>
+                                            <span style={{padding:3}}> {productAmountTMP[countnow]} </span>
+                                            <button onClick={() => productAmountTMP[countnow] < shoppingcart[key][i].product.productAmount ? handleIncrementClick(shoppingcart[key][i].product.id, countnow, shoppingcart[key][i].product.currentPrice) : setproductAmountTMP(productAmountTMP)}>
+                                              +
+                                            </button>
+                                          </div>
+                                }
+                                else{
+                                  return <div className="count">
+                                            <button disabled>
+                                              -
+                                            </button>
+                                            <span style={{padding:3}}> {productAmountTMP[countnow]} </span>
+                                            <button disabled>
+                                              +
+                                            </button>
+                                          </div>
+                                }
+                              }()}
                             <div className="amount"><span>$</span>{productCountTMP[countnow]}</div>
                             <div className="operate">
                               <IconButton aria-label="delete" onClick={() => handleDeleteClick(shoppingcart[key][i].product.id, countnow)}>
