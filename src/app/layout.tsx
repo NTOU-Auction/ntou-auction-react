@@ -66,7 +66,6 @@ export default function RootLayout({
 
 
   React.useEffect(() => {
-    localStorage.setItem("keyword", "");
     async function fetchData() {
       try {
         const data = await fetchUserInfo();

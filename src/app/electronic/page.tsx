@@ -4,15 +4,14 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
 import MediaCard from "@/components/MediaCard";
 
-const commodityAPI = "http://localhost:8080/api/v1/product/products";
+const commodityAPI = "http://localhost:8080/api/v1/product/product/classification";
 
 export default function Electron() {
-  interface CommodityItem {
-    productType: string;
-  }
-  const [commodity, setcommodity] = React.useState<CommodityItem[]>([]);
+
+  const [commodity, setcommodity] = React.useState([]);
+  
   React.useEffect(() => {
-    fetch(commodityAPI)
+    fetch(commodityAPI+"/3C產品")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -35,9 +34,7 @@ export default function Electron() {
                 (function () {
                   let show = [];
                   for (let i = 0; i < len; i++) {
-                    if (commodity[i].productType == "3C產品")
-                      show.push((<MediaCard commodity={commodity[i]} />)
-                      );
+                    show.push((<MediaCard commodity={commodity[i]} />));
                   }
                   return show;
                 })()

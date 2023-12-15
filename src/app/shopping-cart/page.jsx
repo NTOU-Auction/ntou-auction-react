@@ -10,11 +10,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Checkbox from '@mui/material/Checkbox';
-import { green } from '@mui/material/colors';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import './cart.css';
-import { backdropClasses } from "@mui/material";
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 export default function ShoppingCart() {
 
