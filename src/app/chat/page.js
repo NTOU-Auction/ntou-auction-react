@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client"
 import Cookies from "js-cookie";
 import axios from "axios";
 /* UI */
@@ -20,22 +21,77 @@ import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 
 const token = Cookies.get("token");
 
+// const users = localStorage.getItem("usersReceiver");
+// const users = [
+//   { id: "1", name: "admin" },
+//   { id: "2", name: "shit" },
+// ];
+
 const WebSocketTest = () => {
   // const [user, setUser] = useState(null);
   const [userMessage, setUserMessage] = useState(""); /* 使用者輸入欄的訊息 */
   const [messages, setMessages] = useState([]);
   const [client, setClient] = useState(null);
 
-  useEffect(() => {
-    // 在這裡呼叫獲取先前訊息的函式
-    fetchPreviousMessages();
-  }, []); // 空的依賴陣列表示只在組件載入時執行一次
+  const [selectedUser, setSelectedUser] = useState(null);
+  const handleUserClick = (userId) => {
+    console.log(userId);
+    setSelectedUser(userId);
+    setMessages([]);
+    fetchPreviousMessages(userId);
+  };
 
-  const fetchPreviousMessages = async () => {
+  /* 取得聯絡人資訊 */
+  const [users, setContacts] = useState([]);
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/v1/chat/contact", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("聯絡人清單" + response)
+        const contactsArray = Object.entries(response.data).map(([key, value]) => ({ id: key, name: value }));
+        setContacts(contactsArray);
+        const storedContacts = localStorage.getItem("usersReceiver");
+        if (storedContacts) {
+          const parsedContacts = JSON.parse(storedContacts);
+          // 檢查每個 storedContacts 是否存在於 users 中，若不存在則加入
+          parsedContacts.forEach(contact => {
+            if (!users.some(user => user.id === contact.id)) {
+              localStorage.removeItem("usersReceiver");
+              setContacts(prevContacts => [...prevContacts, contact]);
+            }
+          });
+        }
+        console.log("聯絡人" + users);
+      } catch (error) {
+        console.error("無法取得聯絡人清單:", error);
+      }
+    };
+    fetchContacts();
+  }, []); // 空的依賴陣列表示只在組件載入時執行一次
+  
+
+  // 訊息切換時的處理函數
+  useEffect(() => {
+    // 根據所選用戶載入相應的聊天記錄
+    if (selectedUser !== null) {
+      fetchPreviousMessages(selectedUser); // 取得特定使用者的聊天記錄
+    }
+  }, [selectedUser]);
+
+  // useEffect(() => {
+  //   // 在這裡呼叫獲取先前訊息的函式
+  //   fetchPreviousMessages();
+  // }, []); // 空的依賴陣列表示只在組件載入時執行一次
+
+  const fetchPreviousMessages = async (receiverId) => {
     try {
       const response = await axios.get(
-        /* 從哪裡來拿訊息 */
-        `http://localhost:8080/api/v1/chat/messages/1`,
+        /* 從哪裡來拿訊息senderID ID2收到ID1的訊息 */
+        `http://localhost:8080/api/v1/chat/messages/${receiverId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -89,6 +145,12 @@ const WebSocketTest = () => {
       // heartbeatOutgoing: 4000,
     });
 
+    if (typeof WebSocket !== 'function') {
+      newClient.webSocketFactory = function () {
+        return new SockJS('http://localhost:8080/sockjs');
+      };
+    }
+
     newClient.onConnect = function (frame) {
       console.log("Connected to WebSocket server");
       setClient(newClient);
@@ -115,18 +177,18 @@ const WebSocketTest = () => {
                 return {
                   message: message.content,
                   direction: "incoming",
-                  position: "single"
+                  position: "single",
                 };
               } else {
                 // 訊息是自己之前發出去的
                 return {
                   message: message.content,
                   direction: "outgoing",
-                  position: "single"
+                  position: "single",
                 };
               }
             });
-            console.log(messageObjects)
+            console.log(messageObjects);
             setMessages(messageObjects);
             // messageObjects.forEach((msgObj) => {
             //   setMessages((prevMessages) => [...prevMessages, msgObj]);
@@ -165,8 +227,8 @@ const WebSocketTest = () => {
   /* 發送訊息 */
   const handleSendMessage = () => {
     if (userMessage && userMessage.trim() !== "") {
-      const newMessageSocket = { /* 訊息傳給誰 */ 
-        receiverId: "2",
+      const newMessageSocket = {
+        /* 訊息傳給誰 */ receiverId: selectedUser,
         content: userMessage,
       };
 
@@ -203,23 +265,37 @@ const WebSocketTest = () => {
     <div style={{ position: "relative", height: "500px" }}>
       <MainContainer style={{ marginTop: "60px" }}>
         <Sidebar position="left">
-          <ConversationList>
+          {/* <ConversationList>
             <Conversation
               name="keke"
-              lastSenderName="keke"
-              info="你好"
+              // lastSenderName="keke"
+              // info="你好"
               active={true}
             >
               <Avatar src="https://cdn-icons-png.flaticon.com/128/1077/1077114.png" />
             </Conversation>
+          </ConversationList> */}
+          <ConversationList>
+            {users.map((user) => (
+              <Conversation
+                key={user.id}
+                name={user.name}
+                onClick={() => handleUserClick(user.id)}
+                active={user.id === selectedUser} /* */
+              >
+                <Avatar src="https://cdn-icons-png.flaticon.com/128/1077/1077114.png" />
+              </Conversation>
+            ))}
           </ConversationList>
         </Sidebar>
         <ChatContainer>
           <ConversationHeader>
             <Avatar src="https://cdn-icons-png.flaticon.com/128/1077/1077114.png" />
             <ConversationHeader.Content
-              userName="keke"
-              info="上次上線: 10分鐘前"
+              userName={
+                users.find((user) => user.id === selectedUser)?.name || ""
+              }
+              // info="上次上線: 10分鐘前"
             ></ConversationHeader.Content>
           </ConversationHeader>
           <MessageList>
@@ -228,29 +304,6 @@ const WebSocketTest = () => {
                 {/* <Avatar src="https://cdn-icons-png.flaticon.com/128/1077/1077114.png" /> */}
               </Message>
             ))}
-            <Message
-              model={{
-                message: "你好嗎?",
-                sender: "keke",
-                sentTime: "10分鐘前",
-                direction: "incoming",
-                position: "single",
-              }}
-            >
-              <Avatar src="https://cdn-icons-png.flaticon.com/128/1077/1077114.png" />
-            </Message>
-
-            <Message
-              model={{
-                message: "我不好",
-                sender: "keke",
-                sentTime: "10分鐘前",
-                direction: "outgoing",
-                position: "single",
-              }}
-            >
-              <Avatar src="https://cdn-icons-png.flaticon.com/128/1077/1077114.png" />
-            </Message>
           </MessageList>
           <MessageInput
             value={userMessage}
