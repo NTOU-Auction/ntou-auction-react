@@ -35,7 +35,7 @@ export default function Stationery(){
             {commodity ? function() {
               let show = []
               for (let i = 0; i<len; i++){
-                if(commodity[i].productType == "Stationary") 
+                if(commodity[i].productType == "文具類") 
                   show.push((<MediaCard commodity={commodity[i]} />));
               }
             return show

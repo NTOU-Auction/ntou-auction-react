@@ -6,7 +6,7 @@ import MediaCard from "@/components/MediaCard";
 
 const commodityAPI = "http://localhost:8080/api/v1/product/products";
 
-export default function Electron() {
+export default function Other() {
   interface CommodityItem {
     productType: string;
   }
@@ -35,7 +35,7 @@ export default function Electron() {
                 (function () {
                   let show = [];
                   for (let i = 0; i < len; i++) {
-                    if (commodity[i].productType == "3C產品")
+                    if (commodity[i].productType == "其它")
                       show.push((<MediaCard commodity={commodity[i]} />)
                       );
                   }

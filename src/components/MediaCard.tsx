@@ -54,7 +54,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
   const token = Cookies.get("token");
   const productID = commodity.id;
   const auctionType = commodity.isFixedPrice;
-
+  
   const handleButtonClick = () => {
     // 從本地端存儲讀取已有的使用者資訊陣列，如果沒有就創建一個新陣列
     localStorage.removeItem("usersReceiver");
@@ -74,7 +74,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
       // 存回 localStorage
       localStorage.setItem("usersReceiver", JSON.stringify(users));
     }
-    window.location.href = "../chat";
+    window.location.href = '../chat'
   };
 
   const handleSubmit = async (event: any) => {
@@ -229,25 +229,34 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
               ) : (
                 <div>
                   <p style={{ color: "black", fontWeight: "bold" }}>
-                    起標價：${commodity.upsetPrice}
+                    底價：${commodity.upsetPrice}
                   </p>
                   <p style={{ color: "black", fontWeight: "bold" }}>
                     競標價：${commodity.currentPrice}{" "}
+                  </p>
+                  <p style={{ color: "black", fontWeight: "bold" }}>
+                    每次增加金額：${commodity.bidIncrement}{" "}
                   </p>
                   <p style={{ color: "black", fontWeight: "bold" }}>
                     截標時間：{commodity.finishTime}{" "}
                   </p>
                 </div>
               )}
-              <div
-                dangerouslySetInnerHTML={{ __html: productDescriptionHtml }}
-              ></div>
+              <div dangerouslySetInnerHTML={{ __html: productDescriptionHtml }} />
               <p style={{ color: "black" }}>
-                賣家：<a>{commodity.sellerID}</a>
+          賣家：<a>{commodity.sellerName}</a>
               </p>
               <p style={{ color: "black" }}>
                 分類：
-                <a href={"/" + commodity.productType}>
+                <a href={"/" + ( ()=>{
+                    switch(commodity.productType){
+                      case "日用品":return "daily";
+                      case "3C產品":return "electronic";
+                      case "文具類":return "Stationary";
+                      case "其它":return "other";
+                    }
+                  }
+                  )()}>
                   {commodity.productType}
                 </a>
               </p>
@@ -256,7 +265,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
                   <div style={{ display: "flex", justifyContent: "center" }}>
                     <Button
                       variant="contained"
-                      style={{ marginRight: "10px" }}
+                      style={{ marginRight: '10px' }} 
                       onClick={handleButtonClick}
                     >
                       與賣家聯繫
@@ -306,9 +315,9 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
                   </div>
                 ) : (
                   <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Button
+                                        <Button
                       variant="contained"
-                      style={{ marginRight: "10px" }}
+                      style={{ marginRight: '10px' }} 
                       onClick={handleButtonClick}
                     >
                       與賣家聯繫
@@ -318,7 +327,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
                       color="error"
                       onClick={handleSubmit}
                     >
-                      加注
+                      出價
                     </Button>
                     <div style={{ padding: 5 }}>
                       <button onClick={handleMinusClick}>-</button>
