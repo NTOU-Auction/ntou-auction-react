@@ -18,11 +18,7 @@ import "./ScrollBar.css";
 import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { pink } from '@mui/material/colors';
-
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 const ModalFooter = styled.div`
   display: flex;
@@ -159,7 +155,7 @@ export default function MediaCard({ commodity }) {
         }
       } catch (error) {
         if(error)
-          setError(error.request.response);
+          setError(error.response.data.message)
         setOpenSnackbarErrror(true);
         console.error(error);
         //window.location.href = "/shopping-cart";
