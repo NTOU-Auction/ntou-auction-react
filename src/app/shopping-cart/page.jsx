@@ -27,14 +27,24 @@ export default function ShoppingCart() {
   const [cost, setcost] = useState(0);
   //總數量
   const [total, settotal] = useState(0);
+  //訂單
+  const [order, setorder] = useState([]);
   //勾選
   const [checkedParent, setCheckedParent] = useState([]);
   const [checked, setChecked] = useState([]);
+  //商品數量
+  var count = 0;
+  //API
+  const ShoppingCartAPI = "http://localhost:8080/api/v1/shoppingcart/shoppingcart";
+  const ProductIncreaseAPI = "http://localhost:8080/api/v1/shoppingcart/increase";
+  const ProductDecreaseAPI = "http://localhost:8080/api/v1/shoppingcart/decrease";
+  const ProductDeleteAPI = "http://localhost:8080/api/v1/shoppingcart/delete";
+  const CreateOrderAPI = "http://localhost:8080/api/v1/order/create";
 
   useEffect(() => {
     async function fetchShoppingcart() {
       try {
-        const view = await axios.get("http://localhost:8080/api/v1/shoppingcart/shoppingcart", {
+        const view = await axios.get(ShoppingCartAPI, {
           headers: {
             "Authorization": `Bearer ${token}` // Bearer 跟 token 中間有一個空格
           }
@@ -51,7 +61,7 @@ export default function ShoppingCart() {
               totalTMP += view.data.productShowBySeller[key][i].amount;
               productCountTMP.push(view.data.productShowBySeller[key][i].product.currentPrice * view.data.productShowBySeller[key][i].amount);
               costTMP += (view.data.productShowBySeller[key][i].product.currentPrice * view.data.productShowBySeller[key][i].amount);
-              checked.push(true);
+              checked.push([i,true]);
             }
           })
           setcost(costTMP);
@@ -79,7 +89,7 @@ export default function ShoppingCart() {
     });
     console.log(nextAmount);
     setproductAmountTMP(nextAmount);
-    settotal(checked[index] ? total + 1 : total);
+    settotal(checked[index][1] ? total + 1 : total);
 
     const nextCount = productCountTMP.map((c, i) => {
       if (i === index) {
@@ -92,7 +102,7 @@ export default function ShoppingCart() {
     });
     console.log(nextCount);
     setproductCountTMP(nextCount);
-    setcost(checked[index] ? cost + price : cost);
+    setcost(checked[index][1] ? cost + price : cost);
 
     AddProductAmount(productID);
   }
@@ -107,7 +117,7 @@ export default function ShoppingCart() {
     console.log(adddata);
     try {
       let requestData = adddata;
-      let API = "http://localhost:8080/api/v1/shoppingcart/increase";
+      let API = ProductIncreaseAPI;
       const response = await axios.post(API, requestData, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
@@ -135,7 +145,7 @@ export default function ShoppingCart() {
     console.log(decreasedata);
     try {
       let requestData = decreasedata;
-      let API = "http://localhost:8080/api/v1/shoppingcart/decrease";
+      let API = ProductDecreaseAPI;
       const response = await axios.delete(API, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
@@ -165,7 +175,7 @@ export default function ShoppingCart() {
     });
     console.log(nextAmount);
     setproductAmountTMP(nextAmount);
-    settotal(checked[index] ? total - 1 : total);
+    settotal(checked[index][1] ? total - 1 : total);
 
     const nextCount = productCountTMP.map((c, i) => {
       if (i === index) {
@@ -178,7 +188,7 @@ export default function ShoppingCart() {
     });
     console.log(nextCount);
     setproductCountTMP(nextCount);
-    setcost(checked[index] ? cost - price : cost);
+    setcost(checked[index][1] ? cost - price : cost);
 
     DecreaseProductAmount(productID);
   }
@@ -194,7 +204,7 @@ export default function ShoppingCart() {
     console.log(deletedata);
     try {
       let requestData = deletedata;
-      let API = "http://localhost:8080/api/v1/shoppingcart/delete";
+      let API = ProductDeleteAPI;
       const response = await axios.delete(API, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
@@ -224,7 +234,7 @@ export default function ShoppingCart() {
     });
     console.log(nextAmount);
     setproductAmountTMP(nextAmount);
-    settotal(checked[index] ? total - productAmountTMP[index] : total);
+    settotal(checked[index][1] ? total - productAmountTMP[index] : total);
 
     const nextCount = productCountTMP.map((c, i) => {
       if (i === index) {
@@ -237,9 +247,52 @@ export default function ShoppingCart() {
     });
     console.log(nextCount);
     setproductCountTMP(nextCount);
-    setcost(checked[index] ? cost - productCountTMP[index] : cost);
+    setcost(checked[index][1] ? cost - productCountTMP[index] : cost);
 
     DeleteProductAmount(productID);
+  }
+
+  //送出訂單
+  const CreateOrder = async () => {
+
+    const orederdata = JSON.stringify({
+      productList: order,
+      amount: 0,
+    });
+
+    console.log(orederdata);
+    try {
+      let requestData = orederdata;
+      let API = CreateOrderAPI;
+      const response = await axios.post(API, requestData,
+        {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      if (response.status === 200) {
+        console.log("下單成功:", response.data);
+        setorder([]);
+        //window.location.href = "/shopping-cart";
+      }
+    }
+    catch (error) {
+      console.error("刪除錯誤:", error);
+    }
+  };
+
+  function handleCreateOrderClick() {
+    var tmpcount = 0;
+    Object.keys(shoppingcart).map((key, index) => {
+      for (let i = 0; i < shoppingcart[key].length; i++) {
+        if(checked[tmpcount][1])  
+         order.push([shoppingcart[key][i].product.id, shoppingcart[key][i].product.productAmount]);
+        tmpcount++;
+      }
+    })
+    console.log(order);
+    CreateOrder();
   }
 
   //checkbox
@@ -261,20 +314,8 @@ export default function ShoppingCart() {
   function handleChangeChild (event, index) {
     settotal(event.target.checked ? total + productAmountTMP[index] : total - productAmountTMP[index]);
     setcost(event.target.checked ? cost + productCountTMP[index] : cost - productCountTMP[index]);
-
-    const Next = checked.map((c, i) => {
-      if (i === index) {
-        // Increment the clicked counter
-        return event.target.checked;
-      } else {
-        // The rest haven't changed
-        return c;
-      }
-    });
-    setChecked(Next);
+    checked[index][1] = event.target.checked;
   };  
-
-  var count = 0;
 
   return (
     <Box style={{ display: 'block', marginTop: "60px" }}>
@@ -312,7 +353,7 @@ export default function ShoppingCart() {
                           <div className="item_header item_body">
                             <div className="check">
                               <FormControlLabel
-                                control={<Checkbox color="success" checked={checked[countnow]} onChange={() => handleChangeChild(event, countnow)}/>}
+                                control={<Checkbox color="success" checked={checked[countnow][1]} onChange={() => handleChangeChild(event, countnow)}/>}
                               />
                             </div>
                             <div className="item_detail">
@@ -370,7 +411,7 @@ export default function ShoppingCart() {
               <div className="count" >{total}</div>
               <div className="amount">${cost}</div>
               <div className="operate">
-                <Button variant="contained" size="small" color="success" endIcon={<AddShoppingCartIcon />}>
+                <Button onClick={() => handleCreateOrderClick()} variant="contained" size="small" color="success" endIcon={<AddShoppingCartIcon />}>
                   下單
                 </Button>
               </div>
