@@ -54,17 +54,20 @@ const WebSocketTest = () => {
         console.log("聯絡人清單" + response)
         const contactsArray = Object.entries(response.data).map(([key, value]) => ({ id: key, name: value }));
         setContacts(contactsArray);
+
         const storedContacts = localStorage.getItem("usersReceiver");
         if (storedContacts) {
           const parsedContacts = JSON.parse(storedContacts);
           // 檢查每個 storedContacts 是否存在於 users 中，若不存在則加入
           parsedContacts.forEach(contact => {
             if (!users.some(user => user.id === contact.id)) {
-              localStorage.removeItem("usersReceiver");
+              console.log("test" + parsedContacts)
               setContacts(prevContacts => [...prevContacts, contact]);
             }
           });
+          // localStorage.removeItem("usersReceiver");
         }
+        
         console.log("聯絡人" + users);
       } catch (error) {
         console.error("無法取得聯絡人清單:", error);
@@ -72,7 +75,7 @@ const WebSocketTest = () => {
     };
     fetchContacts();
   }, []); // 空的依賴陣列表示只在組件載入時執行一次
-  
+
 
   // 訊息切換時的處理函數
   useEffect(() => {
@@ -253,6 +256,7 @@ const WebSocketTest = () => {
         });
       }
       setUserMessage("");
+      localStorage.removeItem("usersReceiver");
     }
   };
 
