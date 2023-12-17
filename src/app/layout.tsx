@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import React, { useRef, useEffect } from 'react';
 import Link from "next/link";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -36,12 +36,11 @@ import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import HomeIcon from '@mui/icons-material/Home';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
+
 //  const metadata = {
 //   title: "NTOU Auction",
 //   description: "NTOU Auction",
 // };
-
-const DRAWER_WIDTH = 240;
 
 const token = Cookies.get("token");
 async function fetchUserInfo() {
@@ -58,6 +57,22 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
+  //RWD
+  const [DRAWER_WIDTH, setDRAWER_WIDTH] = React.useState<number>(240);
+
+  React.useEffect(() => {
+    function handleWindowResize() {
+      window.innerWidth > 930 ? setDRAWER_WIDTH(240) : setDRAWER_WIDTH(window.innerWidth);
+      console.log(window.innerWidth);
+    }
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
 
   interface User {
     name: string;
@@ -100,8 +115,13 @@ export default function RootLayout({
   /* 側邊欄收縮 */
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const toggleDrawer = () => {
+    isDrawerOpen ? localStorage.setItem("isDrawerOpen", "0") : localStorage.setItem("isDrawerOpen", "1");
     setIsDrawerOpen(!isDrawerOpen);
   };
+  React.useEffect(() => {
+    isDrawerOpen ? localStorage.setItem("isDrawerOpen", "1") : localStorage.setItem("isDrawerOpen", "0");
+  });
+
   /* 登出 */
   const [loggedIn, setLoggedIn] = React.useState(!!user); // 假設 user 是您從某處獲得的使用者資訊
   const handleLogout = () => {
@@ -166,7 +186,11 @@ export default function RootLayout({
                       <img src="img/logo.png" width={"50px"} />
                     </a>
                   </button>
-                  NTOU Auction
+                  {typeof window !== "undefined" && window.innerWidth > 700 ? (
+                    <p>NTOU Auction</p>
+                  ) : (
+                    null
+                  )}
                 </div>
                 <div
                   style={{

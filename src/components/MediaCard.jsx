@@ -181,6 +181,26 @@ export default function MediaCard({ commodity }) {
     }
   };
 
+  //RWD
+  const [margin, setMargin] = React.useState(0);
+
+  React.useEffect(() => {
+    function handleWindowResize() {
+      window.innerWidth > 930 && localStorage.getItem("isDrawerOpen") == "1" ? setMargin(240) : setMargin(0);
+    }
+    function handleWindowClick() {
+      window.innerWidth > 930 && localStorage.getItem("isDrawerOpen") == "1" ? setMargin(240) : setMargin(0);
+    }
+
+    window.addEventListener('resize', handleWindowResize);
+    window.addEventListener('click', handleWindowClick);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+      window.removeEventListener('click', handleWindowClick);
+    };
+  }, []);
+
   return (
 
     <Card variant="outlined" sx={{ width: "200px", height: "400px" }}>
@@ -225,6 +245,7 @@ export default function MediaCard({ commodity }) {
         title={commodity.productName}
         isVisible={isVisible}
         onClose={handleToggleModalShowUp}
+        margin={margin+"px"}
       >
         <ModalContent>
           <div>

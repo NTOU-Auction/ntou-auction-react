@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import ReactDOM from 'react-dom'
 
-const TpModal = ({ title,isVisible, children, maxWidth, target, onClose } = { children: [] }) => {
+const TpModal = ({ title, isVisible, children, maxWidth, target, onClose, margin } = { children: [] }) => {
   // 將彈跳視窗移出到特定的元素上
   const portalTarget = target || document.body
 
@@ -54,12 +54,12 @@ const TpModal = ({ title,isVisible, children, maxWidth, target, onClose } = { ch
     ? ReactDOM.createPortal(
       <Backdrop onClick={handleBackdropClick}>
         {/* 彈跳視窗 */}
-        <Modal ref={modalRef} maxWidth={maxWidth}>
+        <Modal ref={modalRef} maxWidth={maxWidth} style={{ marginLeft: margin }}>
 
           {/* 標頭 */}
           <ModalHeader>
-            <h2 style={{ fontWeight: 'bolder', flex: '1', textAlign: 'center'}}>
-             {title}
+            <h2 style={{ fontWeight: 'bolder', flex: '1', textAlign: 'center' }}>
+              {title}
             </h2>
           </ModalHeader>
 
@@ -104,7 +104,6 @@ const Modal = styled.div`
   max-height: 100vh;
   box-shadow: 3px 3px 9px 1px silver;
   display: flex;
-  margin-left: 240px;
   flex-direction: column;
 `
 
