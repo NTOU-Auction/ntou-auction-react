@@ -419,7 +419,7 @@ export default function ShoppingCart() {
           </div>
         </div>
         :
-        <p>去商店逛逛，把商品加入購物車吧！</p>
+        <h3>去商店逛逛，把商品加入購物車吧！</h3>
       }
     </Box >
   );

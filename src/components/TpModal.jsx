@@ -54,7 +54,7 @@ const TpModal = ({ title, isVisible, children, maxWidth, target, onClose, margin
     ? ReactDOM.createPortal(
       <Backdrop onClick={handleBackdropClick}>
         {/* 彈跳視窗 */}
-        <Modal ref={modalRef} maxWidth={maxWidth} style={{ marginLeft: margin }}>
+        <Modal ref={modalRef} maxWidth={maxWidth} style={{ marginLeft: margin, transition: "margin-left 225ms cubic-bezier(0, 0, 0.2, 1) 0ms", }}>
 
           {/* 標頭 */}
           <ModalHeader>

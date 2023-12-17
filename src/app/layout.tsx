@@ -35,6 +35,8 @@ import SellIcon from "@mui/icons-material/Sell";
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import HomeIcon from '@mui/icons-material/Home';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 
 //  const metadata = {
@@ -108,6 +110,7 @@ export default function RootLayout({
   ];
 
   const PLACEHOLDER_LINKS = [
+    { text: "我的最愛", href: user ? "/my-favorite" : "/sign-in", icon: FavoriteIcon },
     { text: "購物車", href: user ? "/shopping-cart" : "/sign-in", icon: ShoppingCartIcon },
     { text: "聊天室", href: user ? "/chat" : "/sign-in", icon: ChatIcon },
     { text: "設定", href: "/", icon: SettingsIcon },
@@ -148,7 +151,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body>
+      <body style={{background: "rgba(0, 0, 0, 0.1)"}}>
         <ThemeRegistry>
           <AppBar
             position="fixed"
@@ -181,13 +184,13 @@ export default function RootLayout({
                   >
                     <ListIcon fontSize="inherit" />
                   </IconButton>
-                  <button style={{ border: "none", background: "white" }}>
+                  <button style={{ border: "none", backgroundColor: 'transparent' }}>
                     <a href="/">
-                      <img src="img/logo.png" width={"50px"} />
+                      <img src="img/logo.png" width={"50px"} height={"100%"}/>
                     </a>
                   </button>
                   {typeof window !== "undefined" && window.innerWidth > 700 ? (
-                    <p>NTOU Auction</p>
+                    <span>NTOU Auction</span>
                   ) : (
                     null
                   )}
@@ -198,10 +201,12 @@ export default function RootLayout({
                     float: "left",
                     paddingLeft:"10%",
                     width: "40%",
+                    height: "100%",
                     justifyContent: "center",
                     display: "flex",
                     textAlign: "center",
                     alignItems: "center",
+                    paddingTop: "10px",
                   }}
                 >
                   <input
@@ -227,10 +232,11 @@ export default function RootLayout({
                     display: "flex",
                     textAlign: "center",
                     alignItems: "center",
+                    paddingTop: "10px",
                   }}
                 >
                   {user ? (
-                    <div style={{ display:"flex" }}>
+                    <div style={{ display:"flex", height:"100%" }}>
                       <ListItemButton component={Link} href={"/tasks"}>
                         <u style={{ fontSize: "15px", color: "orange" }}>{user.name}</u>
                       </ListItemButton>
@@ -274,8 +280,9 @@ export default function RootLayout({
               color="primary"
               aria-label="close drawer"
               size="large"
+              style={{height:"64px"}}
             >
-              <ChevronLeftIcon />
+              <ArrowLeftIcon fontSize="large"/>
             </IconButton>
             <Divider />
             <List>

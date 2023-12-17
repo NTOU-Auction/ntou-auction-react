@@ -203,23 +203,25 @@ export default function MediaCard({ commodity }) {
 
   return (
 
-    <Card variant="outlined" sx={{ width: "200px", height: "400px" }}>
+    <Card variant="outlined" sx={{ width: "200px", height: "355px" }}>
       <Image
         alt="Image"
         src={"" + commodity.productImage}
         width={640}
-        height={480}
+        height={200}
         style={{
           maxWidth: "100%",
+          width: "200px",
           height: "200px",
           objectFit: "cover",
+          padding: "10px 10px 0px 10px"
         }}
       />
       <CardContent>
-        <Typography gutterBottom variant="h6" component="div">
-          <p style={{ WebkitLineClamp: 1, width: '100%', overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", WebkitBoxOrient: "vertical", boxSizing: "border-box" }}>
+        <Typography gutterBottom variant="h5" component="div">
+          <span style={{ WebkitLineClamp: 1, width: '100%', overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", WebkitBoxOrient: "vertical", boxSizing: "border-box" }}>
             {commodity.productName}
-          </p>
+          </span>
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {commodity.isFixedPrice
