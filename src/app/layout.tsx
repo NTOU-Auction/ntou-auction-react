@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import React, { useRef, useEffect } from 'react';
 import Link from "next/link";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -35,12 +35,14 @@ import SellIcon from "@mui/icons-material/Sell";
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import HomeIcon from '@mui/icons-material/Home';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+
+
 //  const metadata = {
 //   title: "NTOU Auction",
 //   description: "NTOU Auction",
 // };
-
-const DRAWER_WIDTH = 240;
 
 const token = Cookies.get("token");
 async function fetchUserInfo() {
@@ -57,6 +59,22 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
+  //RWD
+  const [DRAWER_WIDTH, setDRAWER_WIDTH] = React.useState<number>(240);
+
+  React.useEffect(() => {
+    function handleWindowResize() {
+      window.innerWidth > 930 ? setDRAWER_WIDTH(240) : setDRAWER_WIDTH(window.innerWidth);
+      console.log(window.innerWidth);
+    }
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
 
   interface User {
     name: string;
@@ -92,6 +110,7 @@ export default function RootLayout({
   ];
 
   const PLACEHOLDER_LINKS = [
+    { text: "我的最愛", href: user ? "/my-favorite" : "/sign-in", icon: FavoriteIcon },
     { text: "購物車", href: user ? "/shopping-cart" : "/sign-in", icon: ShoppingCartIcon },
     { text: "聊天室", href: user ? "/chat" : "/sign-in", icon: ChatIcon },
     { text: "設定", href: "/", icon: SettingsIcon },
@@ -99,8 +118,13 @@ export default function RootLayout({
   /* 側邊欄收縮 */
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const toggleDrawer = () => {
+    isDrawerOpen ? localStorage.setItem("isDrawerOpen", "0") : localStorage.setItem("isDrawerOpen", "1");
     setIsDrawerOpen(!isDrawerOpen);
   };
+  React.useEffect(() => {
+    isDrawerOpen ? localStorage.setItem("isDrawerOpen", "1") : localStorage.setItem("isDrawerOpen", "0");
+  });
+
   /* 登出 */
   const [loggedIn, setLoggedIn] = React.useState(!!user); // 假設 user 是您從某處獲得的使用者資訊
   const handleLogout = () => {
@@ -108,10 +132,26 @@ export default function RootLayout({
     setLoggedIn(false); // 將使用者設定為未登入狀態
     location.reload();
   };
+  
+  //搜尋
+  const [keywords, setKeywords] = React.useState("");
+
+  const search = () => {
+    console.log(keywords);
+    localStorage.setItem("keyword", keywords);
+    window.location.href = "/search";
+  }
+  const handleKeyDown = (event:any) => {
+    if (event.key === 'Enter') {
+      console.log(keywords);
+      localStorage.setItem("keyword", keywords);
+      window.location.href = "/search";
+    }
+  };
 
   return (
     <html lang="en">
-      <body>
+      <body style={{background: "rgba(0, 0, 0, 0.1)"}}>
         <ThemeRegistry>
           <AppBar
             position="fixed"
@@ -140,16 +180,20 @@ export default function RootLayout({
                   <IconButton
                     onClick={toggleDrawer}
                     color="primary"
-                    aria-label="add to shopping cart"
+                    size="large"
                   >
-                    <img src="img/option.png" width={"30px"} />
+                    <ListIcon fontSize="inherit" />
                   </IconButton>
-                  <button style={{ border: "none", background: "white" }}>
+                  <button style={{ border: "none", backgroundColor: 'transparent' }}>
                     <a href="/">
-                      <img src="img/logo.png" width={"50px"} />
+                      <img src="img/logo.png" width={"50px"} height={"100%"}/>
                     </a>
                   </button>
-                  NTOU Auction
+                  {typeof window !== "undefined" && window.innerWidth > 700 ? (
+                    <span>NTOU Auction</span>
+                  ) : (
+                    null
+                  )}
                 </div>
                 <div
                   style={{
@@ -157,10 +201,12 @@ export default function RootLayout({
                     float: "left",
                     paddingLeft:"10%",
                     width: "40%",
+                    height: "100%",
                     justifyContent: "center",
                     display: "flex",
                     textAlign: "center",
                     alignItems: "center",
+                    paddingTop: "10px",
                   }}
                 >
                   <input
@@ -171,10 +217,12 @@ export default function RootLayout({
                       border: "1px solid #ccc",
                       paddingLeft: "3%",
                     }}
+                    onChange={(e) => setKeywords(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     type="search"
                     placeholder="搜尋商品"
                   />
-                  <IconButton>
+                  <IconButton onClick={() => keywords ? search() : null}>
                     <SearchIcon />
                   </IconButton>
                 </div>
@@ -184,10 +232,11 @@ export default function RootLayout({
                     display: "flex",
                     textAlign: "center",
                     alignItems: "center",
+                    paddingTop: "10px",
                   }}
                 >
                   {user ? (
-                    <div style={{ display:"flex" }}>
+                    <div style={{ display:"flex", height:"100%" }}>
                       <ListItemButton component={Link} href={"/tasks"}>
                         <u style={{ fontSize: "15px", color: "orange" }}>{user.name}</u>
                       </ListItemButton>
@@ -231,8 +280,9 @@ export default function RootLayout({
               color="primary"
               aria-label="close drawer"
               size="large"
+              style={{height:"64px"}}
             >
-              <ChevronLeftIcon />
+              <ArrowLeftIcon fontSize="large"/>
             </IconButton>
             <Divider />
             <List>

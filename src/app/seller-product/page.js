@@ -19,14 +19,27 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 // import { Link } from "react-router-dom";
-// import Link from "next/link";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 // import { usePathname, useSearchParams } from 'next/navigation'
+
+// function Copyright() {
+//   return (
+//     <Typography variant="body2" color="text.secondary" align="center">
+//       {"Copyright © "}
+//       <Link color="inherit" href="https://mui.com/">
+//         Your Website
+//       </Link>{" "}
+//       {new Date().getFullYear()}
+//       {"."}
+//     </Typography>
+//   );
+// }
 
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import Image from "next/image"
 const token = Cookies.get("token");
 async function fetchProductInfo() {
   const response = axios.get(
@@ -50,13 +63,14 @@ function Album() {
   const router = useRouter();
   // console.log(url)
   const handleEditClick = (product) => {
+
     // const productInfo = {
     //   id: product.id,
     //   name: "Product Name",
     //   description: "Product Description",
     // };
 
-    localStorage.setItem("product", JSON.stringify(product));
+    localStorage.setItem('product', JSON.stringify(product));
     const pathname = "/update-product";
     // const searchParams = { productInfo: JSON.stringify(productInfo) };
     const url = `${pathname}?id=${product.id}`;
@@ -126,7 +140,7 @@ function Album() {
             >
               歡迎來到賣家商品中心<br></br>您可以在此更新商品資訊以及下架商品!
             </Typography>
-            {/* <Stack
+            <Stack
               sx={{ pt: 4 }}
               direction="row"
               spacing={2}
@@ -134,7 +148,7 @@ function Album() {
             >
               <Button variant="contained">Main call to action</Button>
               <Button variant="outlined">Secondary action</Button>
-            </Stack> */}
+            </Stack>
           </Container>
         </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
@@ -177,37 +191,24 @@ function Album() {
                       maxWidth: "100%",
                       height: "200px",
                       objectFit: "cover",
+                      padding: "10px 10px 0px 10px"
                     }}
                   />
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="h2">
                       {product.productName}
                     </Typography>
-                    <Typography sx={{ fontStyle: "italic" , color: '#737373' }}>
-                      {product.isFixedPrice
-                        ? "不二價: " + product.currentPrice
-                        : "競標價: " + product.currentPrice}
+                    <Typography>
+                      This is a media card. You can use this section to describe
+                      the content.
                     </Typography>
-                    {product.isFixedPrice && (
-                      <Typography  sx={{ fontStyle: "italic" , color: '#737373'}}>
-                        {"商品剩餘數量: " + product.productAmount}
-                      </Typography>
-                    )}
-                    {!product.isFixedPrice && (
-                      <Typography  sx={{ fontStyle: "italic" , color: '#737373'}}>
-                        {"截止時間: " + product.finishTime}
-                      </Typography>
-                    )}
                   </CardContent>
                   <CardActions>
                     {/* <Link href={`test/${card}`} passHref> */}
-                    <Button size="medium" variant="outlined">
-                      下架
-                    </Button>
+                    <Button size="small">下架</Button>
                     {/* </Link> */}
                     <Button
-                      size="medium"
-                      variant="outlined"
+                      size="small"
                       onClick={() => handleEditClick(product)}
                     >
                       編輯
@@ -223,7 +224,7 @@ function Album() {
       {/* Footer */}
       <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
         <Typography variant="h6" align="center" gutterBottom>
-          商品管理中心
+          Footer
         </Typography>
         <Typography
           variant="subtitle1"
@@ -231,7 +232,7 @@ function Album() {
           color="text.secondary"
           component="p"
         >
-          Copyright © NTOU AUCTION 2023.
+          Something here to give the footer a purpose!
         </Typography>
         {/* <Copyright /> */}
       </Box>

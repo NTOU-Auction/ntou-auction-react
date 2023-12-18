@@ -8,9 +8,17 @@ import Typography from "@mui/material/Typography";
 import TpModal from "@/components/TpModal";
 import styled from "styled-components";
 import Cookies from 'js-cookie';
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import axios from 'axios';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import "./ScrollBar.css";
-import { HtmlContext } from "next/dist/server/future/route-modules/app-page/vendored/contexts/entrypoints";
+import Checkbox from '@mui/material/Checkbox';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import Favorite from '@mui/icons-material/Favorite';
+import { pink } from '@mui/material/colors';
 
 const ModalFooter = styled.div`
   display: flex;
@@ -20,23 +28,25 @@ const ModalContent = styled.div`
   margin-bottom: 15px;
 `;
 
-interface Commodity {
-  id?: number;
-  currentPrice?: number;
-  productImage?: string;
-  productName?: string;
-  isFixedPrice?: boolean;
-  productAmount?: number;
-  upsetPrice?: number;
-  productDescription?: string;
-  finishTime?: string;
-  bidIncrement?: number;
-  sellerName?: string;
-  productType?: string;
-  sellerid?: number;
-}
 
-export default function MediaCard({ commodity }: { commodity: Commodity }) {
+export default function MediaCard({ commodity }) {
+
+  //最愛
+  const [love, setLove] = React.useState(false);
+
+  function handleChange (event) {
+    setLove(event.target.checked);
+  };  
+
+  //顯示訊息
+  const [error, setError] = useState(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openSnackbarErrror, setOpenSnackbarErrror] = useState(false); 
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+    setOpenSnackbarErrror(false);
+  };
 
   //詳細資料
   const [isVisible, setIsVisible] = useState(false)
@@ -50,7 +60,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
   ? commodity.productDescription
   : "";
   const parsedHtml = parseOembedString(productDescriptionHtml);
-  function parseOembedString(oembedString:string) {
+  function parseOembedString(oembedString) {
     const regex = /<oembed.*?url="(.*?)"><\/oembed>/;
     const match = oembedString.match(regex);
     if (match && match[1]) {
@@ -67,11 +77,9 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
   
 
   //加入購物車的數量
-  const [productAmountTMP, setproductAmountTMP] = useState(1)
+  const [productAmountTMP, setproductAmountTMP] = useState(1);
   //加注的錢
-  const [commodityTMP, setCommodityTMP] = useState<number | undefined>(
-    commodity.currentPrice
-  );
+  const [commodityTMP, setCommodityTMP] = useState(commodity.currentPrice);
   //token
   const token = Cookies.get('token');
   async function fetchUserInfo() {
@@ -82,10 +90,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
     });
     return response;
   }
-  interface User {
-    name: string;
-  }
-  const [user, setUser] = React.useState<User | null>(null);
+  const [user, setUser] = React.useState(null);
 
 
   React.useEffect(() => {
@@ -103,7 +108,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
   const productID = commodity.id;
   const auctionType = commodity.isFixedPrice;
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const buydata = JSON.stringify({
@@ -133,7 +138,8 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
             console.log("新增成功:", response.data);
             window.location.href = "/shopping-cart";
           }
-        } else {
+        } 
+        else {
           requestData = biddata;
           API = "http://localhost:8080/api/v1/product/bid";
           const response = await axios.patch(API, requestData, {
@@ -143,12 +149,15 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
             },
           });
           if (response.status === 200) {
+            setOpenSnackbar(true);
             console.log("新增成功:", response.data);
-            window.location.href = "/"; 
           }
         }
       } catch (error) {
-        console.error("新增錯誤:", error);
+        if(error)
+          setError(error.response.data.message)
+        setOpenSnackbarErrror(true);
+        console.error(error);
         //window.location.href = "/shopping-cart";
       }
     }
@@ -172,25 +181,47 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
     }
   };
 
+  //RWD
+  const [margin, setMargin] = React.useState(0);
+
+  React.useEffect(() => {
+    function handleWindowResize() {
+      window.innerWidth > 930 && localStorage.getItem("isDrawerOpen") == "1" ? setMargin(240) : setMargin(0);
+    }
+    function handleWindowClick() {
+      window.innerWidth > 930 && localStorage.getItem("isDrawerOpen") == "1" ? setMargin(240) : setMargin(0);
+    }
+
+    window.addEventListener('resize', handleWindowResize);
+    window.addEventListener('click', handleWindowClick);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+      window.removeEventListener('click', handleWindowClick);
+    };
+  }, []);
+
   return (
 
-    <Card variant="outlined" sx={{ width: "200px", height: "400px" }}>
+    <Card variant="outlined" sx={{ width: "200px", height: "355px" }}>
       <Image
         alt="Image"
         src={"" + commodity.productImage}
         width={640}
-        height={480}
+        height={200}
         style={{
           maxWidth: "100%",
+          width: "200px",
           height: "200px",
           objectFit: "cover",
+          padding: "10px 10px 0px 10px"
         }}
       />
       <CardContent>
-        <Typography gutterBottom variant="h6" component="div">
-          <p style={{ WebkitLineClamp: 1, width: '100%', overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", WebkitBoxOrient: "vertical", boxSizing: "border-box" }}>
+        <Typography gutterBottom variant="h5" component="div">
+          <span style={{ WebkitLineClamp: 1, width: '100%', overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", WebkitBoxOrient: "vertical", boxSizing: "border-box" }}>
             {commodity.productName}
-          </p>
+          </span>
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {commodity.isFixedPrice
@@ -216,6 +247,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
         title={commodity.productName}
         isVisible={isVisible}
         onClose={handleToggleModalShowUp}
+        margin={margin+"px"}
       >
         <ModalContent>
           <div>
@@ -278,6 +310,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
               <ModalFooter>
                 {commodity.isFixedPrice ? (
                   <div style={{ display: "flex", justifyContent: "center" }}>
+                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />}  sx={{color: pink[800],'&.Mui-checked': {color: pink[600]}}}/>
                     <Button
                       variant="contained"
                       color="error"
@@ -286,7 +319,10 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
                       加入購物車
                     </Button>
                     <div style={{ padding: 5 }}>
-                      <button onClick={() =>
+                      <IconButton 
+                        color="secondary" 
+                        size="small" 
+                        onClick={() =>
                         setproductAmountTMP((prevproductAmountTMP) => {
                           if (
                             typeof prevproductAmountTMP === "number" &&
@@ -298,10 +334,12 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
                           return prevproductAmountTMP;
                         })
                       }>
-                        -
-                      </button>
+                        <RemoveIcon  fontSize="inherit" />
+                      </IconButton>
                       <span> {productAmountTMP}個 </span>
-                      <button
+                      <IconButton
+                        color="secondary"
+                        size="small"
                         onClick={() =>
                           setproductAmountTMP((prevproductAmountTMP) => {
                             if (
@@ -315,23 +353,31 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
                           })
                         }
                       >
-                        +
-                      </button>
+                        <AddIcon fontSize="inherit" />
+                      </IconButton>
                     </div>
                   </div>
                 ) : (
                   <div style={{ display: "flex", justifyContent: "center" }}>
+                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />}  sx={{color: pink[800],'&.Mui-checked': {color: pink[600]}}}/>
                     <Button
                       variant="contained"
                       color="error"
-                      onClick={handleSubmit}
+                      onClick= {handleSubmit}
                     >
                       出價
                     </Button>
                     <div style={{ padding: 5 }}>
-                      <button onClick={handleMinusClick}>-</button>
+                      <IconButton 
+                        color="secondary" 
+                        size="small"
+                        onClick={handleMinusClick} >
+                        <RemoveIcon  fontSize="inherit" />
+                      </IconButton>
                       <span> {commodityTMP}$ </span>
-                      <button
+                      <IconButton
+                        color="secondary"
+                        size="small"
                         onClick={() =>
                           setCommodityTMP((prevCommodityTMP) => {
                             if (
@@ -344,8 +390,8 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
                           })
                         }
                       >
-                        +
-                      </button>
+                        <AddIcon fontSize="inherit" />
+                      </IconButton >
                     </div>
                   </div>
                 )}
@@ -354,6 +400,32 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
           </div>
         </ModalContent>
       </TpModal>
+      <Snackbar
+        open={openSnackbarErrror}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+      >
+        <MuiAlert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {error}
+        </MuiAlert>
+      </Snackbar>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+      >
+        <MuiAlert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          出價成功，請重新整理頁面
+        </MuiAlert>
+      </Snackbar>
     </Card>
   );
 }
