@@ -37,6 +37,7 @@ const CustomEditor = dynamic(
 );
 
 const UploadProductForm = () => {
+  const [productID, setProductID] = useState("");
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] =
     useState("請輸入商品詳情");
@@ -95,7 +96,7 @@ const UploadProductForm = () => {
     }
   }, []);
 
-  //
+  
   const router = useRouter();
   const searchParams = useSearchParams();
   const search = searchParams.get("id");
@@ -107,6 +108,7 @@ const UploadProductForm = () => {
       // console.log(parsedObject);
       if (parsedObject.isFixedPrice) {
         // 不二價
+        setProductID(parsedObject.id);
         setAuctionType("1");
         setProductName(parsedObject.productName);
         setProductPrice(parsedObject.currentPrice);
@@ -116,6 +118,7 @@ const UploadProductForm = () => {
         // setBase64(parsedObject.productImage); // 未實作
       } else {
         // 拍賣
+        setProductID(parsedObject.id);
         setAuctionType("0");
         setProductName(parsedObject.productName);
         setProductPrice(parsedObject.upsetPrice);
@@ -162,14 +165,14 @@ const UploadProductForm = () => {
       let endpoint = "";
       if (auctionType === "0") {
         requestData = productDataAuction;
-        endpoint = "http://localhost:8080/api/v1/product/nonfixedproduct";
+        endpoint = `http://localhost:8080/api/v1/product/nonfixedproduct/${productID}`;
       } else if (auctionType === "1") {
         requestData = productDataFixed;
-        endpoint = "http://localhost:8080/api/v1/product/fixedproduct";
+        endpoint = `http://localhost:8080/api/v1/product/fixedproduct/${productID}`;
       } else {
         throw new Error("Invalid auctionType value");
       }
-      const response = await axios.post(endpoint, productDataAuction, {
+      const response = await axios.put(endpoint, requestData, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
           Authorization: `Bearer ${token}`,
@@ -185,8 +188,8 @@ const UploadProductForm = () => {
       }
     } catch (error) {
       // setErrorMessage(error.request.response);
-      // console.log(productDataFixed);
-      setError("商品上傳失敗:" + " " + error.request.response);
+      console.log(error.request);
+      setError("商品上傳失敗:" + " " + error.response.data.message);
       setOpenSnackbarErrror(true);
       console.error("商品上傳失敗:", error);
     }

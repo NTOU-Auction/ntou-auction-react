@@ -74,6 +74,7 @@ function Album() {
     // });
   };
 
+  
   const [products, setProduct] = useState([]);
   useEffect(() => {
     async function fetchData() {
@@ -87,6 +88,27 @@ function Album() {
     }
     fetchData();
   }, []);
+  
+  const handleRemoveClick = async (productId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/api/v1/product/${productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      window.location.reload();
+      if (response.data.success) {
+        console.log(`Product with ID ${productId} removed successfully!`);
+      } else {
+        console.error(`Failed to remove product with ID ${productId}`);
+      }
+    } catch (error) {
+      console.error("Error removing product:", error);
+    }
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -183,28 +205,34 @@ function Album() {
                     <Typography gutterBottom variant="h5" component="h2">
                       {product.productName}
                     </Typography>
-                    <Typography sx={{ fontStyle: "italic" , color: '#737373' }}>
+                    <Typography sx={{ fontStyle: "italic", color: "#737373" }}>
                       {product.isFixedPrice
                         ? "不二價: " + product.currentPrice
                         : "競標價: " + product.currentPrice}
                     </Typography>
                     {product.isFixedPrice && (
-                      <Typography  sx={{ fontStyle: "italic" , color: '#737373'}}>
+                      <Typography
+                        sx={{ fontStyle: "italic", color: "#737373" }}
+                      >
                         {"商品剩餘數量: " + product.productAmount}
                       </Typography>
                     )}
                     {!product.isFixedPrice && (
-                      <Typography  sx={{ fontStyle: "italic" , color: '#737373'}}>
+                      <Typography
+                        sx={{ fontStyle: "italic", color: "#737373" }}
+                      >
                         {"截止時間: " + product.finishTime}
                       </Typography>
                     )}
                   </CardContent>
                   <CardActions>
-                    {/* <Link href={`test/${card}`} passHref> */}
-                    <Button size="medium" variant="outlined">
+                    <Button
+                      size="medium"
+                      variant="outlined"
+                      onClick={() => handleRemoveClick(product.id)} // Pass the product ID
+                    >
                       下架
                     </Button>
-                    {/* </Link> */}
                     <Button
                       size="medium"
                       variant="outlined"
@@ -212,7 +240,6 @@ function Album() {
                     >
                       編輯
                     </Button>
-                    {/* <Button size="small">Edit</Button> */}
                   </CardActions>
                 </Card>
               </Grid>
