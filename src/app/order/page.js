@@ -58,13 +58,15 @@ export default function Orders() {
               let show = []
               //console.log(orderlist);
               for (let i = 0; i < len; i++) {
-                show.push(<TableRow key={orderlist[i].orderid}>
-                            <TableCell>{orderlist[i].updateTime}</TableCell>
-                            <TableCell>{orderlist[i].productAddAmountList[0].product.sellerName}</TableCell>
-                            <TableCell>{orderlist[i].productAddAmountList[0].product.productName}</TableCell>
-                            <TableCell>{`$${orderlist[i].productAddAmountList[0].product.currentPrice}`}</TableCell>
-                            <TableCell align="right">{orderlist[i].productAddAmountList[0].amount}</TableCell>
-                          </TableRow>)
+                for (let j = 0; j < orderlist[i].productAddAmountList.length; j++) {
+                  show.push(<TableRow key={orderlist[i].orderid}>
+                              <TableCell>{orderlist[i].updateTime}</TableCell>
+                              <TableCell>{orderlist[i].productAddAmountList[j].product.sellerName}</TableCell>
+                              <TableCell>{orderlist[i].productAddAmountList[j].product.productName}</TableCell>
+                              <TableCell>{`$${orderlist[i].productAddAmountList[j].product.currentPrice}`}</TableCell>
+                              <TableCell align="right">{orderlist[i].productAddAmountList[j].amount}</TableCell>
+                            </TableRow>)
+                }
               }
               return show
             }() : <p></p>}
