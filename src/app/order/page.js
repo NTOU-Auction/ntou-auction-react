@@ -21,95 +21,6 @@ const MAKESUBMIT = "http://localhost:8080/api/v1/order/makesubmit"; //賣家同�
 const MAKEDONE = "http://localhost:8080/api/v1/order/makedone"; //買家付款後，賣家結束訂單
 const MAKEREJECT = "http://localhost:8080/api/v1/order/makereject"; //買家不同意訂單
 const token = Cookies.get("token");
-const mockOrders = [
-  {
-    orderid: 3,
-    buyerid: 1,
-    sellerid: 1,
-    productAddAmountList: [
-      {
-        product: {
-          id: 1,
-          version: 3,
-          productName: "IPhone10",
-          productType: "electronic",
-          isFixedPrice: true,
-          productDescription: "ggggg",
-          sellerID: 1,
-          sellerName: null,
-          productAmount: 1,
-          bidInfo: {},
-          upsetPrice: null,
-          currentPrice: 1500,
-          bidIncrement: null,
-          isAuction: null,
-          updateTime: "2023-11-04 19:45:00",
-          finishTime: null,
-          productImage: null,
-          expired: false,
-        },
-        amount: 1,
-      },
-      {
-        product: {
-          id: 2,
-          version: 3,
-          productName: "IPhone11",
-          productType: "electronic",
-          isFixedPrice: true,
-          productDescription: "ggggg",
-          sellerID: 1,
-          sellerName: null,
-          productAmount: 1,
-          bidInfo: {},
-          upsetPrice: null,
-          currentPrice: 1500,
-          bidIncrement: null,
-          isAuction: null,
-          updateTime: "2023-11-04 19:45:00",
-          finishTime: null,
-          productImage: null,
-          expired: false,
-        },
-        amount: 1,
-      },
-    ],
-    status: 1,
-    updateTime: "2023-12-18 23:52:15",
-  },
-  {
-    orderid: 4,
-    buyerid: 1,
-    sellerid: 1,
-    productAddAmountList: [
-      {
-        product: {
-          id: 1,
-          version: 3,
-          productName: "IPhone12",
-          productType: "electronic",
-          isFixedPrice: true,
-          productDescription: "ggggg",
-          sellerID: 1,
-          sellerName: null,
-          productAmount: 1,
-          bidInfo: {},
-          upsetPrice: null,
-          currentPrice: 1500,
-          bidIncrement: null,
-          isAuction: null,
-          updateTime: "2023-11-04 19:45:00",
-          finishTime: null,
-          productImage: null,
-          expired: false,
-        },
-        amount: 1,
-      },
-    ],
-    status: 1,
-    updateTime: "2023-12-18 23:52:16",
-  },
-];
 
 async function fetchOrderInfo() {
   const response = await axios.get(CHECKORDER, {
@@ -119,8 +30,6 @@ async function fetchOrderInfo() {
   });
   return response.data;
 }
-
-
 
 export default function Orders() {
   const [ordersData, setOrdersData] = useState([]);
@@ -245,8 +154,8 @@ export default function Orders() {
       try {
         const orderData = await fetchOrderInfo();
         console.log(orderData);
-        // setOrdersData(orderData);
-        setOrdersData(mockOrders); // 假測資
+        setOrdersData(orderData);
+        // setOrdersData(mockOrders); // 假測資
       } catch (error) {
         console.error("獲取訂單資料錯誤:", error);
       }
@@ -310,7 +219,7 @@ export default function Orders() {
                       拒絕訂單
                     </MenuItem>
                     <MenuItem value={`makedone_${order.orderid}`}>
-                      結束訂單
+                      取消訂單
                     </MenuItem>
                   </Select>
                 </TableCell>
