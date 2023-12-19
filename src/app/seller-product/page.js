@@ -74,7 +74,6 @@ function Album() {
     // });
   };
 
-  
   const [products, setProduct] = useState([]);
   useEffect(() => {
     async function fetchData() {
@@ -88,7 +87,7 @@ function Album() {
     }
     fetchData();
   }, []);
-  
+
   const handleRemoveClick = async (productId) => {
     try {
       const response = await axios.delete(
