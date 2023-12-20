@@ -189,7 +189,7 @@ export default function RootLayout({
                 >
                   {user ? (
                     <div style={{ display:"flex" }}>
-                      <ListItemButton component={Link} href={"/tasks"}>
+                      <ListItemButton component={Link} href={"/profile"}>
                         <u style={{ fontSize: "15px", color: "orange" }}>{user.name}</u>
                       </ListItemButton>
                       <Button onClick={handleLogout} style={{ fontSize: "15px" }}>
