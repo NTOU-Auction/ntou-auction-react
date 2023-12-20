@@ -1,7 +1,7 @@
 {
     "ci": {
       "collect": {
-        "startServerCommand": "npx serve@latest out",
+        "startServerCommand": "yarn run start",
         "url": ["http://localhost:3000/chat"],
         "numberOfRuns": 1
       },
