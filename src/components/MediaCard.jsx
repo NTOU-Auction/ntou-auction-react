@@ -154,10 +154,11 @@ export default function MediaCard({ commodity }) {
           }
         }
       } catch (error) {
-        if(error)
+        if(error){
           setError(error.response.data.message)
-        setOpenSnackbarErrror(true);
-        console.error(error);
+          setOpenSnackbarErrror(true);
+          console.error(error)
+        }
         //window.location.href = "/shopping-cart";
       }
     }

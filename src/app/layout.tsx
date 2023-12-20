@@ -62,10 +62,15 @@ export default function RootLayout({
 
   //RWD
   const [DRAWER_WIDTH, setDRAWER_WIDTH] = React.useState<number>(240);
+  const [title, setTitle] = React.useState<string>("");
 
   React.useEffect(() => {
+    window.innerWidth > 930 ? setDRAWER_WIDTH(240) : setDRAWER_WIDTH(window.innerWidth);
+    window.innerWidth > 700 ? setTitle("NTOU Aucton") : setTitle("");
+
     function handleWindowResize() {
       window.innerWidth > 930 ? setDRAWER_WIDTH(240) : setDRAWER_WIDTH(window.innerWidth);
+      window.innerWidth > 700 ? setTitle("NTOU Aucton") : setTitle("");
       console.log(window.innerWidth);
     }
 
@@ -149,7 +154,7 @@ export default function RootLayout({
       window.location.href = "/search";
     }
   };
-
+  
   return (
     <html lang="en">
       <body style={{background: "white"}}>
@@ -190,11 +195,7 @@ export default function RootLayout({
                       <img src="img/logo.png" width={"50px"} height={"100%"}/>
                     </a>
                   </button>
-                  {typeof window !== "undefined" && window.innerWidth > 700 ? (
-                    <span>NTOU Auction</span>
-                  ) : (
-                    null
-                  )}
+                  {title}
                 </div>
                 <div
                   style={{
