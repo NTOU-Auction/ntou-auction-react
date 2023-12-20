@@ -283,7 +283,7 @@ const WebSocketTest = () => {
             {users.map((user) => (
               <Conversation
                 key={user.id}
-                name={user.name}
+                name={user.name ? user.name: "請先點選聯絡人"}
                 onClick={() => handleUserClick(user.id)}
                 active={user.id === selectedUser} /* */
               >
