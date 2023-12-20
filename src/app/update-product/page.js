@@ -322,7 +322,7 @@ const UploadProductForm = () => {
                     onChange={(e) => setProductCategory(e.target.value)}
                   >
                     <MenuItem value={"3C產品"}>3C產品</MenuItem>
-                    <MenuItem value={"日常用品"}>日常用品</MenuItem>
+                    <MenuItem value={"日用品"}>日用品</MenuItem>
                     <MenuItem value={"文具類"}>文具類</MenuItem>
                     <MenuItem value={"其它"}>其它</MenuItem>
                   </Select>

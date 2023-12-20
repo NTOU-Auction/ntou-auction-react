@@ -35,11 +35,11 @@ export default function ShoppingCart() {
   //商品數量
   var count = 0;
   //API
-  const ShoppingCartAPI = "http://localhost:8080/api/v1/shoppingcart/shoppingcart";
-  const ProductIncreaseAPI = "http://localhost:8080/api/v1/shoppingcart/increase";
-  const ProductDecreaseAPI = "http://localhost:8080/api/v1/shoppingcart/decrease";
-  const ProductDeleteAPI = "http://localhost:8080/api/v1/shoppingcart/delete";
-  const CreateOrderAPI = "http://localhost:8080/api/v1/order/create";
+  const ShoppingCartAPI = "/api/v1/shoppingcart/shoppingcart";
+  const ProductIncreaseAPI = "/api/v1/shoppingcart/increase";
+  const ProductDecreaseAPI = "/api/v1/shoppingcart/decrease";
+  const ProductDeleteAPI = "/api/v1/shoppingcart/delete";
+  const CreateOrderAPI = "/api/v1/order/create";
 
   useEffect(() => {
     async function fetchShoppingcart() {
