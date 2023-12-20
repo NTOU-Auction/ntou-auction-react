@@ -34,14 +34,14 @@ export default function MediaCard({ commodity }) {
   //最愛
   const [love, setLove] = React.useState(false);
 
-  function handleChange (event) {
+  function handleChange(event) {
     setLove(event.target.checked);
-  };  
+  };
 
   //顯示訊息
   const [error, setError] = useState(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [openSnackbarErrror, setOpenSnackbarErrror] = useState(false); 
+  const [openSnackbarErrror, setOpenSnackbarErrror] = useState(false);
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
@@ -49,7 +49,7 @@ export default function MediaCard({ commodity }) {
   };
 
   //詳細資料
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false)
 
   const handleToggleModalShowUp = () => {
     setIsVisible(!isVisible)
@@ -57,8 +57,8 @@ export default function MediaCard({ commodity }) {
 
   //商品描述
   const productDescriptionHtml = commodity.productDescription
-  ? commodity.productDescription
-  : "";
+    ? commodity.productDescription
+    : "";
   const parsedHtml = parseOembedString(productDescriptionHtml);
   function parseOembedString(oembedString) {
     const regex = /<oembed.*?url="(.*?)"><\/oembed>/;
@@ -71,10 +71,10 @@ export default function MediaCard({ commodity }) {
       const embedUrl = `https://www.youtube.com/embed/${videoId}`;
       return `<iframe width="100%" height="315" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
     } else {
-      return ''; 
+      return '';
     }
   }
-  
+
 
   //加入購物車的數量
   const [productAmountTMP, setproductAmountTMP] = useState(1);
@@ -82,6 +82,7 @@ export default function MediaCard({ commodity }) {
   const [commodityTMP, setCommodityTMP] = useState(commodity.currentPrice);
   //token
   const token = Cookies.get('token');
+
   async function fetchUserInfo() {
     const response = axios.get("http://localhost:8080/api/v1/account/users", {
       headers: {
@@ -92,6 +93,27 @@ export default function MediaCard({ commodity }) {
   }
   const [user, setUser] = React.useState(null);
 
+  const handleButtonClick = () => {
+    // 從本地端存儲讀取已有的使用者資訊陣列，如果沒有就創建一個新陣列
+    localStorage.removeItem("usersReceiver");
+    const users = JSON.parse(
+      localStorage.getItem("usersReceiver") ?? "[]"
+    );
+    const sellerIDToAdd = (commodity.sellerID);
+    const sellerNameToAdd = (commodity.sellerName);
+
+    const isSellerIDExists = users.some(
+      (user) => user.id === sellerIDToAdd
+    );
+
+    if (!isSellerIDExists) {
+      // 將新的 sellerID 添加到 users 陣列
+      users.push({ id: sellerIDToAdd, name: sellerNameToAdd });
+      // 存回 localStorage
+      localStorage.setItem("usersReceiver", JSON.stringify(users));
+    }
+    window.location.href = '../chat'
+  };
 
   React.useEffect(() => {
     async function fetchData() {
@@ -107,28 +129,6 @@ export default function MediaCard({ commodity }) {
 
   const productID = commodity.id;
   const auctionType = commodity.isFixedPrice;
-  
-  const handleButtonClick = () => {
-    // 從本地端存儲讀取已有的使用者資訊陣列，如果沒有就創建一個新陣列
-    localStorage.removeItem("usersReceiver");
-    const users: { id: string; name: string }[] = JSON.parse(
-      localStorage.getItem("usersReceiver") ?? "[]"
-    );
-    const sellerIDToAdd: string = String(commodity.sellerID);
-    const sellerNameToAdd: string = String(commodity.sellerName);
-
-    const isSellerIDExists = users.some(
-      (user: { id: string }) => user.id === sellerIDToAdd
-    );
-
-    if (!isSellerIDExists) {
-      // 將新的 sellerID 添加到 users 陣列
-      users.push({ id: sellerIDToAdd, name: sellerNameToAdd });
-      // 存回 localStorage
-      localStorage.setItem("usersReceiver", JSON.stringify(users));
-    }
-    window.location.href = '../chat'
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -143,7 +143,7 @@ export default function MediaCard({ commodity }) {
       bid: commodityTMP,
     });
 
-    if(user){
+    if (user) {
       try {
         let requestData = {};
         let API = "";
@@ -160,7 +160,7 @@ export default function MediaCard({ commodity }) {
             console.log("新增成功:", response.data);
             window.location.href = "/shopping-cart";
           }
-        } 
+        }
         else {
           requestData = biddata;
           API = "http://localhost:8080/api/v1/product/bid";
@@ -176,22 +176,18 @@ export default function MediaCard({ commodity }) {
           }
         }
       } catch (error) {
-        if(error){
+        if (error) {
           setError(error.response.data.message)
           setOpenSnackbarErrror(true);
           console.error(error)
         }
         //window.location.href = "/shopping-cart";
       }
-    } catch (error) {
-      console.error("新增錯誤:", error);
-      window.location.href = "/shopping-cart";
     }
-  };
-
-  const productDescriptionHtml = commodity.productDescription
-    ? commodity.productDescription
-    : "";
+    else {
+      window.location.href = "/sign-in";
+    }
+  }
 
   const handleMinusClick = () => {
     if (
@@ -229,7 +225,6 @@ export default function MediaCard({ commodity }) {
   }, []);
 
   return (
-
     <Card variant="outlined" sx={{ width: "200px", height: "355px" }}>
       <Image
         alt="Image"
@@ -254,20 +249,16 @@ export default function MediaCard({ commodity }) {
           {commodity.isFixedPrice
             ? "不二價：" + commodity.currentPrice
             : "競標價：" + commodity.currentPrice}
-        </Typography>
-      </CardContent>
+        </Typography >
+      </CardContent >
       <CardActions>
-        {commodity.isFixedPrice ? (
+        {commodity.isFixedPrice ?
           <form onSubmit={handleSubmit}>
-            <Button size="small" type="submit">
-              加入購物車
-            </Button>
+            <Button size="small" type="submit">加入購物車</Button>
           </form>
-        ) : (
-          <Button size="small" type="submit" onClick={handleToggleModalShowUp}>
-            加注
-          </Button>
-        )}
+          :
+          <Button size="small" type="submit" onClick={handleToggleModalShowUp}>出價</Button>
+        }
         <Button size="small" onClick={handleToggleModalShowUp}>
           更多資訊
         </Button>
@@ -278,7 +269,7 @@ export default function MediaCard({ commodity }) {
         title={commodity.productName}
         isVisible={isVisible}
         onClose={handleToggleModalShowUp}
-        margin={margin+"px"}
+        margin={margin + "px"}
       >
         <ModalContent>
           <div>
@@ -320,30 +311,31 @@ export default function MediaCard({ commodity }) {
                 </div>
               )}
               <div dangerouslySetInnerHTML={{ __html: productDescriptionHtml }} />
+              <div dangerouslySetInnerHTML={{ __html: parsedHtml }} />
               <p style={{ color: "black" }}>
-          賣家：<a>{commodity.sellerName}</a>
+                賣家：<a>{commodity.sellerName}</a>
               </p>
               <p style={{ color: "black" }}>
                 分類：
-                <a href={"/" + ( ()=>{
-                    switch(commodity.productType){
-                      case "日用品":return "daily";
-                      case "3C產品":return "electronic";
-                      case "文具類":return "Stationary";
-                      case "其它":return "other";
-                    }
+                <a href={"/" + (() => {
+                  switch (commodity.productType) {
+                    case "日用品": return "daily";
+                    case "3C產品": return "electronic";
+                    case "文具類": return "Stationary";
+                    case "其它": return "other";
                   }
-                  )()}>
+                }
+                )()}>
                   {commodity.productType}
                 </a>
               </p>
               <ModalFooter>
                 {commodity.isFixedPrice ? (
                   <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />}  sx={{color: pink[800],'&.Mui-checked': {color: pink[600]}}}/>
+                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />} sx={{ color: pink[800], '&.Mui-checked': { color: pink[600] } }} />
                     <Button
                       variant="contained"
-                      style={{ marginRight: '10px' }} 
+                      style={{ marginRight: '10px' }}
                       onClick={handleButtonClick}
                     >
                       與賣家聯繫
@@ -356,22 +348,22 @@ export default function MediaCard({ commodity }) {
                       加入購物車
                     </Button>
                     <div style={{ padding: 5 }}>
-                      <IconButton 
-                        color="secondary" 
-                        size="small" 
+                      <IconButton
+                        color="secondary"
+                        size="small"
                         onClick={() =>
-                        setproductAmountTMP((prevproductAmountTMP) => {
-                          if (
-                            typeof prevproductAmountTMP === "number" &&
-                            commodity?.productAmount &&
-                            productAmountTMP > 1
-                          ) {
-                            return prevproductAmountTMP - 1;
-                          }
-                          return prevproductAmountTMP;
-                        })
-                      }>
-                        <RemoveIcon  fontSize="inherit" />
+                          setproductAmountTMP((prevproductAmountTMP) => {
+                            if (
+                              typeof prevproductAmountTMP === "number" &&
+                              commodity?.productAmount &&
+                              productAmountTMP > 1
+                            ) {
+                              return prevproductAmountTMP - 1;
+                            }
+                            return prevproductAmountTMP;
+                          })
+                        }>
+                        <RemoveIcon fontSize="inherit" />
                       </IconButton>
                       <span> {productAmountTMP}個 </span>
                       <IconButton
@@ -396,20 +388,27 @@ export default function MediaCard({ commodity }) {
                   </div>
                 ) : (
                   <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />}  sx={{color: pink[800],'&.Mui-checked': {color: pink[600]}}}/>
+                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />} sx={{ color: pink[800], '&.Mui-checked': { color: pink[600] } }} />
+                    <Button
+                      variant="contained"
+                      style={{ marginRight: '10px' }}
+                      onClick={handleButtonClick}
+                    >
+                      與賣家聯繫
+                    </Button>
                     <Button
                       variant="contained"
                       color="error"
-                      onClick= {handleSubmit}
+                      onClick={handleSubmit}
                     >
                       出價
                     </Button>
                     <div style={{ padding: 5 }}>
-                      <IconButton 
-                        color="secondary" 
+                      <IconButton
+                        color="secondary"
                         size="small"
                         onClick={handleMinusClick} >
-                        <RemoveIcon  fontSize="inherit" />
+                        <RemoveIcon fontSize="inherit" />
                       </IconButton>
                       <span> {commodityTMP}$ </span>
                       <IconButton
