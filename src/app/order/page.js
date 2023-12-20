@@ -1,33 +1,45 @@
 "use client";
 import * as React from "react";
-import Link from "@mui/material/Link";
+import axios from 'axios';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
+import { useEffect, useState } from 'react';
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "@/components/Title";
-
-// Generate Order Data
-function createData(id, date, name, shipTo, paymentMethod, amount) {
-  return { id, date, name, shipTo, paymentMethod, amount };
-}
-
-const rows = [
-  createData(0, "2023/11/27", "Elvis Presley", "Tupelo, MS", "400", 1),
-  createData(1, "2023/11/20", "Paul McCartney", "London, UK", "300", 2),
-  createData(2, "2023/11/29", "Tom Scholz", "Boston, MA", "500", 3),
-  createData(3, "2023/11/22", "Michael Jackson", "Gary, IN", "150", 4),
-  createData(4," 2023/10/26","Bruce Springsteen","Long Branch, NJ","2000",5),
-];
-
-function preventDefault(event) {
-  event.preventDefault();
-}
+import Box from '@mui/material/Box';
+import Cookies from 'js-cookie';
 
 export default function Orders() {
+
+  //token
+  const token = Cookies.get('token');
+  //API
+  const CheckOrderAPI = "http://localhost:8080/api/v1/order/check";
+  //OrderList
+  const [orderlist, setorderlist] = useState([]);
+
+  useEffect(() => {
+    fetch(CheckOrderAPI, {
+        headers: {
+          "Authorization": `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+        }
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setorderlist(data);
+      })
+      .catch((error) => {
+        console.error('獲取訂單資料錯誤:', error);
+      });
+  }, []);
+
+  var len = orderlist ? Object.keys(orderlist).length : 0;
+
   return (
-    <React.Fragment>
+    <Box style={{ display: 'block', marginTop: "60px" }}>
       <Title>
         <strong>近期訂單</strong>
       </Title>
@@ -35,27 +47,31 @@ export default function Orders() {
         <TableHead>
           <TableRow>
             <TableCell>日期</TableCell>
-            <TableCell>姓名</TableCell>
-            <TableCell>面交地點</TableCell>
+            <TableCell>賣家</TableCell>
+            <TableCell>交易商品</TableCell>
             <TableCell>付款金額</TableCell>
             <TableCell align="right">購買數量</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{`$${row.paymentMethod}`}</TableCell>
-              <TableCell align="right">{row.amount}</TableCell>
-            </TableRow>
-          ))}
+          {orderlist ? function () {
+              let show = []
+              //console.log(orderlist);
+              for (let i = 0; i < len; i++) {
+                for (let j = 0; j < orderlist[i].productAddAmountList.length; j++) {
+                  show.push(<TableRow key={orderlist[i].orderid}>
+                              <TableCell>{orderlist[i].updateTime}</TableCell>
+                              <TableCell>{orderlist[i].productAddAmountList[j].product.sellerName}</TableCell>
+                              <TableCell>{orderlist[i].productAddAmountList[j].product.productName}</TableCell>
+                              <TableCell>{`$${orderlist[i].productAddAmountList[j].product.currentPrice}`}</TableCell>
+                              <TableCell align="right">{orderlist[i].productAddAmountList[j].amount}</TableCell>
+                            </TableRow>)
+                }
+              }
+              return show
+            }() : <p></p>}
         </TableBody>
       </Table>
-      {/* <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
-        查看更多訂單
-      </Link> */}
-    </React.Fragment>
+    </Box>
   );
 }
