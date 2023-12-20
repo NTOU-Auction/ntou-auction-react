@@ -2,7 +2,7 @@
     "ci": {
       "collect": {
         "startServerCommand": "npx serve@latest out",
-        "url": ["http://localhost:3000/chat"],
+        "url": ["http://localhost:3000/order"],
         "numberOfRuns": 1
       },
       "upload": {
