@@ -61,3 +61,7 @@
 .item_detail .name{
     margin-left: 100px;
 } 
+
+@media only screen and (max-midth:600px) {
+    
+}

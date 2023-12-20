@@ -11,13 +11,22 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Slider from '@mui/material/Slider';
 
-const commodityAPI = "http://localhost:8080/api/v1/product/product/classification";
+const commodityAPI = "http://localhost:8080/api/v1/product/product/name";
 
-export default function Other() {
+export default function Search() {
+
+  var keyword: any;
+
+  try {
+    keyword = localStorage.getItem("keyword");
+  } catch (error) {
+    console.error(error); //raises the error
+  }
 
   const [commodity, setcommodity] = React.useState<any>([]);
+
   React.useEffect(() => {
-    fetch(commodityAPI + "/其它")
+    fetch(commodityAPI + "/" + keyword)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
