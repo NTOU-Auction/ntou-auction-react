@@ -274,20 +274,21 @@ export default function ShoppingCart() {
       if (response.status === 200) {
         console.log("下單成功:", response.data);
         setorder([]);
-        //window.location.href = "/shopping-cart";
+        window.location.href = "/order";
       }
     }
     catch (error) {
-      console.error("刪除錯誤:", error);
+      console.error("下單錯誤:", error);
     }
   };
 
   function handleCreateOrderClick() {
     var tmpcount = 0;
+    setorder([]);
     Object.keys(shoppingcart).map((key, index) => {
       for (let i = 0; i < shoppingcart[key].length; i++) {
         if(checked[tmpcount][1])  
-         order.push([shoppingcart[key][i].product.id, shoppingcart[key][i].product.productAmount]);
+         order.push([shoppingcart[key][i].product.id, shoppingcart[key][i].amount]);
         tmpcount++;
       }
     })

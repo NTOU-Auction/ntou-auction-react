@@ -29,7 +29,6 @@ import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import Cookies from "js-cookie";
 import StorefrontIcon from "@mui/icons-material/Storefront";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import AddIcon from "@mui/icons-material/Add";
 import SellIcon from "@mui/icons-material/Sell";
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
@@ -37,6 +36,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import GradingIcon from '@mui/icons-material/Grading';
 
 
 //  const metadata = {
@@ -62,10 +62,15 @@ export default function RootLayout({
 
   //RWD
   const [DRAWER_WIDTH, setDRAWER_WIDTH] = React.useState<number>(240);
+  const [title, setTitle] = React.useState<string>("");
 
   React.useEffect(() => {
+    window.innerWidth > 930 ? setDRAWER_WIDTH(240) : setDRAWER_WIDTH(window.innerWidth);
+    window.innerWidth > 700 ? setTitle("NTOU Aucton") : setTitle("");
+
     function handleWindowResize() {
       window.innerWidth > 930 ? setDRAWER_WIDTH(240) : setDRAWER_WIDTH(window.innerWidth);
+      window.innerWidth > 700 ? setTitle("NTOU Aucton") : setTitle("");
       console.log(window.innerWidth);
     }
 
@@ -111,9 +116,10 @@ export default function RootLayout({
 
   const PLACEHOLDER_LINKS = [
     { text: "我的最愛", href: user ? "/my-favorite" : "/sign-in", icon: FavoriteIcon },
+    { text: "我的訂單", href: user ? "/order" : "/sign-in", icon: GradingIcon },
     { text: "購物車", href: user ? "/shopping-cart" : "/sign-in", icon: ShoppingCartIcon },
     { text: "聊天室", href: user ? "/chat" : "/sign-in", icon: ChatIcon },
-    { text: "設定", href: "/", icon: SettingsIcon },
+    { text: "設定", href: user ? "/" : "/sign-in", icon: SettingsIcon },
   ];
   /* 側邊欄收縮 */
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
@@ -148,10 +154,10 @@ export default function RootLayout({
       window.location.href = "/search";
     }
   };
-
+  
   return (
     <html lang="en">
-      <body style={{background: "rgba(0, 0, 0, 0.1)"}}>
+      <body style={{background: "white"}}>
         <ThemeRegistry>
           <AppBar
             position="fixed"
@@ -189,11 +195,7 @@ export default function RootLayout({
                       <img src="img/logo.png" width={"50px"} height={"100%"}/>
                     </a>
                   </button>
-                  {typeof window !== "undefined" && window.innerWidth > 700 ? (
-                    <span>NTOU Auction</span>
-                  ) : (
-                    null
-                  )}
+                  {title}
                 </div>
                 <div
                   style={{
