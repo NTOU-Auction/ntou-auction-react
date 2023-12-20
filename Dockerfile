@@ -6,4 +6,4 @@ RUN yarn build
 
 EXPOSE 3000
 
-CMD ["npx", "serve@latest", "out"]
+CMD ["yarn", "run", "start"]
