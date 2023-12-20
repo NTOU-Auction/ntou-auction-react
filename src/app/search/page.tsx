@@ -2,6 +2,8 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 import MediaCard from '@/components/MediaCard';
 import TuneIcon from '@mui/icons-material/Tune';
 import Fab from '@mui/material/Fab';
@@ -9,13 +11,22 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Slider from '@mui/material/Slider';
 
-const commodityAPI = "/api/v1/product/products";
+const commodityAPI = "/api/v1/product/product/name";
 
-export default function Daily() {
+export default function Search() {
+
+  var keyword: any;
+
+  try {
+    keyword = localStorage.getItem("keyword");
+  } catch (error) {
+    console.error(error); //raises the error
+  }
 
   const [commodity, setcommodity] = React.useState<any>([]);
+
   React.useEffect(() => {
-    fetch(commodityAPI + "/日用品")
+    fetch(commodityAPI + "/" + keyword)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -83,7 +94,7 @@ export default function Daily() {
           <Grid xs={6} style={{ width: "100%" }}>
             <div style={{ display: 'flex', flexWrap: "wrap" }}>
               {commodity ? function () {
-                let show = [];
+                let show = []
                 let min = 0;
                 let max = null;
                 switch (price[0]) {
