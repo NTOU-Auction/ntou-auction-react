@@ -83,7 +83,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/log-in",
+        "/api/v1/auth/log-in",
         data,
         {
           headers: headers,

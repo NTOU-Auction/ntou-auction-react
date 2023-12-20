@@ -12,7 +12,7 @@ import MediaCard from '@/components/MediaCard';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const commodityAPI = "http://localhost:8080/api/v1/product/products";
+const commodityAPI = "/api/v1/product/products";
 
 export default function HomePage() {
   const [commodity, setcommodity] = React.useState([]);

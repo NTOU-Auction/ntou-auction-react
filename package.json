@@ -50,6 +50,7 @@
     "@types/react-dom": "latest",
     "@types/react-scroll-to-bottom": "^4.2.4",
     "@types/stompjs": "^2.3.9",
+    "@types/styled-components": "^5.1.34",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "typescript": "latest"
