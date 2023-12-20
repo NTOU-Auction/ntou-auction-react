@@ -30,7 +30,7 @@ import Image from "next/image";
 const token = Cookies.get("token");
 async function fetchProductInfo() {
   const response = axios.get(
-    "http://localhost:8080/api/v1/product/sellercenter",
+    "/api/v1/product/sellercenter",
     {
       headers: {
         Authorization: `Bearer ${token}`, // Bearer 跟 token 中間有一個空格
@@ -74,7 +74,6 @@ function Album() {
     // });
   };
 
-  
   const [products, setProduct] = useState([]);
   useEffect(() => {
     async function fetchData() {
@@ -88,11 +87,11 @@ function Album() {
     }
     fetchData();
   }, []);
-  
+
   const handleRemoveClick = async (productId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/v1/product/${productId}`,
+        `/api/v1/product/${productId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

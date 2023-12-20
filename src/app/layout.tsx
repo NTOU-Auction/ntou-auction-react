@@ -46,7 +46,7 @@ import GradingIcon from '@mui/icons-material/Grading';
 
 const token = Cookies.get("token");
 async function fetchUserInfo() {
-  const response = axios.get("http://localhost:8080/api/v1/account/users", {
+  const response = axios.get("/api/v1/account/users", {
     headers: {
       Authorization: `Bearer ${token}`, // Bearer 跟 token 中間有一個空格
     },
@@ -239,8 +239,8 @@ export default function RootLayout({
                   }}
                 >
                   {user ? (
-                    <div style={{ display:"flex", height:"100%" }}>
-                      <ListItemButton component={Link} href={"/tasks"}>
+                    <div style={{ display:"flex" }}>
+                      <ListItemButton component={Link} href={"/profile"}>
                         <u style={{ fontSize: "15px", color: "orange" }}>{user.name}</u>
                       </ListItemButton>
                       <Button onClick={handleLogout} style={{ fontSize: "15px" }}>

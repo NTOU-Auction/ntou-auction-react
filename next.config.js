@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // output: 'export',
   reactStrictMode: true,
   swcMinify: true,
   modularizeImports: {
@@ -24,6 +24,14 @@ const nextConfig = {
         pathname: '/archerplus/1657717817-1259189726-g.png',
       },
     ],
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://localhost:8080/api/:path*',
+      },
+    ]
   },
 };
 

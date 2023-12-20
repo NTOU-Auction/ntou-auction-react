@@ -35,16 +35,16 @@ export default function ShoppingCart() {
   //商品數量
   var count = 0;
   //API
-  const ShoppingCartAPI = "http://localhost:8080/api/v1/shoppingcart/shoppingcart";
-  const ProductIncreaseAPI = "http://localhost:8080/api/v1/shoppingcart/increase";
-  const ProductDecreaseAPI = "http://localhost:8080/api/v1/shoppingcart/decrease";
-  const ProductDeleteAPI = "http://localhost:8080/api/v1/shoppingcart/delete";
-  const CreateOrderAPI = "http://localhost:8080/api/v1/order/create";
+  const ShoppingCartAPI = "/api/v1/shoppingcart/shoppingcart";
+  const ProductIncreaseAPI = "/api/v1/shoppingcart/increase";
+  const ProductDecreaseAPI = "/api/v1/shoppingcart/decrease";
+  const ProductDeleteAPI = "/api/v1/shoppingcart/delete";
+  const CreateOrderAPI = "/api/v1/order/create";
 
   useEffect(() => {
     async function fetchShoppingcart() {
       try {
-        const view = await axios.get(ShoppingCartAPI, {
+        const view = await axios.get("/api/v1/shoppingcart/shoppingcart", {
           headers: {
             "Authorization": `Bearer ${token}` // Bearer 跟 token 中間有一個空格
           }
@@ -117,7 +117,7 @@ export default function ShoppingCart() {
     console.log(adddata);
     try {
       let requestData = adddata;
-      let API = ProductIncreaseAPI;
+      let API = "/api/v1/shoppingcart/increase";
       const response = await axios.post(API, requestData, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
@@ -145,7 +145,7 @@ export default function ShoppingCart() {
     console.log(decreasedata);
     try {
       let requestData = decreasedata;
-      let API = ProductDecreaseAPI;
+      let API = "/api/v1/shoppingcart/decrease";
       const response = await axios.delete(API, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
@@ -204,7 +204,7 @@ export default function ShoppingCart() {
     console.log(deletedata);
     try {
       let requestData = deletedata;
-      let API = ProductDeleteAPI;
+      let API = "/api/v1/shoppingcart/delete";
       const response = await axios.delete(API, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",

@@ -84,7 +84,7 @@ export default function MediaCard({ commodity }) {
   const token = Cookies.get('token');
 
   async function fetchUserInfo() {
-    const response = axios.get("http://localhost:8080/api/v1/account/users", {
+    const response = axios.get("/api/v1/account/users", {
       headers: {
         Authorization: `Bearer ${token}`, // Bearer 跟 token 中間有一個空格
       },
@@ -149,7 +149,7 @@ export default function MediaCard({ commodity }) {
         let API = "";
         if (auctionType === true) {
           requestData = buydata;
-          API = "http://localhost:8080/api/v1/product/buy";
+          API = "/api/v1/product/buy";
           const response = await axios.post(API, requestData, {
             headers: {
               "Content-Type": "application/json;charset=UTF-8",
@@ -163,7 +163,7 @@ export default function MediaCard({ commodity }) {
         }
         else {
           requestData = biddata;
-          API = "http://localhost:8080/api/v1/product/bid";
+          API = "/api/v1/product/bid";
           const response = await axios.patch(API, requestData, {
             headers: {
               "Content-Type": "application/json;charset=UTF-8",

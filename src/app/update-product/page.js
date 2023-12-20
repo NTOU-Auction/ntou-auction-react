@@ -165,10 +165,10 @@ const UploadProductForm = () => {
       let endpoint = "";
       if (auctionType === "0") {
         requestData = productDataAuction;
-        endpoint = `http://localhost:8080/api/v1/product/nonfixedproduct/${productID}`;
+        endpoint = `/api/v1/product/nonfixedproduct/${productID}`;
       } else if (auctionType === "1") {
         requestData = productDataFixed;
-        endpoint = `http://localhost:8080/api/v1/product/fixedproduct/${productID}`;
+        endpoint = `/api/v1/product/fixedproduct/${productID}`;
       } else {
         throw new Error("Invalid auctionType value");
       }
@@ -322,7 +322,7 @@ const UploadProductForm = () => {
                     onChange={(e) => setProductCategory(e.target.value)}
                   >
                     <MenuItem value={"3C產品"}>3C產品</MenuItem>
-                    <MenuItem value={"日常用品"}>日常用品</MenuItem>
+                    <MenuItem value={"日用品"}>日用品</MenuItem>
                     <MenuItem value={"文具類"}>文具類</MenuItem>
                     <MenuItem value={"其它"}>其它</MenuItem>
                   </Select>
