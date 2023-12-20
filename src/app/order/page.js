@@ -21,14 +21,14 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
 
-const CHECK_ORDER_WAITING = "http://localhost:8080/api/v1/order/check/waiting"; // 查看待確認訂單
-const CHECK_ORDER_ALL = "http://localhost:8080/api/v1/order/check/all"; // 查看所有訂單
-const CHECK_ORDER_REJECT = "http://localhost:8080/api/v1/order/check/reject"; // 查看已被拒絕的訂單
-const CHECK_ORDER_ACCEPT = "http://localhost:8080/api/v1/order/check/submitted" // 查看已同意的訂單
-const CHECK_ORDER_DONE = "http://localhost:8080/api/v1/order/check/done"; // 查看已完成的訂單
-const MAKESUBMIT = "http://localhost:8080/api/v1/order/makesubmit"; //賣家同意訂單
-const MAKEDONE = "http://localhost:8080/api/v1/order/makedone"; //買家付款後，賣家結束訂單
-const MAKEREJECT = "http://localhost:8080/api/v1/order/makereject"; //買家不同意訂單
+const CHECK_ORDER_WAITING = "/api/v1/order/check/waiting"; // 查看待確認訂單
+const CHECK_ORDER_ALL = "/api/v1/order/check/all"; // 查看所有訂單
+const CHECK_ORDER_REJECT = "/api/v1/order/check/reject"; // 查看已被拒絕的訂單
+const CHECK_ORDER_ACCEPT = "/api/v1/order/check/submitted" // 查看已同意的訂單
+const CHECK_ORDER_DONE = "/api/v1/order/check/done"; // 查看已完成的訂單
+const MAKESUBMIT = "/api/v1/order/makesubmit"; //賣家同意訂單
+const MAKEDONE = "/api/v1/order/makedone"; //買家付款後，賣家結束訂單
+const MAKEREJECT = "/api/v1/order/makereject"; //買家不同意訂單
 const token = Cookies.get("token");
 
 function CustomTabPanel(props) {

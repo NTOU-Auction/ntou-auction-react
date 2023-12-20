@@ -9,7 +9,7 @@ import Title from "@/components/Title";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const CHECK_ORDER_ALL = "http://localhost:8080/api/v1/order/check/all"; // 查看所有訂單
+const CHECK_ORDER_ALL = "/api/v1/order/check/all"; // 查看所有訂單
 const token = Cookies.get("token");
 
 async function fetchOrderAll() {

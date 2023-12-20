@@ -165,10 +165,10 @@ const UploadProductForm = () => {
       let endpoint = "";
       if (auctionType === "0") {
         requestData = productDataAuction;
-        endpoint = `http://localhost:8080/api/v1/product/nonfixedproduct/${productID}`;
+        endpoint = `/api/v1/product/nonfixedproduct/${productID}`;
       } else if (auctionType === "1") {
         requestData = productDataFixed;
-        endpoint = `http://localhost:8080/api/v1/product/fixedproduct/${productID}`;
+        endpoint = `/api/v1/product/fixedproduct/${productID}`;
       } else {
         throw new Error("Invalid auctionType value");
       }

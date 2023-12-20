@@ -36,7 +36,7 @@ export default function ShoppingCart() {
   useEffect(() => {
     async function fetchShoppingcart() {
       try {
-        const view = await axios.get("http://localhost:8080/api/v1/shoppingcart/shoppingcart", {
+        const view = await axios.get("/api/v1/shoppingcart/shoppingcart", {
           headers: {
             "Authorization": `Bearer ${token}` // Bearer 跟 token 中間有一個空格
           }
@@ -109,7 +109,7 @@ export default function ShoppingCart() {
     console.log(adddata);
     try {
       let requestData = adddata;
-      let API = "http://localhost:8080/api/v1/shoppingcart/increase";
+      let API = "/api/v1/shoppingcart/increase";
       const response = await axios.post(API, requestData, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
@@ -137,7 +137,7 @@ export default function ShoppingCart() {
     console.log(decreasedata);
     try {
       let requestData = decreasedata;
-      let API = "http://localhost:8080/api/v1/shoppingcart/decrease";
+      let API = "/api/v1/shoppingcart/decrease";
       const response = await axios.delete(API, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
@@ -196,7 +196,7 @@ export default function ShoppingCart() {
     console.log(deletedata);
     try {
       let requestData = deletedata;
-      let API = "http://localhost:8080/api/v1/shoppingcart/delete";
+      let API = "/api/v1/shoppingcart/delete";
       const response = await axios.delete(API, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",

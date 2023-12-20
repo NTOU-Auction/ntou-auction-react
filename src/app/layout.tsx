@@ -44,7 +44,7 @@ const DRAWER_WIDTH = 240;
 
 const token = Cookies.get("token");
 async function fetchUserInfo() {
-  const response = axios.get("http://localhost:8080/api/v1/account/users", {
+  const response = axios.get("/api/v1/account/users", {
     headers: {
       Authorization: `Bearer ${token}`, // Bearer 跟 token 中間有一個空格
     },

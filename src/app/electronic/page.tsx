@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
 import MediaCard from "@/components/MediaCard";
 
-const commodityAPI = "http://localhost:8080/api/v1/product/products";
+const commodityAPI = "/api/v1/product/products";
 
 export default function Electron() {
   interface CommodityItem {

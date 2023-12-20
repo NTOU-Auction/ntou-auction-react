@@ -46,7 +46,7 @@ const WebSocketTest = () => {
   useEffect(() => {
     const fetchContacts = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/v1/chat/contact", {
+        const response = await axios.get("/api/v1/chat/contact", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -94,7 +94,7 @@ const WebSocketTest = () => {
     try {
       const response = await axios.get(
         /* 從哪裡來拿訊息senderID ID2收到ID1的訊息 */
-        `http://localhost:8080/api/v1/chat/messages/${receiverId}`,
+        `/api/v1/chat/messages/${receiverId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -150,7 +150,7 @@ const WebSocketTest = () => {
 
     if (typeof WebSocket !== 'function') {
       newClient.webSocketFactory = function () {
-        return new SockJS('http://localhost:8080/sockjs');
+        return new SockJS('/sockjs');
       };
     }
 
@@ -166,7 +166,7 @@ const WebSocketTest = () => {
 
           try {
             const response = await axios.get(
-              `http://localhost:8080/api/v1/chat/messages/${receivedMessage.senderId}`,
+              `api/v1/chat/messages/${receivedMessage.senderId}`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,

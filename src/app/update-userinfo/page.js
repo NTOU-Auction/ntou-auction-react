@@ -46,7 +46,7 @@ function UpdateUserInfo() {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/account/user",
+        "/api/v1/account/user",
         data,
         {
           "Content-Type": "application/json;charset=UTF-8",

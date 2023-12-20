@@ -10,7 +10,7 @@ const token = Cookies.get("token");
 
 async function fetchUserInfo() {
   const response = await axios.get(
-    "http://localhost:8080/api/v1/account/users",
+    "/api/v1/account/users",
     {
       headers: {
         Authorization: `Bearer ${token}`,

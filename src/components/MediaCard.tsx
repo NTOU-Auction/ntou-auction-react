@@ -95,7 +95,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
       let API = "";
       if (auctionType === true) {
         requestData = buydata;
-        API = "http://localhost:8080/api/v1/product/buy";
+        API = "/api/v1/product/buy";
         const response = await axios.post(API, requestData, {
           headers: {
             "Content-Type": "application/json;charset=UTF-8",
@@ -108,7 +108,7 @@ export default function MediaCard({ commodity }: { commodity: Commodity }) {
         }
       } else {
         requestData = biddata;
-        API = "http://localhost:8080/api/v1/product/bid";
+        API = "/api/v1/product/bid";
         const response = await axios.patch(API, requestData, {
           headers: {
             "Content-Type": "application/json;charset=UTF-8",
