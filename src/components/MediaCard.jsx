@@ -32,13 +32,6 @@ const ModalContent = styled.div`
 
 export default function MediaCard({ commodity }) {
 
-  //最愛
-  const [love, setLove] = React.useState(false);
-
-  function handleChange (event) {
-    setLove(event.target.checked);
-  };  
-
   //顯示訊息
   const [error, setError] = useState(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -208,6 +201,94 @@ export default function MediaCard({ commodity }) {
       window.removeEventListener('click', handleWindowClick);
     };
   }, []);
+
+  //我的最愛
+  const [love, setLove] = React.useState(false);
+  const favoriteAPI = "http://localhost:8080/api/v1/account/favorite";
+
+  React.useEffect(() => {
+    async function fetchFavorite() {
+      try {
+        const view = await axios.get(favoriteAPI, {
+          headers: {
+            "Authorization": `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+          }
+        });
+        var len = view.data ? Object.keys(view.data).length : 0;
+        {view.data ? function () {
+          for (let i = 0; i < len; i++) {
+            if(view.data[i].id == commodity.id){
+              setLove(true);
+              break;
+            }
+          }
+        }() : null}
+      }
+      catch (error) {
+        console.error('獲取購物車資料錯誤:', error);
+      }
+    }
+    fetchFavorite();
+  }, []);
+
+  const Addfavorite = async () => {
+
+    const favoritedata = JSON.stringify({
+      productId: commodity.id,
+    });
+
+    try {
+      let requestData = favoritedata;
+      let API = favoriteAPI;
+      const response = await axios.post(API, requestData,
+        {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      if (response.status === 200) {
+        console.log("我的最愛成功:", response.data);
+      }
+    }
+    catch (error) {
+      console.error("我的最愛錯誤:", error);
+    }
+  };
+
+  const Deletefavorite = async () => {
+
+    const favoritedata = JSON.stringify({
+      productId: commodity.id,
+    });
+
+    try {
+      let requestData = favoritedata;
+      let API = favoriteAPI;
+      const response = await axios.delete(API,
+        {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Authorization": `Bearer ${token}`,
+        },
+        data: requestData,
+      });
+      if (response.status === 200) {
+        console.log("我的最愛成功:", response.data);
+      }
+    }
+    catch (error) {
+      console.error("我的最愛錯誤:", error);
+    }
+  };
+
+  function handleChange (event) {
+    setLove(event.target.checked);
+    if(event.target.checked)
+      Addfavorite();
+    else
+      Deletefavorite();
+  };  
 
   return (
 
