@@ -6,12 +6,20 @@
     height: auto;
     background-color: lightseagreen;
     border-radius: 3px;
-    padding-left: 10px;
 }
 .item_header div{
     color: white;
     line-height: 30px;
 }
+
+.item_header .check{
+    width: 6%;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    padding-left: 25px;  
+}
+
 .item_header .price{
     width: 12%;
     display: flex;
@@ -36,15 +44,11 @@
     align-items: center; 
     justify-content: center;  
 }
+
 .item_header .item_detail{
     width: 45%;
 }
-.item_header .check{
-    width: 5%;
-    display: flex;
-    align-items: center; 
-    justify-content: center;  
-}
+
 .item_body{
     background-color: darkgray;
     margin-top: 10px;
@@ -52,16 +56,11 @@
     align-items: center;    
 }
 .item_detail img{
-    width: 80px;
     height: 80px;
+    max-width: 100%;
     border-radius: 3px;
-    /* margin-top: 10px; */
     float: left;
 }
 .item_detail .name{
     margin-left: 100px;
 } 
-
-@media only screen and (max-midth:600px) {
-    
-}

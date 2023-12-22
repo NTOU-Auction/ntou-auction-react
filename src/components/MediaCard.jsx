@@ -18,6 +18,7 @@ import "./ScrollBar.css";
 import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import { pink } from '@mui/material/colors';
 
 const ModalFooter = styled.div`
@@ -155,7 +156,7 @@ export default function MediaCard({ commodity }) {
         }
       } catch (error) {
         if(error){
-          setError(error.response.data.message)
+          setError(error.response.data.message);
           setOpenSnackbarErrror(true);
           console.error(error)
         }
@@ -184,13 +185,19 @@ export default function MediaCard({ commodity }) {
 
   //RWD
   const [margin, setMargin] = React.useState(0);
+  const [br, setBr] = React.useState(false);
 
   React.useEffect(() => {
+    window.innerWidth > 930 && localStorage.getItem("isDrawerOpen") == "1" ? setMargin(240) : setMargin(0);
+    window.innerWidth < 880 ? setBr(true) : setBr(false);
+
     function handleWindowResize() {
       window.innerWidth > 930 && localStorage.getItem("isDrawerOpen") == "1" ? setMargin(240) : setMargin(0);
+      window.innerWidth < 880 ? setBr(true) : setBr(false);
     }
     function handleWindowClick() {
       window.innerWidth > 930 && localStorage.getItem("isDrawerOpen") == "1" ? setMargin(240) : setMargin(0);
+      window.innerWidth < 880 ? setBr(true) : setBr(false);
     }
 
     window.addEventListener('resize', handleWindowResize);
@@ -289,10 +296,13 @@ export default function MediaCard({ commodity }) {
                   </p>
                 </div>
               )}
-              <div dangerouslySetInnerHTML={{ __html: productDescriptionHtml }} />
+              <div dangerouslySetInnerHTML={{ __html: productDescriptionHtml }}/>
               <div dangerouslySetInnerHTML={{ __html: parsedHtml }}/>
               <p style={{ color: "black" }}>
                 賣家：<a>{commodity.sellerName}</a>
+                <IconButton size="small">
+                  <QuestionAnswerIcon color="secondary" fontSize="inherit" />
+                </IconButton>
               </p>
               <p style={{ color: "black" }}>
                 分類：
@@ -308,18 +318,9 @@ export default function MediaCard({ commodity }) {
                   {commodity.productType}
                 </a>
               </p>
-              <ModalFooter>
                 {commodity.isFixedPrice ? (
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />}  sx={{color: pink[800],'&.Mui-checked': {color: pink[600]}}}/>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      onClick={handleSubmit}
-                    >
-                      加入購物車
-                    </Button>
-                    <div style={{ padding: 5 }}>
+                  <div style={{ display: "flex", width:"100%", flexDirection: "row-reverse"}}>
+                    <div style={{ padding: 5}}>
                       <IconButton 
                         color="secondary" 
                         size="small" 
@@ -337,7 +338,9 @@ export default function MediaCard({ commodity }) {
                       }>
                         <RemoveIcon  fontSize="inherit" />
                       </IconButton>
+                      {br ? <br/> : null}
                       <span> {productAmountTMP}個 </span>
+                      {br ? <br/> : null}
                       <IconButton
                         color="secondary"
                         size="small"
@@ -357,17 +360,13 @@ export default function MediaCard({ commodity }) {
                         <AddIcon fontSize="inherit" />
                       </IconButton>
                     </div>
+                    <Button variant="contained" color="error" onClick={handleSubmit}>
+                      加入購物車
+                    </Button>
+                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />}  sx={{color: pink[800],'&.Mui-checked': {color: pink[600]}}}/>
                   </div>
                 ) : (
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />}  sx={{color: pink[800],'&.Mui-checked': {color: pink[600]}}}/>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      onClick= {handleSubmit}
-                    >
-                      出價
-                    </Button>
+                  <div style={{ display: "flex", width:"100%", flexDirection: "row-reverse"}}>
                     <div style={{ padding: 5 }}>
                       <IconButton 
                         color="secondary" 
@@ -375,7 +374,9 @@ export default function MediaCard({ commodity }) {
                         onClick={handleMinusClick} >
                         <RemoveIcon  fontSize="inherit" />
                       </IconButton>
+                      {br ? <br/> : null}
                       <span> {commodityTMP}$ </span>
+                      {br ? <br/> : null}
                       <IconButton
                         color="secondary"
                         size="small"
@@ -394,9 +395,16 @@ export default function MediaCard({ commodity }) {
                         <AddIcon fontSize="inherit" />
                       </IconButton >
                     </div>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick= {handleSubmit}
+                    >
+                      出價
+                    </Button>
+                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />}  sx={{color: pink[800],'&.Mui-checked': {color: pink[600]}}}/>
                   </div>
                 )}
-              </ModalFooter>
             </div>
           </div>
         </ModalContent>

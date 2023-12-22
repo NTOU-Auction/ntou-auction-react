@@ -121,6 +121,7 @@ export default function RootLayout({
     { text: "聊天室", href: user ? "/chat" : "/sign-in", icon: ChatIcon },
     { text: "設定", href: user ? "/" : "/sign-in", icon: SettingsIcon },
   ];
+
   /* 側邊欄收縮 */
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const toggleDrawer = () => {
@@ -130,14 +131,6 @@ export default function RootLayout({
   React.useEffect(() => {
     isDrawerOpen ? localStorage.setItem("isDrawerOpen", "1") : localStorage.setItem("isDrawerOpen", "0");
   });
-
-  /* 登出 */
-  const [loggedIn, setLoggedIn] = React.useState(!!user); // 假設 user 是您從某處獲得的使用者資訊
-  const handleLogout = () => {
-    Cookies.remove('token');
-    setLoggedIn(false); // 將使用者設定為未登入狀態
-    location.reload();
-  };
   
   //搜尋
   const [keywords, setKeywords] = React.useState("");
@@ -242,9 +235,6 @@ export default function RootLayout({
                       <ListItemButton component={Link} href={"/tasks"}>
                         <u style={{ fontSize: "15px", color: "orange" }}>{user.name}</u>
                       </ListItemButton>
-                      <Button onClick={handleLogout} style={{ fontSize: "15px" }}>
-                        登出
-                      </Button>
                     </div>
                   ) : (
                     <ListItemButton component={Link} href={"/sign-in"}>
@@ -290,7 +280,7 @@ export default function RootLayout({
             <List>
               {LINKS.map(({ text, href, icon: Icon }) => (
                 <ListItem key={href} disablePadding>
-                  <ListItemButton component={Link} href={href}>
+                  <ListItemButton component={Link} href={href} onClick={toggleDrawer}>
                     <ListItemIcon>
                       <Icon />
                     </ListItemIcon>
@@ -303,7 +293,7 @@ export default function RootLayout({
             <List>
               {SELLER_CENTER_LINKS.map(({ text, href, icon: Icon }) => (
                 <ListItem key={text} disablePadding>
-                  <ListItemButton component={Link} href={href}>
+                  <ListItemButton component={Link} href={href} onClick={toggleDrawer}>
                     <ListItemIcon>
                       <Icon />
                     </ListItemIcon>
@@ -316,7 +306,7 @@ export default function RootLayout({
             <List>
               {PLACEHOLDER_LINKS.map(({ text, href, icon: Icon }) => (
                 <ListItem key={text} disablePadding>
-                  <ListItemButton component={Link} href={href}>
+                  <ListItemButton component={Link} href={href} onClick={toggleDrawer}>
                     <ListItemIcon>
                       <Icon />
                     </ListItemIcon>
