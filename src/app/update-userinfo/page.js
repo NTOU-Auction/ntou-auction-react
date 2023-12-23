@@ -46,7 +46,7 @@ function UpdateUserInfo() {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "/api/v1/account/user",
+        "/api/v1/account/users",
         data,
         {
           "Content-Type": "application/json;charset=UTF-8",
@@ -81,7 +81,7 @@ function UpdateUserInfo() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          更新使用者資訊
+          更新帳號資料
         </Typography>
         {successMessage && (
           <Alert severity="success" sx={{ whiteSpace: "pre-line" }}>

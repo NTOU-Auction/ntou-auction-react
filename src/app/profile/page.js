@@ -79,7 +79,7 @@ function UserInfo() {
       )}
       <Link href="update-userinfo" style={{ textDecoration: "none" }}>
         <Button variant="contained" color="primary" style={{ marginTop: "20px" }}>
-          更新使用者資訊
+          更新帳號資料
         </Button>
       </Link>
     </div>
