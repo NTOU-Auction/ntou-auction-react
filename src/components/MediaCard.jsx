@@ -407,7 +407,7 @@ export default function MediaCard({ commodity }) {
               <div dangerouslySetInnerHTML={{ __html: parsedHtml }} />
               <p style={{ color: "black" }}>
                 賣家：<a>{commodity.sellerName}</a>
-                <IconButton size="small">
+                <IconButton size="small" onClick={handleButtonClick}>
                   <QuestionAnswerIcon color="secondary" fontSize="inherit" />
                 </IconButton>
               </p>

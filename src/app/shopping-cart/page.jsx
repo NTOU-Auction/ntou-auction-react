@@ -276,7 +276,7 @@ export default function ShoppingCart() {
       if (response.status === 200) {
         console.log("下單成功:", response.data);
         setorder([]);
-        window.location.href = "/order";
+        window.location.href = "/my-order";
       }
     }
     catch (error) {

@@ -5,7 +5,6 @@ import Cookies from "js-cookie";
 import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
 import { Typography, CircularProgress, Card, CardContent } from "@mui/material";
-import Button from "@mui/material/Button";
 
 const token = Cookies.get("token");
 
