@@ -385,6 +385,7 @@ export default function MediaCard({ commodity }) {
                   </p>
                   <p style={{ color: "black", fontWeight: "bold" }}>
                     數量：{commodity.productAmount}個
+                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />}  sx={{color: pink[800],'&.Mui-checked': {color: pink[600]}}}/>
                   </p>
                 </div>
               ) : (
@@ -470,7 +471,6 @@ export default function MediaCard({ commodity }) {
                     <Button variant="contained" color="error" onClick={handleSubmit}>
                       加入購物車
                     </Button>
-                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />}  sx={{color: pink[800],'&.Mui-checked': {color: pink[600]}}}/>
                   </div>
                 ) : (
                   <div style={{ display: "flex", width:"100%", flexDirection: "row-reverse"}}>
@@ -509,7 +509,6 @@ export default function MediaCard({ commodity }) {
                     >
                       出價
                     </Button>
-                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />}  sx={{color: pink[800],'&.Mui-checked': {color: pink[600]}}}/>
                   </div>
                 )}
             </div>
