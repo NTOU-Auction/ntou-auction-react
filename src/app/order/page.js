@@ -315,7 +315,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.productAmount}</div>
+                      <div key={index}>{productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>{getStatusText(order.status)}</TableCell>
@@ -382,7 +382,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.productAmount}</div>
+                      <div key={index}>{productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell  align="right">{getStatusText(order.status)}</TableCell>
@@ -425,7 +425,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.productAmount}</div>
+                      <div key={index}>{productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell  align="right">{getStatusText(order.status)}</TableCell>
@@ -469,7 +469,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.productAmount}</div>
+                      <div key={index}>{productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>{getStatusText(order.status)}</TableCell>
@@ -521,7 +521,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.productAmount}</div>
+                      <div key={index}>{productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell  align="right">{getStatusText(order.status)}</TableCell>
