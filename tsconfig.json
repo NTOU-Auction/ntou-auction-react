@@ -24,6 +24,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/sign-in/page.js", "src/app/starred/page.tsx", "alert_test.js", "src/app/test/page.js", "src/components/MediaCard.jsx", "src/app/shopping-cart/page.jsx", "src/components/MediaCard.jsx"],
   "exclude": ["node_modules"]
 }
