@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - 'development'
+      - 'main'
+    tags:
+      - 'v*.*.*'
 env:
   REGISTRY_IMAGE: keke125/ntou-auction-react
   
