@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Slider from '@mui/material/Slider';
 import Cookies from 'js-cookie';
 
-const favoriteAPI = "http://localhost:8080/api/v1/account/favorite";
+const favoriteAPI = "/api/v1/account/favorite";
 
 export default function Favorite() {
   //token
