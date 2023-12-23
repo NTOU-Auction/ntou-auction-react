@@ -35,7 +35,7 @@ export default function MediaCard({ commodity }) {
   //顯示訊息
   const [error, setError] = useState(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [openSnackbarErrror, setOpenSnackbarErrror] = useState(false); 
+  const [openSnackbarErrror, setOpenSnackbarErrror] = useState(false);
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
@@ -51,8 +51,8 @@ export default function MediaCard({ commodity }) {
 
   //商品描述
   const productDescriptionHtml = commodity.productDescription
-  ? commodity.productDescription
-  : "";
+    ? commodity.productDescription
+    : "";
   const parsedHtml = parseOembedString(productDescriptionHtml);
   function parseOembedString(oembedString) {
     const regex = /<oembed.*?url="(.*?)"><\/oembed>/;
@@ -65,10 +65,10 @@ export default function MediaCard({ commodity }) {
       const embedUrl = `https://www.youtube.com/embed/${videoId}`;
       return `<iframe width="100%" height="315" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
     } else {
-      return ''; 
+      return '';
     }
   }
-  
+
 
   //加入購物車的數量
   const [productAmountTMP, setproductAmountTMP] = useState(1);
@@ -76,8 +76,9 @@ export default function MediaCard({ commodity }) {
   const [commodityTMP, setCommodityTMP] = useState(commodity.currentPrice);
   //token
   const token = Cookies.get('token');
+
   async function fetchUserInfo() {
-    const response = axios.get("http://localhost:8080/api/v1/account/users", {
+    const response = axios.get("/api/v1/account/users", {
       headers: {
         Authorization: `Bearer ${token}`, // Bearer 跟 token 中間有一個空格
       },
@@ -86,6 +87,27 @@ export default function MediaCard({ commodity }) {
   }
   const [user, setUser] = React.useState(null);
 
+  const handleButtonClick = () => {
+    // 從本地端存儲讀取已有的使用者資訊陣列，如果沒有就創建一個新陣列
+    localStorage.removeItem("usersReceiver");
+    const users = JSON.parse(
+      localStorage.getItem("usersReceiver") ?? "[]"
+    );
+    const sellerIDToAdd = (commodity.sellerID);
+    const sellerNameToAdd = (commodity.sellerName);
+
+    const isSellerIDExists = users.some(
+      (user) => user.id === sellerIDToAdd
+    );
+
+    if (!isSellerIDExists) {
+      // 將新的 sellerID 添加到 users 陣列
+      users.push({ id: sellerIDToAdd, name: sellerNameToAdd });
+      // 存回 localStorage
+      localStorage.setItem("usersReceiver", JSON.stringify(users));
+    }
+    window.location.href = '../chat'
+  };
 
   React.useEffect(() => {
     async function fetchData() {
@@ -115,13 +137,13 @@ export default function MediaCard({ commodity }) {
       bid: commodityTMP,
     });
 
-    if(user){
+    if (user) {
       try {
         let requestData = {};
         let API = "";
         if (auctionType === true) {
           requestData = buydata;
-          API = "http://localhost:8080/api/v1/product/buy";
+          API = "/api/v1/product/buy";
           const response = await axios.post(API, requestData, {
             headers: {
               "Content-Type": "application/json;charset=UTF-8",
@@ -132,10 +154,10 @@ export default function MediaCard({ commodity }) {
             console.log("新增成功:", response.data);
             window.location.href = "/shopping-cart";
           }
-        } 
+        }
         else {
           requestData = biddata;
-          API = "http://localhost:8080/api/v1/product/bid";
+          API = "/api/v1/product/bid";
           const response = await axios.patch(API, requestData, {
             headers: {
               "Content-Type": "application/json;charset=UTF-8",
@@ -156,8 +178,8 @@ export default function MediaCard({ commodity }) {
         //window.location.href = "/shopping-cart";
       }
     }
-    else{
-      window.location.href = "/sign-in"; 
+    else {
+      window.location.href = "/sign-in";
     }
   }
 
@@ -204,7 +226,7 @@ export default function MediaCard({ commodity }) {
 
   //我的最愛
   const [love, setLove] = React.useState(false);
-  const favoriteAPI = "http://localhost:8080/api/v1/account/favorite";
+  const favoriteAPI = "/api/v1/account/favorite";
 
   React.useEffect(() => {
     async function fetchFavorite() {
@@ -283,15 +305,19 @@ export default function MediaCard({ commodity }) {
   };
 
   function handleChange (event) {
-    setLove(event.target.checked);
-    if(event.target.checked)
-      Addfavorite();
-    else
-      Deletefavorite();
+    if(user){
+      setLove(event.target.checked);
+      if(event.target.checked)
+        Addfavorite();
+      else
+        Deletefavorite();
+    }
+    else{
+      window.location.href = "/sign-in";
+    }
   };  
 
   return (
-
     <Card variant="outlined" sx={{ width: "200px", height: "355px" }}>
       <Image
         alt="Image"
@@ -336,7 +362,7 @@ export default function MediaCard({ commodity }) {
         title={commodity.productName}
         isVisible={isVisible}
         onClose={handleToggleModalShowUp}
-        margin={margin+"px"}
+        margin={margin + "px"}
       >
         <ModalContent>
           <div>
@@ -377,8 +403,8 @@ export default function MediaCard({ commodity }) {
                   </p>
                 </div>
               )}
-              <div dangerouslySetInnerHTML={{ __html: productDescriptionHtml }}/>
-              <div dangerouslySetInnerHTML={{ __html: parsedHtml }}/>
+              <div dangerouslySetInnerHTML={{ __html: productDescriptionHtml }} />
+              <div dangerouslySetInnerHTML={{ __html: parsedHtml }} />
               <p style={{ color: "black" }}>
                 賣家：<a>{commodity.sellerName}</a>
                 <IconButton size="small">
@@ -387,15 +413,15 @@ export default function MediaCard({ commodity }) {
               </p>
               <p style={{ color: "black" }}>
                 分類：
-                <a href={"/" + ( ()=>{
-                    switch(commodity.productType){
-                      case "日用品":return "daily";
-                      case "3C產品":return "electronic";
-                      case "文具類":return "Stationary";
-                      case "其它":return "other";
-                    }
+                <a href={"/" + (() => {
+                  switch (commodity.productType) {
+                    case "日用品": return "daily";
+                    case "3C產品": return "electronic";
+                    case "文具類": return "Stationary";
+                    case "其它": return "other";
                   }
-                  )()}>
+                }
+                )()}>
                   {commodity.productType}
                 </a>
               </p>
@@ -406,18 +432,18 @@ export default function MediaCard({ commodity }) {
                         color="secondary" 
                         size="small" 
                         onClick={() =>
-                        setproductAmountTMP((prevproductAmountTMP) => {
-                          if (
-                            typeof prevproductAmountTMP === "number" &&
-                            commodity?.productAmount &&
-                            productAmountTMP > 1
-                          ) {
-                            return prevproductAmountTMP - 1;
-                          }
-                          return prevproductAmountTMP;
-                        })
-                      }>
-                        <RemoveIcon  fontSize="inherit" />
+                          setproductAmountTMP((prevproductAmountTMP) => {
+                            if (
+                              typeof prevproductAmountTMP === "number" &&
+                              commodity?.productAmount &&
+                              productAmountTMP > 1
+                            ) {
+                              return prevproductAmountTMP - 1;
+                            }
+                            return prevproductAmountTMP;
+                          })
+                        }>
+                        <RemoveIcon fontSize="inherit" />
                       </IconButton>
                       {br ? <br/> : null}
                       <span> {productAmountTMP}個 </span>
@@ -449,11 +475,11 @@ export default function MediaCard({ commodity }) {
                 ) : (
                   <div style={{ display: "flex", width:"100%", flexDirection: "row-reverse"}}>
                     <div style={{ padding: 5 }}>
-                      <IconButton 
-                        color="secondary" 
+                      <IconButton
+                        color="secondary"
                         size="small"
                         onClick={handleMinusClick} >
-                        <RemoveIcon  fontSize="inherit" />
+                        <RemoveIcon fontSize="inherit" />
                       </IconButton>
                       {br ? <br/> : null}
                       <span> {commodityTMP}$ </span>

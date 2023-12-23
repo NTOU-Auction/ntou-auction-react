@@ -1,8 +1,9 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Link from "@mui/material/Link";
+import Button from "@mui/material/Button";
 import { Typography, CircularProgress, Card, CardContent } from "@mui/material";
 import Button from "@mui/material/Button";
 
@@ -10,7 +11,7 @@ const token = Cookies.get("token");
 
 async function fetchUserInfo() {
   const response = await axios.get(
-    "http://localhost:8080/api/v1/account/users",
+    "/api/v1/account/users",
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -22,12 +23,13 @@ async function fetchUserInfo() {
 
 function UserInfo() {
   const [user, setUser] = useState(null);
-
+  
   useEffect(() => {
     async function fetchData() {
       try {
         const userData = await fetchUserInfo();
         setUser(userData);
+        localStorage.setItem("userInfo", JSON.stringify(userData));
       } catch (error) {
         console.error("獲取帳號資料錯誤:", error);
       }
@@ -44,7 +46,7 @@ function UserInfo() {
   };
 
   return (
-    <div>
+    <div style={{ padding: "20px" }}>
       {user ? (
         <Card variant="outlined" style={{ marginTop: "60px" }}>
           <CardContent>
@@ -67,15 +69,20 @@ function UserInfo() {
           </CardContent>
         </Card>
       ) : (
-        <div>
+        <div style={{ textAlign: "center", marginTop: "20px" }}>
           <CircularProgress />
-          <Card variant="outlined" style={{ marginTop: "60px" }}>
+          <Card variant="outlined" style={{ marginTop: "20px" }}>
             <Typography variant="h4" gutterBottom>
               請先登入
             </Typography>
           </Card>
         </div>
       )}
+      <Link href="update-userinfo" style={{ textDecoration: "none" }}>
+        <Button variant="contained" color="primary" style={{ marginTop: "20px" }}>
+          更新使用者資訊
+        </Button>
+      </Link>
     </div>
   );
 }

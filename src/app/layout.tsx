@@ -46,7 +46,7 @@ import GradingIcon from '@mui/icons-material/Grading';
 
 const token = Cookies.get("token");
 async function fetchUserInfo() {
-  const response = axios.get("http://localhost:8080/api/v1/account/users", {
+  const response = axios.get("/api/v1/account/users", {
     headers: {
       Authorization: `Bearer ${token}`, // Bearer 跟 token 中間有一個空格
     },
@@ -92,6 +92,7 @@ export default function RootLayout({
       try {
         const data = await fetchUserInfo();
         setUser(data.data);
+        localStorage.setItem("userID", JSON.stringify(data.data.id));
       } catch (error) {
         console.error("獲取帳號資料錯誤:", error);
       }
@@ -116,7 +117,7 @@ export default function RootLayout({
 
   const PLACEHOLDER_LINKS = [
     { text: "我的最愛", href: user ? "/my-favorite" : "/sign-in", icon: FavoriteIcon },
-    { text: "我的訂單", href: user ? "/order" : "/sign-in", icon: GradingIcon },
+    { text: "我的訂單", href: user ? "/my-order" : "/sign-in", icon: GradingIcon },
     { text: "購物車", href: user ? "/shopping-cart" : "/sign-in", icon: ShoppingCartIcon },
     { text: "聊天室", href: user ? "/chat" : "/sign-in", icon: ChatIcon },
     { text: "設定", href: user ? "/" : "/sign-in", icon: SettingsIcon },
@@ -231,8 +232,8 @@ export default function RootLayout({
                   }}
                 >
                   {user ? (
-                    <div style={{ display:"flex", height:"100%" }}>
-                      <ListItemButton component={Link} href={"/tasks"}>
+                    <div style={{ display:"flex" }}>
+                      <ListItemButton component={Link} href={"/profile"}>
                         <u style={{ fontSize: "15px", color: "orange" }}>{user.name}</u>
                       </ListItemButton>
                     </div>

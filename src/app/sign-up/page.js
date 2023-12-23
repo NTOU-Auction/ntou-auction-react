@@ -36,7 +36,7 @@ function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/auth/sign-up', data, {
+      const response = await axios.post('/api/v1/auth/sign-up', data, {
         headers: headers
       });
       console.log(name.length)

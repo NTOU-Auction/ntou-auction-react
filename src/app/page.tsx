@@ -11,7 +11,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Slider from '@mui/material/Slider';
 
-const commodityAPI = "http://localhost:8080/api/v1/product/products";
+const commodityAPI = "/api/v1/product/products";
 
 export default function HomePage() {
   const [commodity, setcommodity] = React.useState<any>([]);
