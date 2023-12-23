@@ -18,6 +18,7 @@ import "./ScrollBar.css";
 import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import { pink } from '@mui/material/colors';
 
 const ModalFooter = styled.div`
@@ -30,13 +31,6 @@ const ModalContent = styled.div`
 
 
 export default function MediaCard({ commodity }) {
-
-  //最愛
-  const [love, setLove] = React.useState(false);
-
-  function handleChange(event) {
-    setLove(event.target.checked);
-  };
 
   //顯示訊息
   const [error, setError] = useState(null);
@@ -176,8 +170,8 @@ export default function MediaCard({ commodity }) {
           }
         }
       } catch (error) {
-        if (error) {
-          setError(error.response.data.message)
+        if(error){
+          setError(error.response.data.message);
           setOpenSnackbarErrror(true);
           console.error(error)
         }
@@ -206,13 +200,19 @@ export default function MediaCard({ commodity }) {
 
   //RWD
   const [margin, setMargin] = React.useState(0);
+  const [br, setBr] = React.useState(false);
 
   React.useEffect(() => {
+    window.innerWidth > 930 && localStorage.getItem("isDrawerOpen") == "1" ? setMargin(240) : setMargin(0);
+    window.innerWidth < 880 ? setBr(true) : setBr(false);
+
     function handleWindowResize() {
       window.innerWidth > 930 && localStorage.getItem("isDrawerOpen") == "1" ? setMargin(240) : setMargin(0);
+      window.innerWidth < 880 ? setBr(true) : setBr(false);
     }
     function handleWindowClick() {
       window.innerWidth > 930 && localStorage.getItem("isDrawerOpen") == "1" ? setMargin(240) : setMargin(0);
+      window.innerWidth < 880 ? setBr(true) : setBr(false);
     }
 
     window.addEventListener('resize', handleWindowResize);
@@ -223,6 +223,99 @@ export default function MediaCard({ commodity }) {
       window.removeEventListener('click', handleWindowClick);
     };
   }, []);
+
+  //我的最愛
+  const [love, setLove] = React.useState(false);
+  const favoriteAPI = "/api/v1/account/favorite";
+
+  React.useEffect(() => {
+    async function fetchFavorite() {
+      try {
+        const view = await axios.get(favoriteAPI, {
+          headers: {
+            "Authorization": `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+          }
+        });
+        var len = view.data ? Object.keys(view.data).length : 0;
+        {view.data ? function () {
+          for (let i = 0; i < len; i++) {
+            if(view.data[i].id == commodity.id){
+              setLove(true);
+              break;
+            }
+          }
+        }() : null}
+      }
+      catch (error) {
+        console.error('獲取購物車資料錯誤:', error);
+      }
+    }
+    fetchFavorite();
+  }, []);
+
+  const Addfavorite = async () => {
+
+    const favoritedata = JSON.stringify({
+      productId: commodity.id,
+    });
+
+    try {
+      let requestData = favoritedata;
+      let API = favoriteAPI;
+      const response = await axios.post(API, requestData,
+        {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      if (response.status === 200) {
+        console.log("我的最愛成功:", response.data);
+      }
+    }
+    catch (error) {
+      console.error("我的最愛錯誤:", error);
+    }
+  };
+
+  const Deletefavorite = async () => {
+
+    const favoritedata = JSON.stringify({
+      productId: commodity.id,
+    });
+
+    try {
+      let requestData = favoritedata;
+      let API = favoriteAPI;
+      const response = await axios.delete(API,
+        {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Authorization": `Bearer ${token}`,
+        },
+        data: requestData,
+      });
+      if (response.status === 200) {
+        console.log("我的最愛成功:", response.data);
+      }
+    }
+    catch (error) {
+      console.error("我的最愛錯誤:", error);
+    }
+  };
+
+  function handleChange (event) {
+    if(user){
+      setLove(event.target.checked);
+      if(event.target.checked)
+        Addfavorite();
+      else
+        Deletefavorite();
+    }
+    else{
+      window.location.href = "/sign-in";
+    }
+  };  
 
   return (
     <Card variant="outlined" sx={{ width: "200px", height: "355px" }}>
@@ -314,6 +407,9 @@ export default function MediaCard({ commodity }) {
               <div dangerouslySetInnerHTML={{ __html: parsedHtml }} />
               <p style={{ color: "black" }}>
                 賣家：<a>{commodity.sellerName}</a>
+                <IconButton size="small" onClick={handleButtonClick}>
+                  <QuestionAnswerIcon color="secondary" fontSize="inherit" />
+                </IconButton>
               </p>
               <p style={{ color: "black" }}>
                 分類：
@@ -329,28 +425,12 @@ export default function MediaCard({ commodity }) {
                   {commodity.productType}
                 </a>
               </p>
-              <ModalFooter>
                 {commodity.isFixedPrice ? (
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />} sx={{ color: pink[800], '&.Mui-checked': { color: pink[600] } }} />
-                    <Button
-                      variant="contained"
-                      style={{ marginRight: '10px' }}
-                      onClick={handleButtonClick}
-                    >
-                      與賣家聯繫
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      onClick={handleSubmit}
-                    >
-                      加入購物車
-                    </Button>
-                    <div style={{ padding: 5 }}>
-                      <IconButton
-                        color="secondary"
-                        size="small"
+                  <div style={{ display: "flex", width:"100%", flexDirection: "row-reverse"}}>
+                    <div style={{ padding: 5}}>
+                      <IconButton 
+                        color="secondary" 
+                        size="small" 
                         onClick={() =>
                           setproductAmountTMP((prevproductAmountTMP) => {
                             if (
@@ -365,7 +445,9 @@ export default function MediaCard({ commodity }) {
                         }>
                         <RemoveIcon fontSize="inherit" />
                       </IconButton>
+                      {br ? <br/> : null}
                       <span> {productAmountTMP}個 </span>
+                      {br ? <br/> : null}
                       <IconButton
                         color="secondary"
                         size="small"
@@ -385,24 +467,13 @@ export default function MediaCard({ commodity }) {
                         <AddIcon fontSize="inherit" />
                       </IconButton>
                     </div>
+                    <Button variant="contained" color="error" onClick={handleSubmit}>
+                      加入購物車
+                    </Button>
+                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />}  sx={{color: pink[800],'&.Mui-checked': {color: pink[600]}}}/>
                   </div>
                 ) : (
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />} sx={{ color: pink[800], '&.Mui-checked': { color: pink[600] } }} />
-                    <Button
-                      variant="contained"
-                      style={{ marginRight: '10px' }}
-                      onClick={handleButtonClick}
-                    >
-                      與賣家聯繫
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      onClick={handleSubmit}
-                    >
-                      出價
-                    </Button>
+                  <div style={{ display: "flex", width:"100%", flexDirection: "row-reverse"}}>
                     <div style={{ padding: 5 }}>
                       <IconButton
                         color="secondary"
@@ -410,7 +481,9 @@ export default function MediaCard({ commodity }) {
                         onClick={handleMinusClick} >
                         <RemoveIcon fontSize="inherit" />
                       </IconButton>
+                      {br ? <br/> : null}
                       <span> {commodityTMP}$ </span>
+                      {br ? <br/> : null}
                       <IconButton
                         color="secondary"
                         size="small"
@@ -429,9 +502,16 @@ export default function MediaCard({ commodity }) {
                         <AddIcon fontSize="inherit" />
                       </IconButton >
                     </div>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick= {handleSubmit}
+                    >
+                      出價
+                    </Button>
+                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />}  sx={{color: pink[800],'&.Mui-checked': {color: pink[600]}}}/>
                   </div>
                 )}
-              </ModalFooter>
             </div>
           </div>
         </ModalContent>

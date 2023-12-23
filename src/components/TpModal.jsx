@@ -99,8 +99,8 @@ const Backdrop = styled.div`
 const Modal = styled.div`
   background: white;
   border-radius: 5px;
-  width: 60%;
-  max-width: ${props => props.maxWidth || '60%'} ;
+  width: 70%;
+  max-width: ${props => props.maxWidth || '100%'};
   max-height: 100vh;
   box-shadow: 3px 3px 9px 1px silver;
   display: flex;

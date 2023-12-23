@@ -11,7 +11,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Slider from '@mui/material/Slider';
 
-const commodityAPI = "/api/v1/product/product/name";
+const commodityAPI = "/api/v1/product/product/name/";
 
 export default function Search() {
 
@@ -26,7 +26,7 @@ export default function Search() {
   const [commodity, setcommodity] = React.useState<any>([]);
 
   React.useEffect(() => {
-    fetch(commodityAPI + "/" + keyword)
+    fetch(commodityAPI + keyword)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);

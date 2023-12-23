@@ -11,6 +11,8 @@ import IconButton from '@mui/material/IconButton';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import './cart.css';
 
 export default function ShoppingCart() {
@@ -274,10 +276,12 @@ export default function ShoppingCart() {
       if (response.status === 200) {
         console.log("下單成功:", response.data);
         setorder([]);
-        window.location.href = "/order";
+        window.location.href = "/my-order";
       }
     }
     catch (error) {
+      setError(error.response.data.message);
+      setOpenSnackbarErrror(true);
       console.error("下單錯誤:", error);
     }
   };
@@ -297,47 +301,55 @@ export default function ShoppingCart() {
   }
 
   //checkbox
-  function handleChangeParent (event, index) {
-    console.log(index);
-    const Next = checked.map((c, i) => {
-      if (i === index) {
-        // Increment the clicked counter
-        return event.target.checked;
-      } else {
-        // The rest haven't changed
-        return c;
-      }
-    });
-    //console.log(Next);
-    setChecked(Next);
-  };
-
   function handleChangeChild (event, index) {
     settotal(event.target.checked ? total + productAmountTMP[index] : total - productAmountTMP[index]);
     setcost(event.target.checked ? cost + productCountTMP[index] : cost - productCountTMP[index]);
     checked[index][1] = event.target.checked;
   };  
 
+  //顯示訊息
+  const [error, setError] = useState(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openSnackbarErrror, setOpenSnackbarErrror] = useState(false); 
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+    setOpenSnackbarErrror(false);
+  };
+
+  //RWD
+  const [br, setBr] = React.useState(true);
+
+  React.useEffect(() => {
+    window.innerWidth < 880 ? setBr(true) : setBr(false);
+
+    function handleWindowResize() {
+      window.innerWidth < 880 ? setBr(true) : setBr(false);
+    }
+    function handleWindowClick() {
+      window.innerWidth < 880 ? setBr(true) : setBr(false);
+    }
+
+    window.addEventListener('resize', handleWindowResize);
+    window.addEventListener('click', handleWindowClick);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+      window.removeEventListener('click', handleWindowClick);
+    };
+  }, []);
+
   return (
-    <Box style={{ display: 'block', marginTop: "60px" }}>
+    <Box style={{ width:"100%", display: 'block', marginTop: "60px"}}>
       {shoppingcart ?
         <div>
           {Object.keys(shoppingcart).map((key, index) => {
             return (
-              <div key={index} style={{ padding: 5, marginBottom: "20px" }}>
+              <div key={index} style={{ padding: 3, marginBottom: "20px" }}>
                 <hr />
                 <div className="container" >
                   <div className="item_header">
-                    <div className="check">
-                      {/* <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={checkedParent[key]}
-                            onChange={() => handleChangeParent(event, key)}
-                          />
-                        }
-                      /> */}
-                    </div>
+                    <div className="check"></div>
                     <div className="item_detail">賣家：{key}</div>
                     <div className="price">單價</div>
                     <div className="count">數量</div>
@@ -368,7 +380,9 @@ export default function ShoppingCart() {
                                             <button onClick={() => productAmountTMP[countnow] > 1 ? handleDecrementClick(shoppingcart[key][i].product.id, countnow, shoppingcart[key][i].product.currentPrice) : setproductAmountTMP(productAmountTMP)}>
                                               -
                                             </button>
+                                            {br ? <br/> : null}
                                             <span style={{padding:3}}> {productAmountTMP[countnow]} </span>
+                                            {br ? <br/> : null}
                                             <button onClick={() => productAmountTMP[countnow] < shoppingcart[key][i].product.productAmount ? handleIncrementClick(shoppingcart[key][i].product.id, countnow, shoppingcart[key][i].product.currentPrice) : setproductAmountTMP(productAmountTMP)}>
                                               +
                                             </button>
@@ -412,9 +426,15 @@ export default function ShoppingCart() {
               <div className="count" >{total}</div>
               <div className="amount">${cost}</div>
               <div className="operate">
+                {!br ? 
                 <Button onClick={() => handleCreateOrderClick()} variant="contained" size="small" color="success" endIcon={<AddShoppingCartIcon />}>
                   下單
                 </Button>
+                :
+                <Button onClick={() => handleCreateOrderClick()} size="small" color="secondary">
+                  <AddShoppingCartIcon />
+                </Button>
+                }
               </div>
             </div>
           </div>
@@ -422,6 +442,32 @@ export default function ShoppingCart() {
         :
         <h3>去商店逛逛，把商品加入購物車吧！</h3>
       }
+      <Snackbar
+        open={openSnackbarErrror}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+      >
+        <MuiAlert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {error}
+        </MuiAlert>
+      </Snackbar>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+      >
+        <MuiAlert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          出價成功，請重新整理頁面
+        </MuiAlert>
+      </Snackbar>
     </Box >
   );
 }

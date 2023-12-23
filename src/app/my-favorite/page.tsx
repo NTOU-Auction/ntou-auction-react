@@ -1,5 +1,6 @@
 "use client";
 import * as React from 'react';
+import axios from 'axios';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import Alert from '@mui/material/Alert';
@@ -10,23 +11,31 @@ import Fab from '@mui/material/Fab';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Slider from '@mui/material/Slider';
+import Cookies from 'js-cookie';
 
-const commodityAPI = "/api/v1/product/product/classification";
+const favoriteAPI = "http://localhost:8080/api/v1/account/favorite";
 
-export default function Electron() {
-
-  const [commodity, setcommodity] = React.useState<any>([]);
+export default function Favorite() {
+  //token
+  const token = Cookies.get('token');
+  //我的最愛資料
+  const [favorite, setfavorite] = React.useState<any>([]);
 
   React.useEffect(() => {
-    fetch(commodityAPI + "/3C產品")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setcommodity(data);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    async function fetchFavorite() {
+      try {
+        const view = await axios.get(favoriteAPI, {
+          headers: {
+            "Authorization": `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+          }
+        });
+        setfavorite(view.data);
+      }
+      catch (error) {
+        console.error('獲取購物車資料錯誤:', error);
+      }
+    }
+    fetchFavorite();
   }, []);
 
   //價個區間
@@ -77,7 +86,7 @@ export default function Electron() {
     setAnchorEl(null);
   };
 
-  var len = commodity ? Object.keys(commodity).length : 0;
+  var len = favorite ? Object.keys(favorite).length : 0;
 
   return (
     <Box sx={{ display: "block", marginTop: "60px" }}>
@@ -85,7 +94,7 @@ export default function Electron() {
         <Grid container spacing={3} style={{ width: "100%" }}>
           <Grid xs={6} style={{ width: "100%" }}>
             <div style={{ display: 'flex', flexWrap: "wrap" }}>
-              {commodity ? function () {
+              {favorite ? function () {
                 let show = [];
                 let min = 0;
                 let max = null;
@@ -130,11 +139,11 @@ export default function Electron() {
                     break;
                 }
                 for (let i = 0; i < len; i++) {
-                  if (commodity[i].currentPrice >= min && max == null) {
-                    show.push(<MediaCard commodity={commodity[i]} />)
+                  if (favorite[i].currentPrice >= min && max == null) {
+                    show.push(<MediaCard commodity={favorite[i]} />)
                   }
-                  else if (max && commodity[i].currentPrice >= min && commodity[i].currentPrice <= max)
-                    show.push(<MediaCard commodity={commodity[i]} />)
+                  else if (max && favorite[i].currentPrice >= min && favorite[i].currentPrice <= max)
+                    show.push(<MediaCard commodity={favorite[i]} />)
                 }
                 return show
               }() : <p>404</p>}

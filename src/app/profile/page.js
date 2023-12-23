@@ -36,6 +36,14 @@ function UserInfo() {
     fetchData();
   }, []);
 
+  /* 登出 */
+  const [loggedIn, setLoggedIn] = React.useState(!!user); // 假設 user 是您從某處獲得的使用者資訊
+  const handleLogout = () => {
+    Cookies.remove('token');
+    setLoggedIn(false); // 將使用者設定為未登入狀態
+    location.reload();
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       {user ? (
@@ -50,7 +58,13 @@ function UserInfo() {
             <Typography variant="subtitle1">
               使用者帳號: {user?.username}
             </Typography>
-            <Typography variant="subtitle1">電子信箱: {user?.email}</Typography>
+            <Typography variant="subtitle1">
+              電子信箱: {user?.email}
+            </Typography>
+            <hr/>
+            <Button onClick={handleLogout} variant="contained" style={{ fontSize: "15px" }}>
+              登出
+            </Button>
           </CardContent>
         </Card>
       ) : (
