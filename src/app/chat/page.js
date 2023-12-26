@@ -51,10 +51,9 @@ const WebSocketTest = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("聯絡人清單" + response)
+        
         const contactsArray = Object.entries(response.data).map(([key, value]) => ({ id: key, name: value }));
         setContacts(contactsArray);
-
         const storedContacts = localStorage.getItem("usersReceiver");
         if (storedContacts) {
           const parsedContacts = JSON.parse(storedContacts);
@@ -67,8 +66,6 @@ const WebSocketTest = () => {
           });
           // localStorage.removeItem("usersReceiver");
         }
-        
-        console.log("聯絡人" + users);
       } catch (error) {
         console.error("無法取得聯絡人清單:", error);
       }
@@ -297,7 +294,7 @@ const WebSocketTest = () => {
             <Avatar src="https://cdn-icons-png.flaticon.com/128/1077/1077114.png" />
             <ConversationHeader.Content
               userName={
-                users.find((user) => user.id === selectedUser)?.name || ""
+                users.find((user) => user.id === selectedUser)?.name || "請先點選左側聯絡人"
               }
               // info="上次上線: 10分鐘前"
             ></ConversationHeader.Content>
