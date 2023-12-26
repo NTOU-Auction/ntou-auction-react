@@ -45,20 +45,19 @@ function UpdateUserInfo() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(
-        "/api/v1/account/users",
-        data,
-        {
+      const response = await axios.patch("/api/v1/account/users", data, {
+        headers: {
           "Content-Type": "application/json;charset=UTF-8",
           Authorization: `Bearer ${token}`,
-        }
-      );
+        },
+      });
       console.log(name.length);
       if (response.status === 200) {
         setSuccessMessage(response.data.message);
         setErrorMessage("");
+        Cookies.remove('token');
         localStorage.removeItem("userInfo");
-        window.location.href = "/profile";
+        window.location.href = "/sign-up";
       }
     } catch (error) {
       setErrorMessage(error.response.data.message);
@@ -107,7 +106,7 @@ function UpdateUserInfo() {
                 onChange={(e) => setName(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <TextField
                 autoComplete="given-name"
                 value={username}
@@ -118,7 +117,7 @@ function UpdateUserInfo() {
                 autoFocus
                 onChange={(e) => setUsername(e.target.value)}
               />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12}>
               <TextField
                 value={email}
