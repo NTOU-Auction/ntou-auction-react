@@ -199,6 +199,7 @@ export default function Orders() {
         setOrdersDataReject(orderDataReject);
         setOrdersDataAccept(orderDataAccept);
         setOrdersDataDone(orderDataDone);
+        console.log(orderData);
         // setOrdersData(mockOrders); // 假測資
       } catch (error) {
         console.error("獲取訂單資料錯誤:", error);

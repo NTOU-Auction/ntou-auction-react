@@ -256,6 +256,7 @@ export default function Orders() {
         setOrdersDataReject(orderDataReject);
         setOrdersDataAccept(orderDataAccept);
         setOrdersDataDone(orderDataDone);
+        console.log(orderData);
         // setOrdersData(mockOrders); // 假測資
       } catch (error) {
         console.error("獲取訂單資料錯誤:", error);
@@ -270,7 +271,7 @@ export default function Orders() {
     const users = JSON.parse(
       localStorage.getItem("usersReceiver") ?? "[]"
     );
-    const sellerIDToAdd = (order.sellerid);
+    const sellerIDToAdd = (order.buyerid);
     var sellerNameToAdd = "";
     {order.productAddAmountList.map((productItem) => (
       sellerNameToAdd = productItem.product.sellerName
