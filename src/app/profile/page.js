@@ -22,7 +22,7 @@ async function fetchUserInfo() {
 
 function UserInfo() {
   const [user, setUser] = useState(null);
-  
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -61,14 +61,21 @@ function UserInfo() {
             <Typography variant="subtitle1">
               電子信箱: {user?.email}
             </Typography>
-            <hr/>
-            <Button onClick={handleLogout} variant="contained" style={{ fontSize: "15px" }}>
-              登出
-            </Button>
+            <hr />
+            <div>
+              <Button onClick={handleLogout} variant="contained" color="error" style={{ fontSize: "15px" }}>
+                登出
+              </Button>
+              <Link href="update-userinfo" style={{ paddingLeft: "10px", textDecoration: "none" }}>
+                <Button variant="contained" color="primary" style={{ fontSize: "15px" }}>
+                  更新帳號資料
+                </Button>
+              </Link>
+            </div>
           </CardContent>
         </Card>
       ) : (
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <div style={{ textAlign: "center", marginTop: "60px" }}>
           <CircularProgress />
           <Card variant="outlined" style={{ marginTop: "20px" }}>
             <Typography variant="h4" gutterBottom>
@@ -77,11 +84,6 @@ function UserInfo() {
           </Card>
         </div>
       )}
-      <Link href="update-userinfo" style={{ textDecoration: "none" }}>
-        <Button variant="contained" color="primary" style={{ marginTop: "20px" }}>
-          更新帳號資料
-        </Button>
-      </Link>
     </div>
   );
 }

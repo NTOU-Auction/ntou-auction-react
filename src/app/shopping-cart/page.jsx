@@ -277,6 +277,7 @@ export default function ShoppingCart() {
         console.log("下單成功:", response.data);
         setorder([]);
         window.location.href = "/my-order";
+        setOpenSnackbar(true);
       }
     }
     catch (error) {
@@ -457,7 +458,7 @@ export default function ShoppingCart() {
       </Snackbar>
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={5000}
+        autoHideDuration={6000}
         onClose={handleCloseSnackbar}
       >
         <MuiAlert
@@ -465,7 +466,7 @@ export default function ShoppingCart() {
           severity="success"
           sx={{ width: "100%" }}
         >
-          出價成功，請重新整理頁面
+          下單成功，稍後轉移至訂單
         </MuiAlert>
       </Snackbar>
     </Box >
