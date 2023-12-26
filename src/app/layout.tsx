@@ -37,6 +37,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import GradingIcon from '@mui/icons-material/Grading';
+import PersonIcon from '@mui/icons-material/Person';
 
 
 //  const metadata = {
@@ -234,7 +235,7 @@ export default function RootLayout({
                   {user ? (
                     <div style={{ display:"flex" }}>
                       <ListItemButton component={Link} href={"/profile"}>
-                        <u style={{ fontSize: "15px", color: "orange" }}>{user.name}</u>
+                        <PersonIcon/>
                       </ListItemButton>
                     </div>
                   ) : (
