@@ -298,7 +298,14 @@ export default function ShoppingCart() {
       }
     })
     console.log(order);
-    CreateOrder();
+    if(order.length == 0){
+      setError("訂單不可為空");
+      setOpenSnackbarErrror(true);
+      console.error("訂單不可為空", order);
+    }
+    else{
+      CreateOrder();
+    }
   }
 
   //checkbox
