@@ -191,7 +191,7 @@ export default function MediaCard({ commodity }) {
     ) {
       const newCommodityTMP =
         commodityTMP > commodity.currentPrice
-          ? commodityTMP - commodity.bidIncrement
+          ? commodityTMP - 1
           : commodityTMP;
 
       setCommodityTMP(newCommodityTMP);
