@@ -133,7 +133,7 @@ const WebSocketTest = () => {
 
   useEffect(() => {
     const newClient = new Client({
-      brokerURL: "ws://localhost:8080/ws", // brokerURL: "ws://localhost:8080/ws",
+      brokerURL: "wss://ntou-auction.com/ws", // brokerURL: "ws://localhost:8080/ws",
       connectHeaders: {
         Authorization: `${token}`,
       },
