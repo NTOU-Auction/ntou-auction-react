@@ -37,6 +37,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import GradingIcon from '@mui/icons-material/Grading';
+import PersonIcon from '@mui/icons-material/Person';
 
 
 //  const metadata = {
@@ -109,7 +110,7 @@ export default function RootLayout({
   ];
 
   const SELLER_CENTER_LINKS = [
-    { text: "賣家中心", href: user ? "/dashbord" : "/sign-in", icon: StorefrontIcon },
+    //{ text: "賣家中心", href: user ? "/dashbord" : "/sign-in", icon: StorefrontIcon },
     { text: "商品管理", href: user ? "/seller-product" : "/sign-in", icon: SellIcon },
     { text: "訂單管理", href: user ? "/order" : "/sign-in", icon: ContentPasteIcon },
     { text: "上架商品", href: user ? "/add-product" : "/sign-in", icon: AddIcon },
@@ -120,7 +121,7 @@ export default function RootLayout({
     { text: "我的訂單", href: user ? "/my-order" : "/sign-in", icon: GradingIcon },
     { text: "購物車", href: user ? "/shopping-cart" : "/sign-in", icon: ShoppingCartIcon },
     { text: "聊天室", href: user ? "/chat" : "/sign-in", icon: ChatIcon },
-    { text: "設定", href: user ? "/" : "/sign-in", icon: SettingsIcon },
+    //{ text: "設定", href: user ? "/" : "/sign-in", icon: SettingsIcon },
   ];
 
   /* 側邊欄收縮 */
@@ -234,7 +235,7 @@ export default function RootLayout({
                   {user ? (
                     <div style={{ display:"flex" }}>
                       <ListItemButton component={Link} href={"/profile"}>
-                        <u style={{ fontSize: "15px", color: "orange" }}>{user.name}</u>
+                        <PersonIcon/>
                       </ListItemButton>
                     </div>
                   ) : (

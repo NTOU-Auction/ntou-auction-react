@@ -191,7 +191,7 @@ export default function MediaCard({ commodity }) {
     ) {
       const newCommodityTMP =
         commodityTMP > commodity.currentPrice
-          ? commodityTMP - commodity.bidIncrement
+          ? commodityTMP - 1
           : commodityTMP;
 
       setCommodityTMP(newCommodityTMP);
@@ -395,6 +395,7 @@ export default function MediaCard({ commodity }) {
                   </p>
                   <p style={{ color: "black", fontWeight: "bold" }}>
                     競標價：${commodity.currentPrice}{" "}
+                    <Checkbox onChange={handleChange} checked={love} icon={<FavoriteBorder />} checkedIcon={<Favorite />}  sx={{color: pink[800],'&.Mui-checked': {color: pink[600]}}}/>
                   </p>
                   <p style={{ color: "black", fontWeight: "bold" }}>
                     每次增加金額：${commodity.bidIncrement}{" "}
@@ -493,7 +494,10 @@ export default function MediaCard({ commodity }) {
                               typeof prevCommodityTMP === "number" &&
                               commodity?.bidIncrement
                             ) {
-                              return prevCommodityTMP + commodity.bidIncrement;
+                              if(prevCommodityTMP === commodity.currentPrice)
+                                return prevCommodityTMP + commodity.bidIncrement;
+                              else
+                                return prevCommodityTMP + 1;
                             }
                             return prevCommodityTMP;
                           })

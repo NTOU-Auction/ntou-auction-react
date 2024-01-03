@@ -20,6 +20,8 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
+import IconButton from '@mui/material/IconButton';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
 const CHECK_ORDER_WAITING = "/api/v1/order/order/waiting"; // 查看待確認訂單
 const CHECK_ORDER_ALL = "/api/v1/order/order/all"; // 查看所有訂單
@@ -197,6 +199,7 @@ export default function Orders() {
         setOrdersDataReject(orderDataReject);
         setOrdersDataAccept(orderDataAccept);
         setOrdersDataDone(orderDataDone);
+        console.log(orderData);
         // setOrdersData(mockOrders); // 假測資
       } catch (error) {
         console.error("獲取訂單資料錯誤:", error);
@@ -205,10 +208,35 @@ export default function Orders() {
     fetchOrder();
   }, []);
 
+  const handleButtonClick = (order) => {
+    // 從本地端存儲讀取已有的使用者資訊陣列，如果沒有就創建一個新陣列
+    localStorage.removeItem("usersReceiver");
+    const users = JSON.parse(
+      localStorage.getItem("usersReceiver") ?? "[]"
+    );
+    const sellerIDToAdd = (order.sellerid);
+    var sellerNameToAdd = "";
+    {order.productAddAmountList.map((productItem) => (
+      sellerNameToAdd = productItem.product.sellerName
+    ))}
+
+    const isSellerIDExists = users.some(
+      (user) => user.id === sellerIDToAdd
+    );
+
+    if (!isSellerIDExists) {
+      // 將新的 sellerID 添加到 users 陣列
+      users.push({ id: sellerIDToAdd, name: sellerNameToAdd });
+      // 存回 localStorage
+      localStorage.setItem("usersReceiver", JSON.stringify(users));
+    }
+    window.location.href = '../chat'
+  };
+
   return (
     <Paper
       sx={{ p: 2, display: "flex", flexDirection: "column" }}
-      style={{ marginTop: "60px" }} 
+      style={{ marginTop: "60px", overflowX: "scroll" }}
     >
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
@@ -238,7 +266,8 @@ export default function Orders() {
                 <TableCell>購買數量</TableCell>
                 <TableCell>訂單狀態</TableCell>
                 <TableCell>管理訂單狀態</TableCell>
-                <TableCell align="right">更改訂單狀態</TableCell>
+                <TableCell>更改訂單狀態</TableCell>
+                <TableCell>聯絡賣家</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -273,7 +302,7 @@ export default function Orders() {
                       </MenuItem>
                     </Select>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell>
                     <Button
                       variant="contained"
                       color="primary"
@@ -283,6 +312,11 @@ export default function Orders() {
                       執行
                     </Button>
                   </TableCell>
+                  <TableCell>
+                    <IconButton onClick={() => handleButtonClick(order)}>
+                      <QuestionAnswerIcon color="secondary" />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -290,7 +324,7 @@ export default function Orders() {
         </React.Fragment>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-      <React.Fragment>
+        <React.Fragment>
           {/* <Title>
             <strong>訂單管理</strong>
           </Title> */}
@@ -302,7 +336,7 @@ export default function Orders() {
                 <TableCell>商品名稱</TableCell>
                 <TableCell>付款金額</TableCell>
                 <TableCell>購買數量</TableCell>
-                <TableCell align="right">訂單狀態</TableCell>
+                <TableCell>訂單狀態</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -325,7 +359,9 @@ export default function Orders() {
                       <div key={index}>{productItem.amount}</div>
                     ))}
                   </TableCell>
-                  <TableCell  align="right">{getStatusText(order.status)}</TableCell>
+                  <TableCell>
+                    {getStatusText(order.status)}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -333,7 +369,7 @@ export default function Orders() {
         </React.Fragment>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-      <React.Fragment>
+        <React.Fragment>
           {/* <Title>
             <strong>訂單管理</strong>
           </Title> */}
@@ -345,7 +381,7 @@ export default function Orders() {
                 <TableCell>商品名稱</TableCell>
                 <TableCell>付款金額</TableCell>
                 <TableCell>購買數量</TableCell>
-                <TableCell align="right">訂單狀態</TableCell>
+                <TableCell>訂單狀態</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -368,7 +404,9 @@ export default function Orders() {
                       <div key={index}>{productItem.amount}</div>
                     ))}
                   </TableCell>
-                  <TableCell  align="right">{getStatusText(order.status)}</TableCell>
+                  <TableCell>
+                    {getStatusText(order.status)}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -376,7 +414,7 @@ export default function Orders() {
         </React.Fragment>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
-      <React.Fragment>
+        <React.Fragment>
           {/* <Title>
             <strong>訂單管理</strong>
           </Title> */}
@@ -389,7 +427,8 @@ export default function Orders() {
                 <TableCell>付款金額</TableCell>
                 <TableCell>購買數量</TableCell>
                 <TableCell>訂單狀態</TableCell>
-                <TableCell align="right">更改訂單狀態</TableCell>
+                <TableCell>更改訂單狀態</TableCell>
+                <TableCell>聯絡賣家</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -413,7 +452,7 @@ export default function Orders() {
                     ))}
                   </TableCell>
                   <TableCell>{getStatusText(order.status)}</TableCell>
-                  <TableCell align="right">
+                  <TableCell>
                     <Button
                       variant="contained"
                       color="primary"
@@ -422,6 +461,11 @@ export default function Orders() {
                       完成訂單
                     </Button>
                   </TableCell>
+                  <TableCell>
+                    <IconButton onClick={() => handleButtonClick(order)}>
+                      <QuestionAnswerIcon color="secondary"/>
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -429,7 +473,7 @@ export default function Orders() {
         </React.Fragment>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={4}>
-      <React.Fragment>
+        <React.Fragment>
           {/* <Title>
             <strong>訂單管理</strong>
           </Title> */}
@@ -441,7 +485,7 @@ export default function Orders() {
                 <TableCell>商品名稱</TableCell>
                 <TableCell>付款金額</TableCell>
                 <TableCell>購買數量</TableCell>
-                <TableCell align="right">訂單狀態</TableCell>
+                <TableCell>訂單狀態</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -464,7 +508,7 @@ export default function Orders() {
                       <div key={index}>{productItem.amount}</div>
                     ))}
                   </TableCell>
-                  <TableCell  align="right">{getStatusText(order.status)}</TableCell>
+                  <TableCell>{getStatusText(order.status)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
