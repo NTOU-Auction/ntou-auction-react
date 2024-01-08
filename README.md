@@ -86,7 +86,7 @@ yarn run dev
 
 ### Docker 部署
 
-參考 [Docker Hub](https://hub.docker.com/repository/docker/keke125/ntou-auction-react)。
+參考 [Docker Hub](https://hub.docker.com/r/keke125/ntou-auction-react)。
 
 ## 反向代理(Nginx)參考設定檔
 
