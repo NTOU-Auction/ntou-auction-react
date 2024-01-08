@@ -282,7 +282,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.currentPrice}</div>
+                      <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>
@@ -351,7 +351,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.currentPrice}</div>
+                      <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>
@@ -396,7 +396,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.currentPrice}</div>
+                      <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>
@@ -442,7 +442,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.currentPrice}</div>
+                      <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>
@@ -490,7 +490,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.currentPrice}</div>
+                      <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>
