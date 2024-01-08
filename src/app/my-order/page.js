@@ -282,7 +282,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.currentPrice}</div>
+                      <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>
@@ -351,7 +351,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.currentPrice}</div>
+                      <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>
@@ -396,7 +396,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.currentPrice}</div>
+                      <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>
@@ -427,7 +427,6 @@ export default function Orders() {
                 <TableCell>付款金額</TableCell>
                 <TableCell>購買數量</TableCell>
                 <TableCell>訂單狀態</TableCell>
-                <TableCell>更改訂單狀態</TableCell>
                 <TableCell>聯絡賣家</TableCell>
               </TableRow>
             </TableHead>
@@ -443,7 +442,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.currentPrice}</div>
+                      <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>
@@ -452,15 +451,6 @@ export default function Orders() {
                     ))}
                   </TableCell>
                   <TableCell>{getStatusText(order.status)}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleOrderDoneClick(order.orderid)}
-                    >
-                      完成訂單
-                    </Button>
-                  </TableCell>
                   <TableCell>
                     <IconButton onClick={() => handleButtonClick(order)}>
                       <QuestionAnswerIcon color="secondary"/>
@@ -500,7 +490,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.currentPrice}</div>
+                      <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>

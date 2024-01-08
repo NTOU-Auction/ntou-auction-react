@@ -88,25 +88,36 @@ export default function MediaCard({ commodity }) {
   const [user, setUser] = React.useState(null);
 
   const handleButtonClick = () => {
-    // 從本地端存儲讀取已有的使用者資訊陣列，如果沒有就創建一個新陣列
-    localStorage.removeItem("usersReceiver");
-    const users = JSON.parse(
-      localStorage.getItem("usersReceiver") ?? "[]"
-    );
-    const sellerIDToAdd = (commodity.sellerID);
-    const sellerNameToAdd = (commodity.sellerName);
-
-    const isSellerIDExists = users.some(
-      (user) => user.id === sellerIDToAdd
-    );
-
-    if (!isSellerIDExists) {
-      // 將新的 sellerID 添加到 users 陣列
-      users.push({ id: sellerIDToAdd, name: sellerNameToAdd });
-      // 存回 localStorage
-      localStorage.setItem("usersReceiver", JSON.stringify(users));
+    if(user){
+      // 從本地端存儲讀取已有的使用者資訊陣列，如果沒有就創建一個新陣列
+      localStorage.removeItem("usersReceiver");
+      const users = JSON.parse(
+        localStorage.getItem("usersReceiver") ?? "[]"
+      );
+      if(commodity.sellerID != user.id){
+        const sellerIDToAdd = (commodity.sellerID);
+        const sellerNameToAdd = (commodity.sellerName);
+    
+        const isSellerIDExists = users.some(
+          (user) => user.id === sellerIDToAdd
+        );
+    
+        if (!isSellerIDExists) {
+          // 將新的 sellerID 添加到 users 陣列
+          users.push({ id: sellerIDToAdd, name: sellerNameToAdd });
+          // 存回 localStorage
+          localStorage.setItem("usersReceiver", JSON.stringify(users));
+        }
+        window.location.href = '../chat'
+      }
+      else{
+        setError("此商品為您的商品");
+        setOpenSnackbarErrror(true);
+      }
     }
-    window.location.href = '../chat'
+    else{
+      window.location.href = "/sign-in";
+    }
   };
 
   React.useEffect(() => {
