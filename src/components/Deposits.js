@@ -53,7 +53,7 @@ export default function Deposits() {
         {formattedTotal}
       </Typography>
       <Typography color="text.secondary" sx={{ flex: 1 }}>
-        截止日期 {formattedDate}
+        從 {formattedDate} 至今
       </Typography>
     </React.Fragment>
   );
