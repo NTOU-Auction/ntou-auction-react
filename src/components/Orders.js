@@ -60,6 +60,7 @@ export default function Orders() {
           <TableRow>
             <TableCell>訂單編號</TableCell>
             <TableCell>日期</TableCell>
+            <TableCell>買家名稱</TableCell>
             <TableCell>商品名稱</TableCell>
             <TableCell>付款金額</TableCell>
             <TableCell>購買數量</TableCell>
@@ -71,6 +72,7 @@ export default function Orders() {
             <TableRow key={order.orderid}>
               <TableCell>{order.orderid}</TableCell>
               <TableCell>{order.updateTime}</TableCell>
+              <TableCell>{order.buyername}</TableCell>
               <TableCell>
                 {order.productAddAmountList.map((productItem, index) => (
                   <div key={index}>{productItem.product.productName}</div>
@@ -78,7 +80,7 @@ export default function Orders() {
               </TableCell>
               <TableCell>
                 {order.productAddAmountList.map((productItem, index) => (
-                  <div key={index}>{productItem.product.currentPrice}</div>
+                  <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                 ))}
               </TableCell>
               <TableCell>

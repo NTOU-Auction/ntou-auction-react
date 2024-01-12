@@ -256,7 +256,7 @@ export default function Orders() {
         setOrdersDataReject(orderDataReject);
         setOrdersDataAccept(orderDataAccept);
         setOrdersDataDone(orderDataDone);
-        console.log(orderData);
+        console.log(orderDataAll);
         // setOrdersData(mockOrders); // 假測資
       } catch (error) {
         console.error("獲取訂單資料錯誤:", error);
@@ -266,24 +266,20 @@ export default function Orders() {
   }, []);
 
   const handleButtonClick = (order) => {
-    // 從本地端存儲讀取已有的使用者資訊陣列，如果沒有就創建一個新陣列
     localStorage.removeItem("usersReceiver");
     const users = JSON.parse(
       localStorage.getItem("usersReceiver") ?? "[]"
     );
-    const sellerIDToAdd = (order.buyerid);
-    var sellerNameToAdd = "";
-    {order.productAddAmountList.map((productItem) => (
-      sellerNameToAdd = productItem.product.sellerName
-    ))}
-
+    const buyerIDToAdd = (order.buyerid);
+    var buyerNameToAdd = "";
+    buyerNameToAdd = order.buyername
     const isSellerIDExists = users.some(
-      (user) => user.id === sellerIDToAdd
+      (user) => user.id === buyerIDToAdd
     );
 
     if (!isSellerIDExists) {
       // 將新的 sellerID 添加到 users 陣列
-      users.push({ id: sellerIDToAdd, name: sellerNameToAdd });
+      users.push({ id: buyerIDToAdd, name: buyerNameToAdd });
       // 存回 localStorage
       localStorage.setItem("usersReceiver", JSON.stringify(users));
     }
@@ -318,13 +314,14 @@ export default function Orders() {
               <TableRow>
                 <TableCell>訂單編號</TableCell>
                 <TableCell>日期</TableCell>
+                <TableCell>買家名稱</TableCell>
                 <TableCell>商品名稱</TableCell>
                 <TableCell>付款金額</TableCell>
                 <TableCell>購買數量</TableCell>
                 <TableCell>訂單狀態</TableCell>
                 <TableCell>管理訂單狀態</TableCell>
                 <TableCell>更改訂單狀態</TableCell>
-                <TableCell>聯絡賣家</TableCell>
+                <TableCell>聯絡買家</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -332,6 +329,7 @@ export default function Orders() {
                 <TableRow key={order.orderid}>
                   <TableCell>{order.orderid}</TableCell>
                   <TableCell>{order.updateTime}</TableCell>
+                  <TableCell>{order.buyername}</TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
                       <div key={index}>{productItem.product.productName}</div>
@@ -339,7 +337,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.currentPrice}</div>
+                      <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>
@@ -393,10 +391,12 @@ export default function Orders() {
               <TableRow>
                 <TableCell>訂單編號</TableCell>
                 <TableCell>日期</TableCell>
+                <TableCell>買家名稱</TableCell>
                 <TableCell>商品名稱</TableCell>
                 <TableCell>付款金額</TableCell>
                 <TableCell>購買數量</TableCell>
                 <TableCell>訂單狀態</TableCell>
+                <TableCell>聯絡買家</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -404,6 +404,7 @@ export default function Orders() {
                 <TableRow key={order.orderid}>
                   <TableCell>{order.orderid}</TableCell>
                   <TableCell>{order.updateTime}</TableCell>
+                  <TableCell>{order.buyername}</TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
                       <div key={index}>{productItem.product.productName}</div>
@@ -411,7 +412,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.currentPrice}</div>
+                      <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>
@@ -420,6 +421,11 @@ export default function Orders() {
                     ))}
                   </TableCell>
                   <TableCell>{getStatusText(order.status)}</TableCell>
+                  <TableCell>
+                    <IconButton onClick={() => handleButtonClick(order)}>
+                      <QuestionAnswerIcon color="secondary" />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -436,6 +442,7 @@ export default function Orders() {
               <TableRow>
                 <TableCell>訂單編號</TableCell>
                 <TableCell>日期</TableCell>
+                <TableCell>買家名稱</TableCell>
                 <TableCell>商品名稱</TableCell>
                 <TableCell>付款金額</TableCell>
                 <TableCell>購買數量</TableCell>
@@ -447,6 +454,7 @@ export default function Orders() {
                 <TableRow key={order.orderid}>
                   <TableCell>{order.orderid}</TableCell>
                   <TableCell>{order.updateTime}</TableCell>
+                  <TableCell>{order.buyername}</TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
                       <div key={index}>{productItem.product.productName}</div>
@@ -454,7 +462,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.currentPrice}</div>
+                      <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>
@@ -479,12 +487,12 @@ export default function Orders() {
               <TableRow>
                 <TableCell>訂單編號</TableCell>
                 <TableCell>日期</TableCell>
+                <TableCell>買家名稱</TableCell>
                 <TableCell>商品名稱</TableCell>
                 <TableCell>付款金額</TableCell>
                 <TableCell>購買數量</TableCell>
                 <TableCell>訂單狀態</TableCell>
                 <TableCell>更改訂單狀態</TableCell>
-                <TableCell>聯絡賣家</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -492,6 +500,7 @@ export default function Orders() {
                 <TableRow key={order.orderid}>
                   <TableCell>{order.orderid}</TableCell>
                   <TableCell>{order.updateTime}</TableCell>
+                  <TableCell>{order.buyername}</TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
                       <div key={index}>{productItem.product.productName}</div>
@@ -499,7 +508,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.currentPrice}</div>
+                      <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>
@@ -517,11 +526,6 @@ export default function Orders() {
                       完成訂單
                     </Button>
                   </TableCell>
-                  <TableCell>
-                    <IconButton onClick={() => handleButtonClick(order)}>
-                      <QuestionAnswerIcon color="secondary" />
-                    </IconButton>
-                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -538,6 +542,7 @@ export default function Orders() {
               <TableRow>
                 <TableCell>訂單編號</TableCell>
                 <TableCell>日期</TableCell>
+                <TableCell>買家名稱</TableCell>
                 <TableCell>商品名稱</TableCell>
                 <TableCell>付款金額</TableCell>
                 <TableCell>購買數量</TableCell>
@@ -549,6 +554,7 @@ export default function Orders() {
                 <TableRow key={order.orderid}>
                   <TableCell>{order.orderid}</TableCell>
                   <TableCell>{order.updateTime}</TableCell>
+                  <TableCell>{order.buyername}</TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
                       <div key={index}>{productItem.product.productName}</div>
@@ -556,7 +562,7 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     {order.productAddAmountList.map((productItem, index) => (
-                      <div key={index}>{productItem.product.currentPrice}</div>
+                      <div key={index}>{productItem.product.currentPrice * productItem.amount}</div>
                     ))}
                   </TableCell>
                   <TableCell>

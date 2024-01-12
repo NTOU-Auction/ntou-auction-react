@@ -21,24 +21,29 @@ import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 
 const token = Cookies.get("token");
 
-// const users = localStorage.getItem("usersReceiver");
-// const users = [
-//   { id: "1", name: "admin" },
-//   { id: "2", name: "shit" },
-// ];
-
 const WebSocketTest = () => {
   // const [user, setUser] = useState(null);
   const [userMessage, setUserMessage] = useState(""); /* 使用者輸入欄的訊息 */
   const [messages, setMessages] = useState([]);
   const [client, setClient] = useState(null);
-
   const [selectedUser, setSelectedUser] = useState(null);
+  const [isInputDisabled, setIsInputDisabled] = useState(true);
+
   const handleUserClick = (userId) => {
-    console.log(userId);
+    // console.log(userId);
     setSelectedUser(userId);
     setMessages([]);
     fetchPreviousMessages(userId);
+    handleCondition();
+    setIsInputDisabled(false);
+  };
+
+  const handleCondition = () => {
+    if (selectedUser !== null) {
+      setIsInputDisabled(false);
+    } else {
+      setIsInputDisabled(true);
+    }
   };
 
   /* 取得聯絡人資訊 */
@@ -59,8 +64,8 @@ const WebSocketTest = () => {
           const parsedContacts = JSON.parse(storedContacts);
           // 檢查每個 storedContacts 是否存在於 users 中，若不存在則加入
           parsedContacts.forEach(contact => {
-            if (!users.some(user => user.id === contact.id)) {
-              console.log("test" + parsedContacts)
+            if (!contactsArray.some(user => user.id == contact.id)) {
+              console.log(`Contact ${contact.id} not found in contactsArray`);
               setContacts(prevContacts => [...prevContacts, contact]);
             }
           });
@@ -123,7 +128,7 @@ const WebSocketTest = () => {
         .filter((message) => message !== null); // 過濾掉可能的空值
       setMessages(messageObjects);
 
-      console.log(previousMessagesData);
+      // console.log(previousMessagesData);
       // 設置先前的聊天訊息到狀態中
       // setPreviousMessages(previousMessagesData);
     } catch (error) {
@@ -188,7 +193,7 @@ const WebSocketTest = () => {
                 };
               }
             });
-            console.log(messageObjects);
+            // console.log(messageObjects);
             setMessages(messageObjects);
             // messageObjects.forEach((msgObj) => {
             //   setMessages((prevMessages) => [...prevMessages, msgObj]);
@@ -308,6 +313,7 @@ const WebSocketTest = () => {
           </MessageList>
           <MessageInput
             value={userMessage}
+            disabled={isInputDisabled}
             onChange={handleInputChange}
             placeholder="請在此輸入訊息"
             onSend={handleSendMessage}
