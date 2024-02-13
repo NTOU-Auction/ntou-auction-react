@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/NTOU-Auction/ntou-auction-react/actions/workflows/main.yml/badge.svg)](https://github.com/NTOU-Auction/ntou-auction-react/actions/workflows/main.yml)
 [![React CI/CD with Yarn and Docker for Dev](https://github.com/NTOU-Auction/ntou-auction-react/actions/workflows/docker.yml/badge.svg)](https://github.com/NTOU-Auction/ntou-auction-react/actions/workflows/docker.yml)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FNTOU-Auction%2Fntou-auction-react.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FNTOU-Auction%2Fntou-auction-react?ref=badge_shield)
 
 [![GitHub release](https://img.shields.io/github/release/NTOU-Auction/ntou-auction-react.svg)](https://github.com/NTOU-Auction/ntou-auction-react/releases/latest)
 ![GitHub top language](https://img.shields.io/github/languages/top/NTOU-Auction/ntou-auction-react)
@@ -165,3 +166,7 @@ server {
 ## 授權條款
 
 ![GitHub License](https://img.shields.io/github/license/NTOU-Auction/ntou-auction-react)
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FNTOU-Auction%2Fntou-auction-react.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FNTOU-Auction%2Fntou-auction-react?ref=badge_large)
